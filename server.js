@@ -12,7 +12,7 @@ app.use(expressLayouts);
 app.use("/", express.static(__dirname + '/public'));
 app.use("/", router);
 
-app.listen(port, () => {
+app.listen(port, 'localhost', () => {
   console.log("app started");
 })
 
