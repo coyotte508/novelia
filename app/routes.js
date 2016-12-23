@@ -1,9 +1,13 @@
+const _ = require("lodash");
 const express = require("express");
 
 var router = express.Router();
 
 router.get("/", (req, res) => {
-  res.render("pages/index", {error:null});
+  var locals = {
+    title: 'Home'
+  };
+  res.render("pages/index", _.extend(locals, {error:null}));
 });
 
 module.exports = router;
