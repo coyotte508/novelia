@@ -1,6 +1,5 @@
 const co = require('co');
 const fs = require('fs-extra');
-const db = require('sqlite');
 const passport = require('passport');
 const mongoose = require('mongoose');
 
@@ -59,9 +58,6 @@ app.get("/", function(req, res) {
 })
 
 co(function *() {
-  fs.mkdirpSync('./data');
-  yield db.open('./data/database.sqlite');
-
   yield new Promise((resolve, reject) => {
     app.listen(port, 'localhost', () => {resolve();});
   });
