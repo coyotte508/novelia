@@ -5,7 +5,7 @@ const bcrypt   = require('bcrypt');
 // define the schema for our user model
 var userSchema = mongoose.Schema({
     local            : {
-        username     : {type: String, index: true},
+        username     : String,
         email        : {type: String, index: true},
         password     : String,
     },
@@ -20,6 +20,8 @@ var userSchema = mongoose.Schema({
         date         : Date
     } 
 });
+
+userSchema.index({"local.username": "text"});
 
 // methods ======================
 // generating a hash

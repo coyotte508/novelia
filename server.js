@@ -16,6 +16,7 @@ const flash = require('connect-flash');
 const configAuth = require('./config/auth');
 const configDB = require('./config/database');
 const router = require('./app/routes');
+require('./config/validator.js');
 
 var app = express();
 const port = process.env.port || 8080;
