@@ -14,7 +14,11 @@ var userSchema = mongoose.Schema({
         token        : String,
         email        : {type: String, index: true},
         name         : String
-    }
+    },
+    lastLogin: {
+        ip           : String,
+        date         : Date
+    } 
 });
 
 // methods ======================
