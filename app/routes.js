@@ -13,7 +13,6 @@ module.exports = function(passport) {
   var router = express.Router();
 
   router.get("/", (req, res) => {
-    console.log("rending index");
     res.render("pages/index", {error:null, req});
   });
 

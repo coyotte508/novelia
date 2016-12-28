@@ -13,6 +13,7 @@ const session = require('express-session');
 const morgan = require('morgan');
 const flash = require('connect-flash');
 
+const pjson = require('./package.json');
 const configAuth = require('./config/auth');
 const configDB = require('./config/database');
 const router = require('./app/routes');
@@ -40,6 +41,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(flash());
 
+/* For css cache busting */
+app.use(function(req, res, next){
+    req.version = pjson.version;
+    next();
+});
+
 /* Required for passport */
 app.use(session(
   {
@@ -53,11 +60,6 @@ app.use(passport.session());
 
 app.use("/", express.static(__dirname + '/public'));
 app.use("/", router(passport));
-
-app.get("/", function(req, res) {
-  res.json("{'a':'v'}");
-  res.end();
-})
 
 co(function *() {
   yield new Promise((resolve, reject) => {
