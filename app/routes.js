@@ -14,32 +14,37 @@ module.exports = function(passport) {
 
   router.get("/", (req, res) => {
     console.log("rending index");
-    res.render("pages/index", {error:null});
+    res.render("pages/index", {error:null, req});
   });
 
   router.get("/login", (req, res) => {
-    res.render('pages/login', {message: req.flash('loginMessage')});
+    res.render('pages/login', {message: req.flash('loginMessage'), req});
   });
 
-  router.post('/login', passport.authenticate('local-login', {
-      successRedirect : '/profile',
+  router.post('/login', (req, res, next) => {
+    passport.authenticate('local-login', {
+      successRedirect : req.body.referrer || "/profile",
       failureRedirect : '/login',
       failureFlash : true 
-  }));
-
-  router.get("/signup", (req, res) => {
-    res.render('pages/signup', {message: req.flash('signupMessage')});
+    })(req, res, next);
   });
 
-  router.post("/signup", passport.authenticate('local-signup', {
-    successRedirect : '/profile',
-    failureRedirect : '/signup',
-    failureFlash : true
-  }));
+  router.get("/signup", (req, res) => {
+    res.render('pages/signup', {message: req.flash('signupMessage'), req});
+  });
+
+  router.post('/signup', (req, res, next) => {
+    passport.authenticate('local-signup', {
+      successRedirect : req.body.referrer || "/profile",
+      failureRedirect : '/signup',
+      failureFlash : true 
+    })(req, res, next);
+  });
 
   router.get('/profile', isLoggedIn, function(req, res) {
     res.render('pages/profile', {
-      user: req.user // get the user out of session and pass to template
+      user: req.user,
+      req
     });
   });
 
