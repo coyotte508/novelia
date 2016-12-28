@@ -1,6 +1,6 @@
 {
   "name": "novelia",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A website for original novels",
   "main": "server.js",
   "scripts": {
