@@ -5,6 +5,6 @@ module.exports = {
   googleAuth: {
     'clientID'      : '644281802429-n6c4opfqc42dc7so8e0tid0qll5pq0n7.apps.googleusercontent.com',
     'clientSecret'  : 'yGQNzImh5gIikQqfG8yd9dZz',
-    'callbackURL'   : 'http://novelia.com/auth/google/callback'
+    'callbackURL'   : '/auth/google/callback'
   }
 };
