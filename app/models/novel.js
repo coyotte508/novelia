@@ -1,6 +1,7 @@
 const co = require("co");
 const randomInt = require("random-int");
 const mongoose = require('mongoose');
+const slug = require('slug');
 const bcrypt   = require('bcrypt');
 const Schema = mongoose.Schema;
 
@@ -9,7 +10,6 @@ var novelSchema = new Schema({
   title: {
     type: String, 
     required: true, 
-    unique: true
   },
   author: {
     type: Schema.Types.ObjectId,
@@ -17,7 +17,7 @@ var novelSchema = new Schema({
   },
   //updatedAt: Date,
   categories: [String],
-  //chapters: [String],
+  chapters: [String],
   description: String,
   totalViews: {
     type: Number,
@@ -27,21 +27,36 @@ var novelSchema = new Schema({
     type: Boolean,
     default: false
   },
-  slug: {
+  slug: String
+  /* code: {
     type: String,
     unique: true
-  }
+  } */
 });
 
-/* Generate a xxxx0000 slug */
-novelSchema.methods.generateSlug = function() {
-  var ret = '';
-  for (var i = 0, i < 4; i++) {
-    ret.push(String.fromCharCode('a'.charCodeAt(0)+randomInt(0,25)));
-  }
-  for (i = 0; i < 4; i++) {
-    ret += randomInt(0,9);
-  }
+novelSchema.index({"slug": "text"}, {unique: true});
+
+/* Generate a xxxx000 slug */
+// novelSchema.methods.generateCode = function() {
+//   var ret = '';
+//   for (var i = 0, i < 4; i++) {
+//     ret.push(String.fromCharCode('a'.charCodeAt(0)+randomInt(0,25)));
+//   }
+//   for (i = 0; i < 3; i++) {
+//     ret += randomInt(0,9);
+//   }
+
+//   this.code = ret;
+// };
+
+novelSchema.pre("save", function(next) {
+  this.slug = slug(this.title, {lower: true});
+
+  next();
+});
+
+novelSchema.methods.classySlug = function() {
+  return slug(this.title, {lower: false});
 };
 
 //expose novel model to the app

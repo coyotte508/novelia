@@ -8,13 +8,13 @@ const Schema = mongoose.Schema;
 var userSchema = new Schema({
     local            : {
         username     : String,
-        email        : {type: String, index: true},
+        email        : {type: String, unique: true},
         password     : String,
     },
     google           : {
         id           : String,
         token        : String,
-        email        : {type: String, index: true},
+        email        : {type: String, unique: true},
         name         : String
     },
     lastLogin: {
@@ -24,7 +24,7 @@ var userSchema = new Schema({
     novels           : [{title: String, id: Schema.Types.ObjectId, slug: String}]
 });
 
-userSchema.index({"local.username": "text"});
+userSchema.index({"local.username": "text"}, {unique: true});
 
 // methods ======================
 // generating a hash
@@ -39,6 +39,10 @@ userSchema.methods.validPassword = function(password) {
 
 userSchema.methods.displayName = function() {
     return this.local.username || this.google.name;
+};
+
+userSchema.methods.getLink = function() {
+    return "/u/" + (this.local.username || "g-"+ this.google.id);
 };
 
 // create the model for users and expose it to our app

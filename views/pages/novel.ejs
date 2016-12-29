@@ -1,0 +1,18 @@
+<% title = novel.title || "Unknown Novel"; %>
+
+<%- contentFor('body') %>
+
+<div>
+  <h4><%= title %> <small>by <% if (author.displayName) { %> <a href="<%= author.getLink() %>"><%= author.displayName() %></a><%} else {%>Unkwown Author<% }%></small></h4>
+  <% if (message.length > 0) { %>
+  <div class="alert alert-danger"><%= message %></div>
+  <% } %>
+  <p>
+    <%= novel.description %>
+  </p>
+  <ul class="list-group">
+    <% (novel.chapters||[]).forEach( (item, index) => { %>
+      <a class="list-group-item list-group-item-action"><%= index %> - <%= item.title %></a>
+    <% }); %>
+  </ul>
+</div>

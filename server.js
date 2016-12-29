@@ -10,14 +10,15 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const morgan = require('morgan');
 const flash = require('connect-flash');
 
 const pjson = require('./package.json');
 const configAuth = require('./config/auth');
 const configDB = require('./config/database');
-const router = require('./app/routes');
-require('./config/validator.js');
+const router = require('./app/routes/routes');
+require('./config/validator');
 
 var app = express();
 const port = process.env.port || 8080;
@@ -52,14 +53,16 @@ app.use(session(
   {
     secret: configAuth.sessionSecret,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: new MongoStore({mongooseConnection:mongoose.connection}),
+    maxAge: new Date(Date.now() + 120*3600*1000), //120 days expire
   })
 );
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/", express.static(__dirname + '/public'));
-app.use("/", router(passport));
+app.use("/", router);
 
 co(function *() {
   yield new Promise((resolve, reject) => {
