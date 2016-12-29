@@ -2,8 +2,10 @@
 const mongoose = require('mongoose');
 const bcrypt   = require('bcrypt');
 
+const Schema = mongoose.Schema;
+
 // define the schema for our user model
-var userSchema = mongoose.Schema({
+var userSchema = new Schema({
     local            : {
         username     : String,
         email        : {type: String, index: true},
@@ -18,7 +20,8 @@ var userSchema = mongoose.Schema({
     lastLogin: {
         ip           : String,
         date         : Date
-    } 
+    },
+    novels           : [{title: String, id: Schema.Types.ObjectId, slug: String}]
 });
 
 userSchema.index({"local.username": "text"});

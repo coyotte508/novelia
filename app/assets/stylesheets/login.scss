@@ -24,7 +24,7 @@
 }
 
 .btn-google {
-  .btn-danger;
+  @extend .btn-danger;
 }
 
 .btn-fb{

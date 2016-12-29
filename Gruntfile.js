@@ -5,7 +5,6 @@ module.exports = function(grunt) {
   ];
 
   var js_frontend = [
-    './bower_components/bootstrap/dist/js/bootstrap.min.js',
 /*    './bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js',
     './bower_components/bootstrap-contextmenu/bootstrap-contextmenu.js',
     './bower_components/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js',
@@ -15,21 +14,19 @@ module.exports = function(grunt) {
   ];
 
   //Initializing the configuration object
-    grunt.initConfig({
-
+  grunt.initConfig({
       // Task configuration
-    less: {
-        development: {
-            options: {
-              compress: true,  //minifying the result
-            },
-            files: {
-              //compiling frontend.less into frontend.css
-              "./public/assets/stylesheets/frontend.css":"./app/assets/stylesheets/frontend.less",
-              //compiling backend.less into backend.css
-              "./public/assets/stylesheets/backend.css":"./app/assets/stylesheets/backend.less"
-            }
-        }
+    sass: {
+      dist: {
+        style: "expanded",
+        files: [{
+          expand: true,
+          cwd: "app/assets/stylesheets",
+          src: ["frontend.scss"],
+          dest: "public/assets/stylesheets",
+          ext: ".css"
+        }]
+      }
     },
     concat: {
       options: {
@@ -47,9 +44,9 @@ module.exports = function(grunt) {
     copy: {
       files: {
         files: [
-          {expand: true, src: ['bower_components/bootstrap/dist/fonts/*'], dest: './public/assets/fonts/', filter: 'isFile', flatten: true},
-          {expand: true, src: ['bower_components/font-awesome/fonts/*'], dest: './public/assets/fonts/', filter: 'isFile', flatten: true},
-          {expand: true, src: ['bower_components/jquery/dist/jquery.min.js'], dest: './public/assets/javascript/', filter: 'isFile', flatten: true},
+          {expand: true, src: ['node_modules/font-awesome/fonts/*'], dest: './public/assets/fonts/', filter: 'isFile', flatten: true},
+          {expand: true, src: ['node_modules/jquery/dist/jquery.min.js'], dest: './public/assets/javascript/', filter: 'isFile', flatten: true},
+          {expand: true, src: ['node_modules/bootstrap/dist/js/bootstrap.min.js'], dest: './public/assets/javascript/', filter: 'isFile', flatten: true},
         ]
       }
     },
@@ -89,9 +86,9 @@ module.exports = function(grunt) {
             livereload: true                        //reloads the browser
           }
         },
-        less: {
-          files: ['./app/assets/stylesheets/*.less'],  //watched files
-          tasks: ['less'],                          //tasks to run
+        sass: {
+          files: ['./app/assets/stylesheets/*.scss'],  //watched files
+          tasks: ['sass'],                          //tasks to run
           options: {
             livereload: true                        //reloads the browser
           }
@@ -106,7 +103,7 @@ module.exports = function(grunt) {
   // Plugin loading
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
   //grunt.loadNpmTasks('grunt-phpunit');

@@ -2,27 +2,29 @@
 
 <%- contentFor('body') %>
 
-<div class="page-header text-center">
+<div class="text-md-center">
   <h1><span class="fa fa-anchor"></span> Profile Page</h1>
-  <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+  <a href="/logout" class="btn btn-secondary btn-sm">Logout</a>
 </div>
 
-<div class="row">
-  <h1 class="page-header">Novels</h1>
-  <h1 class="page-header">Personal details</h1>
+<div>
+  <h2>Novels</h2>
+  <p><a href="/newnovel"><span class="fa fa-plus"></span> New novel</a></p>
+</div>
+<div>
+  <h2>Personal details</h2><hr>
   <!-- LOCAL INFORMATION -->
   <% if(user.local.email) { %>
   <div class="col-md-6">
-    <div class="well">
-      <h3><span class="fa fa-user"></span> Local</h3>
-
-      <p>
-        <strong>id</strong>: <%= user._id %><br>
-        <strong>username</strong>: <%= user.local.username %><br>
-        <strong>email</strong>: <%= user.local.email %><br>
-        <strong>password</strong>: <%= user.local.password %>
-      </p>
-
+    <div class="card well">
+      <div class="card-block">
+        <h4 class="card-title"><span class="fa fa-user"></span> Local User</h4>
+        <p class="card-text">
+          <strong>id</strong>: <%= user._id %><br>
+          <strong>username</strong>: <%= user.local.username %><br>
+          <strong>email</strong>: <%= user.local.email %>
+        </p>
+      </div>
     </div>
   </div>
   <% } %>
@@ -30,16 +32,16 @@
   <!-- GOOGLE INFORMATION -->
   <% if(user.google.token) { %>
   <div class="col-md-6">
-    <div class="well">
-      <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google</h3>
+    <div class="card well">
+      <div class="card-block">
+        <h4 class="card-title text-danger"><span class="fa fa-google-plus"></span> Google</h4>
 
-      <p>
-        <strong>id</strong>: <%= user.google.id %><br>
-        <strong>token</strong>: <%= user.google.token %><br>
-        <strong>email</strong>: <%= user.google.email %><br>
-        <strong>name</strong>: <%= user.google.name %>
-      </p>
-
+        <p>
+          <strong>id</strong>: <%= user.google.id %><br>
+          <strong>email</strong>: <%= user.google.email %><br>
+          <strong>name</strong>: <%= user.google.name %>
+        </p>        
+      </div>
     </div>
   </div>
   <% } %>

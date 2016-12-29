@@ -2,46 +2,38 @@
 <html lang="en">  
 <head>
   <meta charset="utf-8">
-  <title><%- title %> - Novelia</title>
+  <title><%- title %> - LitNovel</title>
   <meta name="description" content="">
   <meta name="author" content="">
   <link rel="stylesheet" href="/assets/stylesheets/frontend.css?v=<%= req.version %>">
 </head>
 <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <nav class="navbar navbar-dark bg-inverse navbar-fixed-top">
     <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/">Novelia</a>
-      </div>
-      <div id="navbar" class="collapse navbar-collapse">
+      <a class="navbar-brand" href="/">LitNovel</a>
+      <button class="navbar-toggler hidden-md-up" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
+  
+      <div id="navbarResponsive" class="collapse navbar-toggleable-sm">
         <ul class="nav navbar-nav">
-          <li<% if (title=="Home"){%> class="active"<% } %>><a href="/">Home</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/contact">Contact</a></li>
+          <li class="nav-item<% if (title=="Home"){%> active <% } %>"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item<% if (title=="Contact us"){%> active <% } %>"><a href="/contact" class="nav-link">Contact</a></li>
         </ul>
 
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-md-right">
           <% if (req.user) { %>
-            <li><p class="navbar-text">Welcome, <%= req.user.displayName() %>!</p></li>  
-            <li><p class="navbar-text"><a href="/profile">Profile</a></p></li>
+            <li class="nav-item"><span class="navbar-text text-muted">Welcome, <%= req.user.displayName() %>!</span></li>  
+            <li class="nav-item"><span class="navbar-text text-muted"><a href="/profile">Profile</a></span></li>
           <% } else { %>
-          <li><p class="navbar-text">Already have an account?</p></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
-            <ul id="login-dp" class="dropdown-menu">
+          <li class="nav-item"><span class="navbar-text text-muted">Already have an account?</span></li>
+          <li class="nav-item dropdown">
+            <a href="/login" class="nav-link dropdown-toggle" data-toggle="dropdown" id="loginDropDown">Login</a>
+            <ul id="login-dp" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-menu">
               <li>
                <div class="row">
                 <div class="col-md-12">
                   Login via
                   <div class="social-buttons">
                     <a href="/auth/google" class="btn btn-google"><i class="fa fa-google-plus"></i> Google</a>
-                    <!--<a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>-->
                   </div>
                   or
                   <form class="form" role="form" method="post" action="/login" accept-charset="UTF-8" id="login-nav">
@@ -67,18 +59,15 @@
                </div>
                <div class="bottom text-center">
                 New here ? <a href="/signup?referrer=<%= req.path %>"><b>Join Us</b></a>
-              </div>
-            </div>
+            </ul>
           </li>
           <% } %>
         </ul>
-      </li>
-    </ul>
-  </div><!--/.nav-collapse -->
-</div>
-</nav>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
 
-<div class="container">
+<div class="container" style="padding-top: 10px">
 
   <!-- CONTENT -->
   <%- body %>
@@ -86,7 +75,7 @@
 </div><!-- /.container -->
 
 <script src="/assets/javascript/jquery.min.js"></script>
+<script src="/assets/javascript/bootstrap.min.js"></script>
 <script src="/assets/javascript/frontend.js"></script>
-<script src="/assets/javascript/backend.js"></script>
 </body>
 </html>  

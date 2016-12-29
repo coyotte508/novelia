@@ -6,7 +6,7 @@ function isLoggedIn(req, res, next) {
     return next();
   }
 
-  res.redirect('/login');
+  res.redirect('/login?referrer='+req.url);
 }
 
 module.exports = function(passport) {
@@ -50,6 +50,10 @@ module.exports = function(passport) {
   router.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/');
+  });
+
+  router.get('/newnovel', isLoggedIn, (req, res) => {
+    res.render('pages/newnovel', {req});
   });
 
   // =====================================
