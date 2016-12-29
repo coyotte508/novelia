@@ -1,4 +1,4 @@
-// load the things we need
+const validator = require('validator');
 const mongoose = require('mongoose');
 const bcrypt   = require('bcrypt');
 
@@ -38,7 +38,7 @@ userSchema.methods.validPassword = function(password) {
 };
 
 userSchema.methods.displayName = function() {
-    return this.local.username || this.google.name;
+    return validator.escape(this.local.username || this.google.name);
 };
 
 // create the model for users and expose it to our app

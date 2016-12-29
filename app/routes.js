@@ -1,4 +1,4 @@
-const _ = require("lodash");
+const validator = require("validator");
 const express = require("express");
 const configAuth = require("../config/auth");
 function isLoggedIn(req, res, next) {
@@ -17,6 +17,9 @@ module.exports = function(passport) {
   });
 
   router.get("/login", (req, res) => {
+    if (req.isAuthenticated()) {
+      return res.redirect('/profile');
+    }
     res.render('pages/login', {message: req.flash('loginMessage'), req});
   });
 
@@ -53,8 +56,22 @@ module.exports = function(passport) {
   });
 
   router.get('/newnovel', isLoggedIn, (req, res) => {
-    res.render('pages/newnovel', {req});
+    res.render('pages/newnovel', {req, message: req.flash('newnovelMessage')});
   });
+
+  router.post('/newnovel', isLoggedIn, (req, res, next) => {
+    /* Todo: check if user can post new novel */
+    try {
+      var title = validator.validateTitle(req.body["novel-title"]);
+      var description = validator.validateDescription(req.body["novel-description"]);
+
+      req.flash('newnovelMessage', "New novel added (sort of)");
+      res.redirect('/newnovel');
+    } catch (err) {
+      req.flash('newnovelMessage', err.message);
+      res.redirect('/newnovel');
+    }
+  })
 
   // =====================================
   // GOOGLE ROUTES =======================

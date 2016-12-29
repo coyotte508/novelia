@@ -37,7 +37,8 @@
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
     "random-int": "^1.0.0",
-    "validator": "^6.2.0"
+    "validator": "^6.2.0",
+    "xregexp": "^3.1.1"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
