@@ -5,6 +5,8 @@ module.exports = function(grunt) {
   ];
 
   var js_frontend = [
+    'node_modules/tether/dist/js/tether.min.js',
+    'node_modules/bootstrap/dist/js/bootstrap.min.js',
 /*    './bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js',
     './bower_components/bootstrap-contextmenu/bootstrap-contextmenu.js',
     './bower_components/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js',
@@ -45,8 +47,7 @@ module.exports = function(grunt) {
       files: {
         files: [
           {expand: true, src: ['node_modules/font-awesome/fonts/*'], dest: './public/assets/fonts/', filter: 'isFile', flatten: true},
-          {expand: true, src: ['node_modules/jquery/dist/jquery.min.js'], dest: './public/assets/javascript/', filter: 'isFile', flatten: true},
-          {expand: true, src: ['node_modules/bootstrap/dist/js/bootstrap.min.js'], dest: './public/assets/javascript/', filter: 'isFile', flatten: true},
+          {expand: true, src: ['node_modules/jquery/dist/jquery.min.js'], dest: './public/assets/javascript/', filter: 'isFile', flatten: true}
         ]
       }
     },
