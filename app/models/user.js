@@ -38,7 +38,7 @@ userSchema.methods.validPassword = function(password) {
 };
 
 userSchema.methods.displayName = function() {
-    return validator.escape(this.local.username || this.google.name);
+    return this.local.username || this.google.name;
 };
 
 // create the model for users and expose it to our app

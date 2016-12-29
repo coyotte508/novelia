@@ -1,4 +1,4 @@
-const validator = require("validator");
+const val = require("validator");
 const express = require("express");
 const configAuth = require("../config/auth");
 function isLoggedIn(req, res, next) {
@@ -62,14 +62,14 @@ module.exports = function(passport) {
   router.post('/newnovel', isLoggedIn, (req, res, next) => {
     /* Todo: check if user can post new novel */
     try {
-      var title = validator.validateTitle(req.body["novel-title"]);
-      var description = validator.validateDescription(req.body["novel-description"]);
+      var title = val.validateTitle(req.body.novelTitle);
+      var description = val.validateDescription(req.body.novelDescription);
 
       req.flash('newnovelMessage', "New novel added (sort of)");
       res.redirect('/newnovel');
     } catch (err) {
       req.flash('newnovelMessage', err.message);
-      res.redirect('/newnovel');
+      res.render('pages/newnovel', {req, message: req.flash('newnovelMessage')});
     }
   })
 
