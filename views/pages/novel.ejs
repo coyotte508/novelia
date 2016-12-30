@@ -3,10 +3,14 @@
 <%- contentFor('body') %>
 
 <div>
-  <h4><%= title %> <small>by <% if (author.displayName) { %> <a href="<%= author.getLink() %>"><%= author.displayName() %></a><%} else {%>Unkwown Author<% }%></small></h4>
+  <h2 class="text-md-center"><%= title %> <small>by <% if (author.displayName) { %> <a href="<%= author.getLink() %>"><%= author.displayName() %></a><%} else {%>Unkwown Author<% }%></small></h2>
+  <hr/>
   <% if (message.length > 0) { %>
   <div class="alert alert-danger"><%= message %></div>
   <% } %>
+  <p><br/><br/><br/><br/><br/></p>
+  <hr/>
+  <h4>Synopsis</h4>
   <p>
     <%= novel.description %>
   </p>
