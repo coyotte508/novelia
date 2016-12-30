@@ -27,6 +27,10 @@ const port = process.env.port || 8080;
 mongoose.connect(configDB.url);
 mongoose.Promise = global.Promise; //native promises
 
+mongoose.connection.on("error", (err) => {
+  console.log(err);
+});
+
 /* Configure passport */
 require('./config/passport')(passport);
 
