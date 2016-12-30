@@ -19,6 +19,7 @@ const configAuth = require('./config/auth');
 const configDB = require('./config/database');
 const router = require('./app/routes/routes');
 require('./config/validator');
+require('./config/utils');
 
 var app = express();
 const port = process.env.port || 8080;

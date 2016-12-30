@@ -45,5 +45,15 @@ userSchema.methods.getLink = function() {
     return "/u/" + (this.local.username || "g-"+ this.google.id);
 };
 
+var User = mongoose.model('User', userSchema);
+
+User.findByUrl = function(id) {
+    if (id.startsWith("g-")) {
+        return User.findOne({"google.id": id.substr(2)});
+    } else {
+        return User.findOne({"local.username": id});
+    }
+}
+
 // create the model for users and expose it to our app
-module.exports = mongoose.model('User', userSchema);
+module.exports = User;

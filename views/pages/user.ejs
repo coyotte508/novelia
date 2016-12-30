@@ -1,0 +1,26 @@
+<% 
+if (user.displayName) {
+  username = user.displayName();
+} else {
+  username = "Unknown User";
+}
+
+title = username + ""; 
+%>
+
+<%- contentFor('body') %>
+
+<div class="text-md-center">
+  <h1><%= title %></h1>
+</div>
+
+<div>
+  <h2>Novels</h2>
+  <ul class="list-group">
+    <% if (user.novels) { user.novels.forEach( (novel) => { %>
+      <a href="/nv/<%= novel.slug %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
+    <% });} %>
+  </ul>
+</div>
+
+</div>

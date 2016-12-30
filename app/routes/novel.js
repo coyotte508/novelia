@@ -3,7 +3,6 @@ const co = require("co");
 const Novel = require("../models/novel");
 const User = require("../models/user");
 const utils = require("./utils");
-const assert = require("assert");
 const router = require("express").Router();
 
 router.get('/newnovel', utils.isLoggedIn, (req, res) => {
@@ -44,13 +43,13 @@ router.get('/nv/:novel', (req, res) => {
       novel = yield Novel.findOne({slug: req.params.novel.toLowerCase()});
       author = yield User.findById(novel.author); 
 
-      assert(novel, "Novel not found");
+      assert404(res, novel, "Novel not found");
 
       res.render('pages/novel', {req, novel, author, message: ""});
     } catch(err) {
-      console.log(err);
       novel = novel || {}, author = author || {};
-      console.log(novel, author);
+
+      res.statusCode = res.statusCode == 200 ? 500 : res.statusCode;
       res.render('pages/novel', {req, novel, author, message: err.message});
     }
   });

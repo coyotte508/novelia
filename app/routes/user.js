@@ -1,3 +1,5 @@
+const co = require("co");
+const User = require("../models/user")
 const passport = require("passport");
 const utils = require("./utils");
 const router = require("express").Router();
@@ -34,6 +36,23 @@ router.post('/signup', (req, res, next) => {
 
 router.get('/profile', utils.isLoggedIn, function(req, res) {
   res.render('pages/profile', {user: req.user, req});
+});
+
+router.get('/u/:name', function(req, res) {
+  co(function*() {
+    try {
+      var user = yield User.findByUrl(req.params.name);
+      
+      assert404(res, user, "User not found");
+
+      res.render('pages/user', {req, user, message: ""});
+    } catch (err) {
+      novel = novel || {}, author = author || {};
+      res.statusCode = res.statusCode == 200 ? 500 : res.statusCode;
+
+      res.render('pages/user', {req, user, message: err.message});
+    }
+  });
 });
 
 router.get('/logout', (req, res) => {
