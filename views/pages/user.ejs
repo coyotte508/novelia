@@ -1,11 +1,5 @@
 <% 
-if (user.displayName) {
-  username = user.displayName();
-} else {
-  username = "Unknown User";
-}
-
-title = username + ""; 
+title = user.displayName(); 
 %>
 
 <%- contentFor('body') %>
@@ -15,12 +9,20 @@ title = username + "";
 </div>
 
 <div>
+  <h2>Bio</h2>
+  <div class="card">
+    <div class="card-block">
+      <%- user.bio || "<i>This user does not yet have a bio.</i>" %>
+    </div>
+  </div>
+  <%if (user.novels) { %>
   <h2>Novels</h2>
   <ul class="list-group">
-    <% if (user.novels) { user.novels.forEach( (novel) => { %>
+    <% user.novels.forEach( (novel) => { %>
       <a href="/nv/<%= novel.slug %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
-    <% });} %>
+    <% }); %>
   </ul>
+  <% } %>
 </div>
 
 </div>

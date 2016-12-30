@@ -1,22 +1,29 @@
-<% title = novel.title || "Unknown Novel"; %>
+<% 
+title = novel.title; 
+isGod = req.user && author && req.user.id == author.id;
+nLink = novel.getLink();
+%>
 
 <%- contentFor('body') %>
 
 <div>
-  <h2 class="text-md-center"><%= title %> <small>by <% if (author.displayName) { %> <a href="<%= author.getLink() %>"><%= author.displayName() %></a><%} else {%>Unkwown Author<% }%></small></h2>
+  <h2 class="text-md-center"><%= title %> <small>by <a href="<%= author.getLink() %>"><%= author.displayName() %></a></small></h2>
   <hr/>
-  <% if (message.length > 0) { %>
-  <div class="alert alert-danger"><%= message %></div>
-  <% } %>
   <p><br/><br/><br/><br/><br/></p>
   <hr/>
-  <h4>Synopsis</h4>
-  <p>
-    <%= novel.description %>
-  </p>
-  <ul class="list-group">
-    <% (novel.chapters||[]).forEach( (item, index) => { %>
-      <a class="list-group-item list-group-item-action"><%= index %> - <%= item.title %></a>
-    <% }); %>
-  </ul>
+  <div>
+    <h4>Synopsis</h4>
+    <p>
+      <%= novel.description %>
+    </p>  
+  </div>
+  <div>
+    <h4>Chapters</h4>
+    <p><ul class="list-group">
+    <% novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>
+      <a class="list-group-item list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %></a>
+    <% } }); %>
+    </ul></p>
+    <% if (isGod) {%><p><a href="<%= nLink %>/addchapter"><span class="fa fa-plus"></span> Add a chapter</a></p><% } %>
+  </div>
 </div>

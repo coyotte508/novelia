@@ -5,11 +5,11 @@ const User = require("../models/user");
 const utils = require("./utils");
 const router = require("express").Router();
 
-router.get('/newnovel', utils.isLoggedIn, (req, res) => {
-  res.render('pages/newnovel', {req, message: req.flash('newnovelMessage')});
+router.get('/addnovel', utils.isLoggedIn, (req, res) => {
+  res.render('pages/addnovel', {req, message: ""});
 });
 
-router.post('/newnovel', utils.isLoggedIn, (req, res) => {
+router.post('/addnovel', utils.isLoggedIn, (req, res) => {
   /* Todo: check if user can post new novel */
   co(function*() {
     try {
@@ -22,37 +22,28 @@ router.post('/newnovel', utils.isLoggedIn, (req, res) => {
       novel.author = req.user.id;
 
       yield novel.save();
-      yield req.user.update({$push: {"novels": {title: title, id: novel.id, slug: novel.classySlug()}}});
+      yield req.user.update({$push: {"novels": {title: title, ref: novel.id, slug: novel.classySlug()}}});
 
       console.log("saved");
 
-      // req.flash('newnovelMessage', "New novel added (sort of)");
-      res.redirect('/nv/'+novel.classySlug());
+      // req.flash('addnovelMessage', "New novel added (sort of)");
+      res.redirect(novel.getLink());
     } catch (err) {
-      console.log(err);
-
-      res.render('pages/newnovel', {req, message: err.message});
+      res.render('pages/addnovel', {req, message: err.message});
     }
   });
 });
 
-router.get('/nv/:novel', (req, res) => {
+router.get('/nv/:novel', (req, res, next) => {
   co(function*() {
-    var novel, author;
-    try {
-      novel = yield Novel.findOne({slug: req.params.novel.toLowerCase()});
-      author = yield User.findById(novel.author); 
+    var novel = yield Novel.findOne({slug: req.params.novel.toLowerCase()});
+    
+    assert404(res, novel, "Novel not found");
 
-      assert404(res, novel, "Novel not found");
+    var author = yield User.findById(novel.author); 
 
-      res.render('pages/novel', {req, novel, author, message: ""});
-    } catch(err) {
-      novel = novel || {}, author = author || {};
-
-      res.statusCode = res.statusCode == 200 ? 500 : res.statusCode;
-      res.render('pages/novel', {req, novel, author, message: err.message});
-    }
-  });
+    res.render('pages/novel', {req, novel, author});
+  }).catch((err) => next(err));
 });
 
 module.exports = router;

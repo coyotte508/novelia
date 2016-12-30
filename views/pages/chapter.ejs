@@ -1,0 +1,38 @@
+<% 
+title = chapter.title; 
+isGod = req.user && req.user.id == novel.author;
+novelLink = novel.getLink();
+num = +req.params.chapter;
+%>
+
+<%- contentFor('body') %>
+
+<div>
+  <h2 class="text-md-center"><a href="<%= novel.getLink() %>"><%= novel.title %></a> - <%= num %></h2>
+  <hr/>
+  <h3 class="text-md-center"><%= chapter.title %></h3>
+  <div class="chapter-content text-justify">
+    <%= chapter.content %>
+  </div>
+
+  <% if (chapter.authorNote) {%>
+  <br/>
+  <div class="card">
+    <div class="card-block bg-faded">
+      <h6 class="card-title">Author's note</h6>
+      <div class="text-justify">
+        <%= chapter.authorNote %>
+      </div>
+    </div>
+  </div>
+  <% } %>
+  <hr/>
+
+  <div class="text-xs-center">
+    <div class="btn-group" role="group" aria-label="Navigation">
+      <a href="<%= novel.getLink() + "/" + (num-1) %>" class="btn btn-primary<%= num == (novel.prologue? 0 : 1) ? " disabled" : ""%>"><span class="fa fa-lg fa-long-arrow-left"></span> <span class="hidden-xs hidden-sm">Previous Chapter</span></a>
+      <a href="<%= novel.getLink()%>" class="btn btn-primary"><span class="fa fa-lg fa-th-list"></span> <span class="hidden-xs hidden-sm">Table of Contents</span></button>
+      <a href="<%= novel.getLink() + "/" + (num+1) %>" class="btn btn-primary<%= num == novel.numChapters ? " disabled" : ""%>"><span class="hidden-xs hidden-sm">Next Chapter</span> <span class="fa fa-lg fa-long-arrow-right"></span></a>
+    </div>
+  </div>
+</div>

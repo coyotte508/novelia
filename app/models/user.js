@@ -21,7 +21,7 @@ var userSchema = new Schema({
         ip           : String,
         date         : Date
     },
-    novels           : [{title: String, id: Schema.Types.ObjectId, slug: String}]
+    novels           : [{title: String, ref: Schema.Types.ObjectId, slug: String}]
 });
 
 userSchema.index({"local.username": "text"}, {unique: true});

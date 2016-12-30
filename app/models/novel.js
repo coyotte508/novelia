@@ -17,17 +17,25 @@ var novelSchema = new Schema({
   },
   //updatedAt: Date,
   categories: [String],
-  chapters: [String],
+  chapters: {
+    type: [{
+      title: String, 
+      ref: Schema.Types.ObjectId
+    }],
+    default: [{title: "", id: null}]
+  },
   description: String,
   totalViews: {
     type: Number,
     default: 0
   },
-  public: {
-    type: Boolean,
-    default: false
-  },
-  slug: String
+  public: Boolean,
+  prologue: Boolean,
+  slug: String,
+  numChapters: {
+    type: Number,
+    default: 0
+  }
   /* code: {
     type: String,
     unique: true
@@ -57,6 +65,10 @@ novelSchema.pre("save", function(next) {
 
 novelSchema.methods.classySlug = function() {
   return slug(this.title, {lower: false});
+};
+
+novelSchema.methods.getLink = function() {
+    return "/nv/" + this.classySlug();
 };
 
 //expose novel model to the app

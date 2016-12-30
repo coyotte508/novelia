@@ -56,4 +56,11 @@ validator.validateDescription = (text) => {
   return text;
 }
 
+validator.validateChapter = (text) => {
+  if (!validator.isLength(text, {min: 0, max: 50000})) {
+    throw new Error("The content of the chapter must be less than 2000 characters.");
+  }
+  return text;
+}
+
 module.exports = validator;

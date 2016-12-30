@@ -38,21 +38,14 @@ router.get('/profile', utils.isLoggedIn, function(req, res) {
   res.render('pages/profile', {user: req.user, req});
 });
 
-router.get('/u/:name', function(req, res) {
+router.get('/u/:name', function(req, res, next) {
   co(function*() {
-    try {
-      var user = yield User.findByUrl(req.params.name);
-      
-      assert404(res, user, "User not found");
+    var user = yield User.findByUrl(req.params.name);
+    
+    assert404(res, user, "User not found");
 
-      res.render('pages/user', {req, user, message: ""});
-    } catch (err) {
-      novel = novel || {}, author = author || {};
-      res.statusCode = res.statusCode == 200 ? 500 : res.statusCode;
-
-      res.render('pages/user', {req, user, message: err.message});
-    }
-  });
+    res.render('pages/user', {req, user});
+  }).catch((err) => next(err));
 });
 
 router.get('/logout', (req, res) => {

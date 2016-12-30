@@ -3,18 +3,20 @@
 <%- contentFor('body') %>
 
 <div class="text-md-center">
-  <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+  <h1><span class="fa fa-home"></span> Profile Page</h1>
   <a href="/logout" class="btn btn-secondary btn-sm">Logout</a>
 </div>
 
 <div>
   <h2>Novels</h2>
-  <ul class="list-group">
-    <% user.novels.forEach( (novel) => { %>
-      <a href="/nv/<%= novel.slug %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
-    <% }); %>
-  </ul>
-  <p><a href="/newnovel"><span class="fa fa-plus"></span> New novel</a></p>
+  <p>
+    <ul class="list-group">
+      <% user.novels.forEach( (novel) => { %>
+        <a href="/nv/<%= novel.slug %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
+      <% }); %>
+    </ul>
+  </p>
+  <p><a href="/addnovel"><span class="fa fa-plus"></span> New novel</a></p>
 </div>
 <div>
   <h2>Personal details</h2><hr>
