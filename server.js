@@ -24,7 +24,7 @@ var app = express();
 const port = process.env.port || 8080;
 
 /* Configuration */
-mongoose.connect(configDB.url);
+mongoose.connect(configDB.url, {server: {reconnectTries: Number.MAX_VALUE, reconnectInterval: 1000}});
 mongoose.Promise = global.Promise; //native promises
 
 mongoose.connection.on("error", (err) => {
