@@ -1,5 +1,31 @@
 const XRegExp = require("xregexp");
 const validator = require('validator');
+const marked = require('marked');
+const toMarkdown = require('to-markdown');
+
+// const createDOMPurify = require('dompurify');
+// const jsdom = require('jsdom');
+// const window = jsdom.jsdom('', {
+//   features: {
+//     FetchExternalResources: false, // disables resource loading over HTTP / filesystem
+//     ProcessExternalResources: false // do not execute JS within script blocks
+//   }
+// }).defaultView;
+
+// const DOMPurify = createDOMPurify(window);
+// validator.purify = (dirty) => {
+//   return DOMPurify.sanitize(dirty);
+// }
+
+marked.setOptions({sanitize: true});
+
+validator.textToDb = (text) => {
+  return marked(text.trim());
+};
+
+validator.dbToText = (html) => {
+  return toMarkdown(html);
+};
 
 validator.validateUser = (username) => {
   if (!validator.isAlphanumeric(username)) {
@@ -53,14 +79,14 @@ validator.validateDescription = (text) => {
   if (!validator.isLength(text, {min: 0, max: 2000})) {
     throw new Error("The description must be less than 2000 characters.");
   }
-  return text;
+  return validator.textToDb(text);
 }
 
 validator.validateChapter = (text) => {
   if (!validator.isLength(text, {min: 0, max: 50000})) {
     throw new Error("The content of the chapter must be less than 2000 characters.");
   }
-  return text;
+  return validator.textToDb(text);
 }
 
 module.exports = validator;

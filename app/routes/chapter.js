@@ -22,7 +22,7 @@ router.post('/nv/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
   /* Todo: check if user can post new novel */
   co(function*() {
     var novel;
-    var prologue = req.body.options.split(",").indexOf("prologue") != -1;
+    var prologue = (req.body.options||"").split(",").indexOf("prologue") != -1;
     try {
       novel = yield Novel.findOne({slug: req.params.novel.toLowerCase()}, "author title numChapters prologue");
       assert404(res, novel, "Novel not found");
