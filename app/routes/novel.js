@@ -4,6 +4,9 @@ const Novel = require("../models/novel");
 const User = require("../models/user");
 const utils = require("./utils");
 const router = require("express").Router();
+const limiter = require("../../config/limits")
+
+const mongoose = require("mongoose");
 
 router.get('/addnovel', utils.isLoggedIn, (req, res) => {
   res.render('pages/addnovel', {req, message: ""});
@@ -16,6 +19,14 @@ router.post('/addnovel', utils.isLoggedIn, (req, res) => {
       var title = val.validateTitle(req.body.novelTitle);
       var description = val.validateDescription(req.body.novelDescription);
 
+      if (yield limiter.attempt(req.user.id, 'addnovel', req.body.novelTitle)) {
+        throw new Error(`You can only add ${limiter.limits().addnovel.limit} novels per day`);
+      }
+
+      if ((yield Novel.count({author: req.user.id}).limit(10)) >= 10) {
+        throw new Error("You can only have 10 novels at most.");
+      }
+
       var novel = new Novel();
       novel.title = title;
       novel.description = description;
@@ -24,11 +35,10 @@ router.post('/addnovel', utils.isLoggedIn, (req, res) => {
       yield novel.save();
       yield req.user.update({$push: {"novels": {title: title, ref: novel.id, slug: novel.classySlug()}}});
 
-      console.log("saved");
-
       // req.flash('addnovelMessage', "New novel added (sort of)");
       res.redirect(novel.getLink());
     } catch (err) {
+      console.log(err);
       res.render('pages/addnovel', {req, message: err.message});
     }
   });

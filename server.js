@@ -2,6 +2,7 @@ const co = require('co');
 const fs = require('fs-extra');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const limiter = require('mongo-limiter');
 
 /* Express stuff */
 const express = require('express');
@@ -31,6 +32,9 @@ mongoose.Promise = global.Promise; //native promises
 mongoose.connection.on("error", (err) => {
   console.log(err);
 });
+
+/* Mongo db limits, AFTER mongoose.connect */
+require('./config/limits');
 
 /* Configure passport */
 require('./config/passport')(passport);

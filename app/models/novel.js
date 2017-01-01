@@ -1,8 +1,6 @@
-const co = require("co");
-const randomInt = require("random-int");
+//const randomInt = require("random-int");
 const mongoose = require('mongoose');
 const slug = require('slug');
-const bcrypt   = require('bcrypt');
 const Schema = mongoose.Schema;
 
 // define the schema for our user model
@@ -31,7 +29,10 @@ var novelSchema = new Schema({
   },
   public: Boolean,
   prologue: Boolean,
-  slug: String,
+  slug: {
+    type: String,
+    unique: String
+  },
   numChapters: {
     type: Number,
     default: 0
@@ -42,7 +43,7 @@ var novelSchema = new Schema({
   } */
 });
 
-novelSchema.index({"slug": "text"}, {unique: true});
+//novelSchema.index({"title": "text"});
 
 /* Generate a xxxx000 slug */
 // novelSchema.methods.generateCode = function() {

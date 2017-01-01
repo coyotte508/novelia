@@ -1,7 +1,4 @@
-const co = require("co");
-const randomInt = require("random-int");
 const mongoose = require('mongoose');
-const bcrypt   = require('bcrypt');
 const Schema = mongoose.Schema;
 
 // define the schema for our user model

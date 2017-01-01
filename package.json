@@ -33,6 +33,7 @@
     "font-awesome": "^4.7.0",
     "fs-extra": "^1.0.0",
     "lodash": "^4.17.2",
+    "mongo-limiter": "0.0.6",
     "mongoose": "^4.7.4",
     "morgan": "^1.7.0",
     "passport": "^0.3.2",
