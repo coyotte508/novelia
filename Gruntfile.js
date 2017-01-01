@@ -26,7 +26,7 @@ module.exports = function(grunt) {
       // Task configuration
     sass: {
       dist: {
-        style: "expanded",
+        style: "compact",
         files: [{
           expand: true,
           cwd: "app/assets/stylesheets",

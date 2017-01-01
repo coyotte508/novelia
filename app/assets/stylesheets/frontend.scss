@@ -47,7 +47,11 @@ body > .container {
   border-color: #eee;
 }
 
-/* for profile page */
-/*.row > h1 {
-  padding-left: 20px;
-}*/
+table {
+  @extend .table;
+  @extend .table-bordered;
+  margin-left: auto;
+  margin-right: auto;
+  /*width: inherit;*/
+  max-width: 95%;
+}
