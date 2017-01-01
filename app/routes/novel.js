@@ -4,7 +4,7 @@ const Novel = require("../models/novel");
 const User = require("../models/user");
 const utils = require("./utils");
 const router = require("express").Router();
-const limiter = require("../../config/limits")
+const limiter = require("../../config/limits");
 
 const mongoose = require("mongoose");
 
@@ -19,7 +19,7 @@ router.post('/addnovel', utils.isLoggedIn, (req, res) => {
       var title = val.validateTitle(req.body.novelTitle);
       var description = val.validateDescription(req.body.novelDescription);
 
-      if (yield limiter.attempt(req.user.id, 'addnovel', req.body.novelTitle)) {
+      if (yield limiter.attempt(req.user.id, 'addnovel', title)) {
         throw new Error(`You can only add ${limiter.limits().addnovel.limit} novels per day`);
       }
 

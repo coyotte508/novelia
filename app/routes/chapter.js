@@ -6,6 +6,7 @@ const User = require("../models/user");
 const Chapter = require("../models/chapter");
 const utils = require("./utils");
 const router = require("express").Router();
+const limiter = require("../../config/limits");
 
 router.get('/nv/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
   co(function*() {
@@ -31,6 +32,10 @@ router.post('/nv/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
       var title = val.validateTitle(req.body.chapterTitle);
       var content = val.validateChapter(req.body.chapterContent);
       var authorNote = val.validateDescription(req.body.authorNote);
+
+      if (yield limiter.attempt(req.user.id, 'addchapter', req.body.novelTitle)) {
+        throw new Error(`You can only add ${limiter.limits().addchapter.limit} chapters per day`);
+      }
 
       var chapter = new Chapter();
       chapter.title = title;
