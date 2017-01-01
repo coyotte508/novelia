@@ -15,6 +15,12 @@ module.exports = function(grunt) {
     './app/assets/javascript/frontend.js'
   ];
 
+  var squire = [
+    'node_modules/dompurify/src/purify.js',
+    'node_modules/squire-rte/build/squire-raw.js',
+    'app/assets/javascript/squire-ui.js'
+  ];
+
   //Initializing the configuration object
   grunt.initConfig({
       // Task configuration
@@ -41,13 +47,20 @@ module.exports = function(grunt) {
       js_backend: {
         src: js_backend,
         dest: './public/assets/javascript/backend.js',
+      },
+      squire: {
+        src: squire,
+        dest: './public/assets/javascript/squire.js'
       }
     },
     copy: {
       files: {
         files: [
+          {expand: true, src: ['app/assets/html/*'], dest: './public/assets/html/', filter: 'isFile', flatten: true},
           {expand: true, src: ['node_modules/font-awesome/fonts/*'], dest: './public/assets/fonts/', filter: 'isFile', flatten: true},
-          {expand: true, src: ['node_modules/jquery/dist/jquery.min.js'], dest: './public/assets/javascript/', filter: 'isFile', flatten: true}
+          {expand: true, src: ['node_modules/jquery/dist/jquery.min.js'], dest: './public/assets/javascript/', filter: 'isFile', flatten: true},
+          {expand: true, src: ['node_modules/bootstrap/dist/css/bootstrap.min.css', 
+            'app/assets/stylesheets/squire-ui.css'], dest: './public/assets/stylesheets/', filter: 'isFile', flatten: true}
         ]
       }
     },
@@ -65,6 +78,11 @@ module.exports = function(grunt) {
           './public/assets/javascript/backend.js': './public/assets/javascript/backend.js',
         }
       },
+      squire: {
+        files: {
+          './public/assets/javascript/squire.js': './public/assets/javascript/squire.js',
+        }
+      }
     },
     phpunit: {
         classes: {

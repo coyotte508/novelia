@@ -33,7 +33,7 @@ router.post('/nv/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
       var content = val.validateChapter(req.body.chapterContent);
       var authorNote = val.validateDescription(req.body.authorNote);
 
-      if (yield limiter.attempt(req.user.id, 'addchapter', req.body.novelTitle)) {
+      if (yield limiter.attempt(req.user.id, 'addchapter', title)) {
         throw new Error(`You can only add ${limiter.limits().addchapter.limit} chapters per day`);
       }
 
