@@ -22,7 +22,7 @@ nLink = novel.getLink();
     <h4>Chapters</h4>
     <p><ul class="list-group">
     <% novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>
-      <li class="list-group-item"><a class="list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %></a> <% if (isGod) {%><a href="<%= nLink + "/edit/" + index %>" class="float-xs-right"><span class="fa fa-pencil-square-o"></span></a><% } %>  </li>
+      <li class="list-group-item"><a class="list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %></a> <% if (isGod) {%><a href="<%= nLink + "/" + index  + "/edit" %>" class="float-xs-right"><span class="fa fa-pencil-square-o"></span></a><% } %>  </li>
     <% } }); %>
     </ul></p>
     <% if (isGod) {%><p><a href="<%= nLink %>/addchapter"><span class="fa fa-plus"></span> Add a chapter</a></p><% } %>

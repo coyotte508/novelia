@@ -1,6 +1,7 @@
 const val = require("validator");
 const co = require("co");
 const assert = require("assert");
+const toMarkdown = require("to-markdown");
 const Novel = require("../models/novel");
 const User = require("../models/user");
 const Chapter = require("../models/chapter");
@@ -12,7 +13,7 @@ router.get('/addchapter', utils.isLoggedIn, (req, res, next) => {
   co(function*() {
     var novel = req.novel;
 
-    assert(novel.author == req.user.id, "You can only change your own novels");
+    utils.assert403(novel.author == req.user.id, "You can only change your own novels");
 
     res.render('pages/addchapter', {req, novel, message: ""});  
   }).catch((err) => next(err));
@@ -45,9 +46,9 @@ router.post('/addchapter', utils.isLoggedIn, (req, res, next) => {
       yield chapter.save();
 
       if (prologue) {
-        yield novel.update({prologue: true, $set: {"chapters.0": {title: title, ref: chapter.id}}});
+        yield novel.update({prologue: true, $set: {"chapters.0": {title, ref: chapter.id}}});
       } else {
-        yield novel.update({$inc: {"numChapters": 1}, $push: {"chapters": {title: title, ref: chapter.id}}});
+        yield novel.update({$inc: {"numChapters": 1}, $push: {"chapters": {title, ref: chapter.id}}});
       }
 
       console.log("saved chapter");
@@ -61,15 +62,63 @@ router.post('/addchapter', utils.isLoggedIn, (req, res, next) => {
   }).catch((err) => next(err));
 });
 
-router.get('/:chapter(\\d+)/', (req, res, next) => {
+router.param('chapter', function(req, res, next, chapterNum) {
   co(function*() {
     var novel = req.novel;
-    var chap = parseInt(req.params.chapter);
+    var chap = parseInt(chapterNum);
     utils.assert404(chap >= 0 && chap <= novel.chapters.length && novel.chapters[chap].title, "Chapter not found");
-    var chapter = yield Chapter.findOne(novel.chapters[chap].ref);
-    assert(chapter, "Error while fetching chapter");
 
-    res.render('pages/chapter', {req, novel, chapter});
+    if ( (chap == 0 && !novel.prologue) || chap < 0 || chap > novel.numChapters ) {
+      throw new utils.HttpError("Chapter not found", 404);
+    }
+
+    req.chapter = yield Chapter.findOne(novel.chapters[chap].ref);
+
+    assert(req.chapter, "Error while fetching chapter");
+
+    next();
+  }).catch(err => next(err));
+});
+
+router.get('/:chapter(\\d+)/', (req, res, next) => {
+  co(function*() {
+    res.render('pages/chapter', {req, novel: req.novel, chapter: req.chapter});
+  }).catch((err) => next(err));
+});
+
+router.get('/:chapter(\\d+)/edit', utils.isLoggedIn, (req, res, next) => {
+  co(function*() {
+    var novel = req.novel;
+
+    utils.assert403(novel.author == req.user.id, "You can only change your own novels");
+
+    res.render('pages/editchapter', {req, novel, chapter: req.chapter, toMarkdown, message: ""});  
+  }).catch((err) => next(err));
+});
+
+
+router.post('/:chapter(\\d+)/edit', utils.isLoggedIn, (req, res, next) => {
+  /* Todo: check if user can post new novel */
+  co(function*() {
+    var novel = req.novel;
+    try {
+      utils.assert403(novel.author == req.user.id, "You can only change your own novels");
+
+      var title = val.validateTitle(req.body.chapterTitle);
+      var content = val.validateChapter(req.body.chapterContent);
+      var authorNote = val.validateDescription(req.body.authorNote);
+
+      yield req.chapter.update({title, content, authorNote});
+
+      var setOptions = {};
+      setOptions["chapters."+req.params.chapter] = {title};
+      novel.update({$set: setOptions}).exec();
+
+      res.redirect(novel.getLink() + "/" + req.params.chapter);
+    } catch (err) {
+      res.status(err.statusCode || 500);
+      res.render('pages/editchapter', {req, novel: novel || {}, chapter: req.chapter, toMarkdown, message: err.message});
+    }
   }).catch((err) => next(err));
 });
 

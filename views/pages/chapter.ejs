@@ -8,7 +8,7 @@ num = +req.params.chapter;
 <%- contentFor('body') %>
 
 <div>
-  <h2 class="text-md-center"><a href="<%= novel.getLink() %>"><%= novel.title %></a> - <%= num %></h2>
+  <h2 class="text-md-center"><a href="<%= novel.getLink() %>"><%= novel.title %></a> - <%= num %> <% if (isGod) {%><small><a href="<%= novelLink + "/" + num  + "/edit" %>"><small><span class="fa fa-pencil-square-o smaller"></span></small></a></small><% } %></h2>
   <hr/>
   <h3 class="text-md-center"><%= chapter.title %></h3>
   <div class="chapter-content text-justify">
