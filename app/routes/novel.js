@@ -96,4 +96,6 @@ router.post('/:novel/edit', utils.isLoggedIn, (req, res) => {
   });
 });
 
+router.use("/:novel/", require("./chapter"));
+
 module.exports = router;

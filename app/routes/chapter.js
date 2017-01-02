@@ -8,7 +8,7 @@ const utils = require("./utils");
 const router = require("express").Router();
 const limiter = require("../../config/limits");
 
-router.get('/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
+router.get('/addchapter', utils.isLoggedIn, (req, res, next) => {
   co(function*() {
     var novel = req.novel;
 
@@ -18,7 +18,7 @@ router.get('/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
   }).catch((err) => next(err));
 });
 
-router.post('/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
+router.post('/addchapter', utils.isLoggedIn, (req, res, next) => {
   /* Todo: check if user can post new novel */
   co(function*() {
     var novel = req.novel;
@@ -61,7 +61,7 @@ router.post('/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
   }).catch((err) => next(err));
 });
 
-router.get('/:novel/:chapter(\\d+)/', (req, res, next) => {
+router.get('/:chapter(\\d+)/', (req, res, next) => {
   co(function*() {
     var novel = req.novel;
     var chap = parseInt(req.params.chapter);
