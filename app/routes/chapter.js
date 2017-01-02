@@ -46,7 +46,7 @@ router.post('/addchapter', utils.isLoggedIn, (req, res, next) => {
       yield chapter.save();
 
       if (prologue) {
-        yield novel.update({prologue: true, $set: {"chapters.0": {title, ref: chapter.id}}});
+        yield novel.update({prologue: true, "chapters.0.title": title, "chapters.0.ref": chapter.id});
       } else {
         yield novel.update({$inc: {"numChapters": 1}, $push: {"chapters": {title, ref: chapter.id}}});
       }
@@ -111,8 +111,8 @@ router.post('/:chapter(\\d+)/edit', utils.isLoggedIn, (req, res, next) => {
       yield req.chapter.update({title, content, authorNote});
 
       var setOptions = {};
-      setOptions["chapters."+req.params.chapter] = {title};
-      novel.update({$set: setOptions}).exec();
+      setOptions["chapters."+req.params.chapter + ".title"] = title;
+      novel.update(setOptions).exec();
 
       res.redirect(novel.getLink() + "/" + req.params.chapter);
     } catch (err) {
@@ -132,7 +132,7 @@ router.all('/:chapter(\\d+)/delete', utils.isLoggedIn, (req, res, next) => {
     utils.assert403(novel.numChapters >= num, "You can only delete the last chapter");
 
     if (req.params.chapter == 0) {
-      yield novel.update({prologue: false, $set: {"chapters.0": {title: null, ref: null}}});
+      yield novel.update({prologue: false, "chapters.0.title": null, "chapters.0.ref": null});
     } else {
       yield novel.update({$inc: {"numChapters": -1}, $pull: {"chapters": {ref: chapter.id}}});
     }
