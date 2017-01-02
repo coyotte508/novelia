@@ -38,12 +38,24 @@ router.get('/profile', utils.isLoggedIn, function(req, res) {
   res.render('pages/profile', {user: req.user, req});
 });
 
-router.get('/u/:name', function(req, res, next) {
+router.param('user', function(req, res, next, user) {
   co(function*() {
-    var user = yield User.findByUrl(req.params.name);
-    
-    assert404(res, user, "User not found");
+    user = yield User.findByUrl(user);
 
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    req.viewedUser = user;
+    next();
+  }).catch(err => next(err));
+});
+
+router.get('/u/:user', function(req, res, next) {
+  co(function*() {
+    var user = req.viewedUser;
+    
     res.render('pages/user', {req, user});
   }).catch((err) => next(err));
 });

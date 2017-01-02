@@ -10,8 +10,8 @@ const limiter = require("../../config/limits");
 
 router.get('/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
   co(function*() {
-    var novel = yield Novel.findOne({slug: req.params.novel.toLowerCase()}, "author title numChapters prologue");
-    assert404(res, novel, "Novel not found");
+    var novel = req.novel;
+
     assert(novel.author == req.user.id, "You can only change your own novels");
 
     res.render('pages/addchapter', {req, novel, message: ""});  
@@ -21,11 +21,9 @@ router.get('/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
 router.post('/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
   /* Todo: check if user can post new novel */
   co(function*() {
-    var novel;
+    var novel = req.novel;
     var prologue = (req.body.options||"").split(",").indexOf("prologue") != -1;
     try {
-      novel = yield Novel.findOne({slug: req.params.novel.toLowerCase()}, "author title numChapters prologue");
-      assert404(res, novel, "Novel not found");
       assert(novel.author == req.user.id, "You can only change your own novels");
       assert(!(novel.prologue && prologue), "There is already a prologue, you can't add another one.");
 
@@ -64,8 +62,7 @@ router.post('/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
 
 router.get('/:novel/:chapter(\\d+)/', (req, res, next) => {
   co(function*() {
-    var novel = yield Novel.findOne({slug: req.params.novel.toLowerCase()});
-    assert404(res, novel, "Novel not found");
+    var novel = req.novel;
     var chap = parseInt(req.params.chapter);
     assert404(res, chap >= 0 && chap <= novel.chapters.length && novel.chapters[chap].title, "Chapter not found");
     var chapter = yield Chapter.findOne(novel.chapters[chap].ref);

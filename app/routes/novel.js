@@ -44,11 +44,24 @@ router.post('/addnovel', utils.isLoggedIn, (req, res) => {
   });
 });
 
+router.param('novel', function(req, res, next, novel) {
+  co(function*() {
+    novel = yield Novel.findOne({slug: novel.toLowerCase()});
+
+    if (!novel) {
+      res.status(404);
+      throw new Error("Novel not found");
+    }
+
+    req.novel = novel;
+
+    next();
+  }).catch(err => next(err));
+});
+
 router.get('/:novel', (req, res, next) => {
   co(function*() {
-    var novel = yield Novel.findOne({slug: req.params.novel.toLowerCase()});
-    
-    assert404(res, novel, "Novel not found");
+    var novel = req.novel;
 
     var author = yield User.findById(novel.author); 
 

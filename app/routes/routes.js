@@ -14,6 +14,7 @@ router.get("/contact", (req, res) => {
 [require("./auth.js"), require("./user.js"), require("./novel.js"), require("./chapter.js")].forEach((mod) => router.use("/", mod));
 
 router.use(function errorHandler (err, req, res, next) {
+  console.log(err);
   if (res.headersSent) {
     return next(err)
   }
