@@ -5,6 +5,7 @@ const User = require("../models/user");
 const utils = require("./utils");
 const router = require("express").Router();
 const limiter = require("../../config/limits");
+const toMarkdown = require("to-markdown");
 
 const mongoose = require("mongoose");
 
@@ -73,7 +74,7 @@ router.get('/:novel/edit', utils.isLoggedIn, (req, res, next) => {
     var novel = req.novel;
     utils.assert403(novel.author == req.user.id, "You can only change your own novels");
 
-    res.render('pages/editnovel', {req, novel, message: ""});
+    res.render('pages/editnovel', {req, novel, toMarkdown, message: ""});
   }).catch((err) => next(err));
 });
 
@@ -90,7 +91,7 @@ router.post('/:novel/edit', utils.isLoggedIn, (req, res) => {
       res.redirect(novel.getLink());
     } catch (err) {
       res.status(err.statusCode || 500);
-      res.render('pages/editnovel', {req, novel, message: err.message});
+      res.render('pages/editnovel', {req, novel, toMarkdown, message: err.message});
     }
   });
 });
