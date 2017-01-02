@@ -16,7 +16,7 @@
   </div>
   <div class="form-group">
     <label for="novelDescription">Description</label>
-    <textarea class="form-control" name="novelDescription" id="novelDescription" rows="4" placeholder="The description must not be too vague and give readers an idea what they are going to read." maxlength="2000"><%= req.body.novelDescription%></textarea>
+    <textarea class="form-control" name="novelDescription" id="novelDescription" rows="4" placeholder="The description must not be too vague and give readers an idea what they are going to read." maxlength="2000"><%- req.body.novelDescription%></textarea>
   </div>
   <button type="submit" class="btn btn-primary">Add novel</button>
 </form>

@@ -26,7 +26,7 @@ You can try **bold** text, *italics*, [link description](url), or:
 - This is a 
 - two-item list 
 
-and all the other things possible with Markdown, including tables!" minlength="100" maxlength="50000" required><%= req.body.chapterContent%></textarea>
+and all the other things possible with Markdown, including tables!" minlength="100" maxlength="50000" required><%- req.body.chapterContent%></textarea>
   </div>
   <% if (!novel.prologue) { %>
   <div class="form-check">
@@ -38,7 +38,7 @@ and all the other things possible with Markdown, including tables!" minlength="1
   <% } %>
   <div class="form-group">
     <label for="authorNote">Author's note</label>
-    <textarea class="form-control" name="authorNote" id="authorNote" rows="4" placeholder="Optional, if you have something more to say" maxlength="2000"><%= req.body.authorNote%></textarea>
+    <textarea class="form-control" name="authorNote" id="authorNote" rows="4" placeholder="Optional, if you have something more to say" maxlength="2000"><%- req.body.authorNote%></textarea>
   </div>
   <button type="submit" class="btn btn-primary">Add chapter</button>
 </form>

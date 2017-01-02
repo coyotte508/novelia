@@ -18,9 +18,7 @@ router.use(function errorHandler (err, req, res, next) {
   if (res.headersSent) {
     return next(err)
   }
-  if (res.statusCode != 404) {
-    res.statusCode = 500;
-  }
+  res.status(err.statusCode || 500);
   res.render('pages/'+res.statusCode, { req, err })
 });
 

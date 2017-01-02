@@ -24,15 +24,15 @@ router.post('/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
     var novel = req.novel;
     var prologue = (req.body.options||"").split(",").indexOf("prologue") != -1;
     try {
-      assert(novel.author == req.user.id, "You can only change your own novels");
-      assert(!(novel.prologue && prologue), "There is already a prologue, you can't add another one.");
+      utils.assert403(novel.author == req.user.id, "You can only change your own novels");
+      utils.assert403(!(novel.prologue && prologue), "There is already a prologue, you can't add another one.");
 
       var title = val.validateTitle(req.body.chapterTitle);
       var content = val.validateChapter(req.body.chapterContent);
       var authorNote = val.validateDescription(req.body.authorNote);
 
       if (yield limiter.attempt(req.user.id, 'addchapter', title)) {
-        throw new Error(`You can only add ${limiter.limits().addchapter.limit} chapters per day`);
+        throw new utils.HttpError(`You can only add ${limiter.limits().addchapter.limit} chapters per day`, 403);
       }
 
       var chapter = new Chapter();
@@ -55,6 +55,7 @@ router.post('/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
       // req.flash('addnovelMessage', "New novel added (sort of)");
       res.redirect(novel.getLink() + "/" + (prologue ? 0 : novel.numChapters + 1));
     } catch (err) {
+      res.status(err.statusCode || 500);
       res.render('pages/addchapter', {req, novel: novel || {}, message: err.message});
     }
   }).catch((err) => next(err));
@@ -64,7 +65,7 @@ router.get('/:novel/:chapter(\\d+)/', (req, res, next) => {
   co(function*() {
     var novel = req.novel;
     var chap = parseInt(req.params.chapter);
-    assert404(res, chap >= 0 && chap <= novel.chapters.length && novel.chapters[chap].title, "Chapter not found");
+    utils.assert404(chap >= 0 && chap <= novel.chapters.length && novel.chapters[chap].title, "Chapter not found");
     var chapter = yield Chapter.findOne(novel.chapters[chap].ref);
     assert(chapter, "Error while fetching chapter");
 
