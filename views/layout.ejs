@@ -46,7 +46,7 @@
                      <input type="password" class="form-control" id="password" placeholder="Password" name="password" required>
                      <div class="help-block text-right"><a href="">Forget the password ?</a></div>
                    </div>
-                   <input type="hidden" name="referrer" value="<%= req.path %>">
+                   <input type="hidden" name="referrer" value="<%= req.originalUrl %>">
                    <div class="form-group">
                      <button type="submit" class="btn btn-primary btn-block">Sign in</button>
                    </div>
@@ -58,7 +58,7 @@
                  </form>
                </div>
                <div class="bottom text-center">
-                New here ? <a href="/signup?referrer=<%= req.path %>"><b>Join Us</b></a>
+                New here ? <a href="/signup?referrer=<%= req.url %>"><b>Join Us</b></a>
             </ul>
           </li>
           <% } %>
