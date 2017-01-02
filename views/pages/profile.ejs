@@ -12,7 +12,7 @@
   <p>
     <ul class="list-group">
       <% user.novels.forEach( (novel) => { %>
-        <a href="/nv/<%= novel.slug %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
+        <a href="/<%= novel.slug %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
       <% }); %>
     </ul>
   </p>

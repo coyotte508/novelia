@@ -11,7 +11,7 @@ router.get("/contact", (req, res) => {
 });
 
 /* Aggregate routers */
-[require("./auth.js"), require("./novel.js"), require("./user.js"), require("./chapter.js")].forEach((mod) => router.use("/", mod));
+[require("./auth.js"), require("./user.js"), require("./novel.js"), require("./chapter.js")].forEach((mod) => router.use("/", mod));
 
 router.use(function errorHandler (err, req, res, next) {
   if (res.headersSent) {

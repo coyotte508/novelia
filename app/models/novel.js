@@ -69,7 +69,7 @@ novelSchema.methods.classySlug = function() {
 };
 
 novelSchema.methods.getLink = function() {
-    return "/nv/" + this.classySlug();
+    return /*"/nv/" +*/ "/" + this.classySlug();
 };
 
 //expose novel model to the app

@@ -44,7 +44,7 @@ router.post('/addnovel', utils.isLoggedIn, (req, res) => {
   });
 });
 
-router.get('/nv/:novel', (req, res, next) => {
+router.get('/:novel', (req, res, next) => {
   co(function*() {
     var novel = yield Novel.findOne({slug: req.params.novel.toLowerCase()});
     

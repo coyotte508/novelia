@@ -8,7 +8,7 @@ const utils = require("./utils");
 const router = require("express").Router();
 const limiter = require("../../config/limits");
 
-router.get('/nv/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
+router.get('/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
   co(function*() {
     var novel = yield Novel.findOne({slug: req.params.novel.toLowerCase()}, "author title numChapters prologue");
     assert404(res, novel, "Novel not found");
@@ -18,7 +18,7 @@ router.get('/nv/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
   }).catch((err) => next(err));
 });
 
-router.post('/nv/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
+router.post('/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
   /* Todo: check if user can post new novel */
   co(function*() {
     var novel;
@@ -62,7 +62,7 @@ router.post('/nv/:novel/addchapter', utils.isLoggedIn, (req, res, next) => {
   }).catch((err) => next(err));
 });
 
-router.get('/nv/:novel/:chapter(\\d+)/', (req, res, next) => {
+router.get('/:novel/:chapter(\\d+)/', (req, res, next) => {
   co(function*() {
     var novel = yield Novel.findOne({slug: req.params.novel.toLowerCase()});
     assert404(res, novel, "Novel not found");
