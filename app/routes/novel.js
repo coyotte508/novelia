@@ -1,6 +1,7 @@
 const val = require("validator");
 const co = require("co");
 const Novel = require("../models/novel");
+const Chapter = require("../models/chapter");
 const User = require("../models/user");
 const utils = require("./utils");
 const router = require("express").Router();
@@ -34,7 +35,7 @@ router.post('/addnovel', utils.isLoggedIn, (req, res) => {
       novel.author = req.user.id;
 
       yield novel.save();
-      yield req.user.update({$push: {"novels": {title: title, ref: novel.id, slug: novel.classySlug()}}});
+      yield req.user.update({$push: {"novels": {title, ref: novel.id, slug: novel.classySlug()}}});
 
       // req.flash('addnovelMessage', "New novel added (sort of)");
       res.redirect(novel.getLink());
@@ -95,6 +96,26 @@ router.post('/:novel/edit', utils.isLoggedIn, (req, res) => {
     }
   });
 });
+
+router.all('/:novel/delete', utils.isLoggedIn, (req, res, next) => {
+  /* Todo: check if user can post new novel */
+  co(function*() {
+    var novel = req.novel;
+    utils.assert403(novel.author == req.user.id, "You can only delete your own novels");
+    utils.assert403(novel.numChapters == 0, "You can only delete empty novels");
+
+    //not using req.user since admin may in the future be able to delete others' novels
+    yield User.findByIdAndUpdate(novel.author, {$pull: {"novels": {ref: novel.id}}});
+
+    if (novel.prologue) {
+      Chapter.findOneAndRemove(novel.chapters[0].ref).exec();
+    }
+    novel.remove();
+
+    res.redirect("/profile");
+  }).catch(err => next(err));
+});
+
 
 router.use("/:novel/", require("./chapter"));
 

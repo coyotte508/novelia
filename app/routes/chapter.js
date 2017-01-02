@@ -122,4 +122,25 @@ router.post('/:chapter(\\d+)/edit', utils.isLoggedIn, (req, res, next) => {
   }).catch((err) => next(err));
 });
 
+router.all('/:chapter(\\d+)/delete', utils.isLoggedIn, (req, res, next) => {
+  /* Todo: check if user can post new novel */
+  co(function*() {
+    var novel = req.novel;
+    var num = req.params.chapter;
+    var chapter = req.chapter;
+    utils.assert403(novel.author == req.user.id, "You can only delete your own novels");
+    utils.assert403(novel.numChapters >= num, "You can only delete the last chapter");
+
+    if (req.params.chapter == 0) {
+      yield novel.update({prologue: false, $set: {"chapters.0": {title: null, ref: null}}});
+    } else {
+      yield novel.update({$inc: {"numChapters": -1}, $pull: {"chapters": {ref: chapter.id}}});
+    }
+
+    chapter.remove();
+
+    res.redirect(novel.getLink());
+  }).catch(err => next(err));
+});
+
 module.exports = router;

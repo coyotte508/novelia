@@ -13,9 +13,9 @@ nLink = novel.getLink();
   <hr/>
   <div>
     <h4>Synopsis</h4>
-    <p>
+    <div class="text-justify">
       <%- novel.description %>
-    </p>
+    </div>
     <% if (isGod) {%><p><a href="<%= nLink %>/edit"><span class="fa fa-pencil-square-o"></span> Edit description</a></p><% } %>  
   </div>
   <div>
@@ -27,10 +27,17 @@ nLink = novel.getLink();
     <% } });
      } else { %>
     <% novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>
-      <li class="list-group-item"><a class="list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %></a> <a href="<%= nLink + "/" + index  + "/edit" %>" class="float-xs-right"><span class="fa fa-pencil-square-o"></span></a></li>
+      <li class="list-group-item"><a class="list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %></a> <span class="float-xs-right"> <a href="<%= nLink + "/" + index  + "/edit" %>"><span class="sr-only">Edit chapter</span><span class="fa fa-pencil-square-o" aria-hidden="true"></span></a> <% if (index == novel.numChapters) {%><a href="<%= nLink + "/" + index  + "/delete" %>"> <span class="sr-only">Delete chapter</span><span class="fa fa-trash" aria-hidden="true"></span></a> <% } %> </span> </li>
     <% } });
     } %>
     </ul></p>
     <% if (isGod) {%><p><a href="<%= nLink %>/addchapter"><span class="fa fa-plus"></span> Add a chapter</a></p><% } %>
   </div>
+  <% if (isGod) {%> 
+  <div>
+    <p>
+      <a href="<%= nLink %>/delete" class="btn btn-danger<% if (novel.numChapters > 0) {%> disabled" title="You can't delete a novel with chapters in it"<% }else{ %>"<%}%>><span class="fa fa-trash"></span> Delete novel</a>
+    </p>
+  </div>
+  <% } %>
 </div>
