@@ -31,8 +31,8 @@ validator.validateUser = (username) => {
   if (!validator.isAlphanumeric(username)) {
     throw new Error("Invalid username.");
   }
-  if (!validator.isLength(username, {min: 4, max: 16})) {
-    throw new Error("Username must be betwween 4 and 16 characters.");
+  if (!validator.isLength(username, {min: 4, max: 20})) {
+    throw new Error("Username must be betwween 4 and 20 characters.");
   }
   return username;
 };
