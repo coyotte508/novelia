@@ -32,6 +32,15 @@ mongoose.connection.on("error", (err) => {
   console.log(err);
 });
 
+// mongoose.connection.once("open", () => {
+//   const Chapter = require("./app/models/chapter");
+//   const Novel = require("./app/models/novel");
+//   const User = require("./app/models/user");
+//   Chapter.collection.dropAllIndexes();
+//   Novel.collection.dropAllIndexes();
+//   User.collection.dropAllIndexes();
+// });
+
 /* Mongo db limits, AFTER mongoose.connect */
 require('./config/limits');
 

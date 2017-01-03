@@ -8,13 +8,13 @@ const Schema = mongoose.Schema;
 var userSchema = new Schema({
     local            : {
         username     : String,
-        email        : {type: String, unique: true},
+        email        : {type: String, unique: true, sparse: true},
         password     : String,
     },
     google           : {
         id           : String,
         token        : String,
-        email        : {type: String, unique: true},
+        email        : {type: String, unique: true, sparse: true},
         name         : String
     },
     lastLogin: {
@@ -24,7 +24,7 @@ var userSchema = new Schema({
     novels           : [{title: String, ref: Schema.Types.ObjectId, slug: String}]
 });
 
-userSchema.index({"local.username": "text"}, {unique: true});
+userSchema.index({"local.username": "text"}, {unique: true, sparse: true});
 
 // methods ======================
 // generating a hash
