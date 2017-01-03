@@ -1,9 +1,14 @@
-<!DOCTYPE html>  
+<% 
+  if (typeof description == "undefined") {
+    description = "";
+  }
+%><!DOCTYPE html>  
 <html lang="en">  
 <head>
   <meta charset="utf-8">
   <title><%= title %> - LitNovel</title>
-  <meta property="og:title" content="<%- title %>" /> 
+  <meta property="og:title" content="<%= title %>" />
+  <meta name="description" content="<%= description %>" />
   <%- meta %>
   <link rel="stylesheet" href="/assets/stylesheets/frontend.css?v=<%= req.version %>">
 </head>
