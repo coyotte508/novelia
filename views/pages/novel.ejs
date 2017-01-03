@@ -2,12 +2,20 @@
 title = novel.title; 
 isGod = req.user && author && req.user.id == author.id;
 nLink = novel.getLink();
+authorName = author.displayName();
 %>
 
 <%- contentFor('body') %>
 
+<meta property="og:title" content="<%= title %>" />
+<meta property="og:type" content="books.book" />
+<meta property="books:author" content="<%= authorName %>" />
+<meta property="og:url" content="http://" + reg.get("host") + "/" + novel.getLink() />
+<!--<meta property="og:image" content="http://ia.media-imdb.com/images/rock.jpg" />-->
+<meta name="author" content="<%= authorName %>" />
+
 <div>
-  <h2 class="text-md-center"><%= title %> <small>by <a href="<%= author.getLink() %>"><%= author.displayName() %></a></small></h2>
+  <h2 class="text-md-center"><%= title %> <small>by <a href="<%= author.getLink() %>"><%= authorName %></a></small></h2>
   <hr/>
   <p><br/><br/><br/><br/><br/></p>
   <hr/>

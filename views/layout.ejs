@@ -2,9 +2,9 @@
 <html lang="en">  
 <head>
   <meta charset="utf-8">
-  <title><%- title %> - LitNovel</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <title><%= title %> - LitNovel</title>
+  <meta property="og:title" content="<%- title %>" /> 
+  <%- meta %>
   <link rel="stylesheet" href="/assets/stylesheets/frontend.css?v=<%= req.version %>">
 </head>
 <body>

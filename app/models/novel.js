@@ -10,7 +10,10 @@ var novelSchema = new Schema({
     required: true, 
   },
   author: {
-    type: Schema.Types.ObjectId,
+    type: {
+      ref: Schema.Types.ObjectId,
+      name: String
+    },
     required: true
   },
   //updatedAt: Date,

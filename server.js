@@ -53,6 +53,7 @@ app.use(morgan('dev'));
 app.set('view engine', 'ejs'); 
 
 app.set("layout extractScripts", true)
+app.set("layout extractMetas", true)
 app.use(expressLayouts);
 app.use(compression());
 app.use(bodyParser.json());

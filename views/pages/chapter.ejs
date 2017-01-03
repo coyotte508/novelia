@@ -1,11 +1,13 @@
 <% 
 title = chapter.title; 
-isGod = req.user && req.user.id == novel.author;
+isGod = req.user && req.user.id == novel.author.ref;
 novelLink = novel.getLink();
 num = +req.params.chapter;
 %>
 
 <%- contentFor('body') %>
+
+<meta name="author" content="<%= novel.author.name %>" />
 
 <div>
   <h2 class="text-md-center"><a href="<%= novel.getLink() %>"><%= novel.title %></a> - <%= num %> <% if (isGod) {%><small><a href="<%= novelLink + "/" + num  + "/edit" %>"><small><span class="fa fa-pencil-square-o smaller"></span></small></a></small><% } %></h2>

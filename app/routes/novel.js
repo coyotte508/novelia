@@ -32,7 +32,7 @@ router.post('/addnovel', utils.isLoggedIn, (req, res) => {
       var novel = new Novel();
       novel.title = title;
       novel.description = description;
-      novel.author = req.user.id;
+      novel.author = {ref: req.user.id, name: req.user.displayName()};
 
       yield novel.save();
       yield req.user.update({$push: {"novels": {title, ref: novel.id, slug: novel.classySlug()}}});
@@ -64,7 +64,7 @@ router.get('/:novel', (req, res, next) => {
   co(function*() {
     var novel = req.novel;
 
-    var author = yield User.findById(novel.author); 
+    var author = yield User.findById(novel.author.ref); 
 
     res.render('pages/novel', {req, novel, author});
   }).catch((err) => next(err));
@@ -73,7 +73,7 @@ router.get('/:novel', (req, res, next) => {
 router.get('/:novel/edit', utils.isLoggedIn, (req, res, next) => {
   co(function*() {
     var novel = req.novel;
-    utils.assert403(novel.author == req.user.id, "You can only change your own novels");
+    utils.assert403(novel.author.ref == req.user.id, "You can only change your own novels");
 
     res.render('pages/editnovel', {req, novel, toMarkdown, message: ""});
   }).catch((err) => next(err));
@@ -84,7 +84,7 @@ router.post('/:novel/edit', utils.isLoggedIn, (req, res) => {
   co(function*() {
     try {
       var novel = req.novel;
-      utils.assert403(novel.author == req.user.id, "You can only change your own novels");
+      utils.assert403(novel.author.ref == req.user.id, "You can only change your own novels");
       var description = val.validateDescription(req.body.novelDescription);
 
       yield novel.update({description});
@@ -101,11 +101,11 @@ router.all('/:novel/delete', utils.isLoggedIn, (req, res, next) => {
   /* Todo: check if user can post new novel */
   co(function*() {
     var novel = req.novel;
-    utils.assert403(novel.author == req.user.id, "You can only delete your own novels");
+    utils.assert403(novel.author.ref == req.user.id, "You can only delete your own novels");
     utils.assert403(novel.numChapters == 0, "You can only delete empty novels");
 
     //not using req.user since admin may in the future be able to delete others' novels
-    yield User.findByIdAndUpdate(novel.author, {$pull: {"novels": {ref: novel.id}}});
+    yield User.findByIdAndUpdate(novel.author.ref, {$pull: {"novels": {ref: novel.id}}});
 
     if (novel.prologue) {
       Chapter.findOneAndRemove(novel.chapters[0].ref).exec();
