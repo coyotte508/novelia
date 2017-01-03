@@ -115,6 +115,7 @@ router.all('/:novel/show', utils.canTouchNovel, (req, res, next) => {
   co(function*() {
     var novel = req.novel;
 
+    Chapter.update({"novel.ref": novel.id}, {public: true}, {multi: true}).then();
     yield novel.update({public: true});
 
     res.redirect(novel.getLink());
@@ -126,6 +127,7 @@ router.all('/:novel/hide', utils.canTouchNovel, (req, res, next) => {
   co(function*() {
     var novel = req.novel;
 
+    Chapter.update({"novel.ref": novel.id}, {public: false}, {multi: true}).then();
     yield novel.update({public: false});
 
     res.redirect(novel.getLink());
