@@ -1,9 +1,16 @@
 const express = require("express");
+const Chapter = require("../models/chapter");
+const co = require("co");
+const slug = require("slug");
 
 var router = express.Router();
 
-router.get("/", (req, res) => {
-  res.render("pages/index", {error:null, req});
+router.get("/", (req, res, err) => {
+  co(function* () {
+    const latest = yield Chapter.find({}, "title novel number").sort({_id: -1}).limit(10);
+    console.log(latest);
+    res.render("pages/index", {error:null, latest, req, slug});
+  }).catch(err => next(err));
 });
 
 router.get("/contact", (req, res) => {

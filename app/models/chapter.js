@@ -23,10 +23,6 @@ var chapterSchema = new Schema({
     required: true
   },
   authorNote: String,
-  views: {
-    type: Number,
-    default: 0
-  },
   public: Boolean,
   number: {
     type: Number,

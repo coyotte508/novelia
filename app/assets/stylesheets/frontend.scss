@@ -55,3 +55,16 @@ table {
   /*width: inherit;*/
   max-width: 95%;
 }
+
+blockquote {
+  @extend .blockquote;
+}
+
+.content {
+  @extend .text-justify;
+
+  img {
+    max-height: 400px;
+    max-width: 600px;
+  }
+}

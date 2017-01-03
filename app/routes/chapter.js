@@ -40,8 +40,8 @@ router.post('/addchapter', utils.isLoggedIn, (req, res, next) => {
       chapter.title = title;
       chapter.content = content;
       chapter.authorNote = authorNote;
-      chapter.novel = {ref: novel.id};
-      chapter.number = prologue ? 0 : novel.numChapters;
+      chapter.novel = {ref: novel.id, title: novel.title};
+      chapter.number = prologue ? 0 : (novel.numChapters+1);
 
       yield chapter.save();
 

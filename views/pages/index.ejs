@@ -21,4 +21,9 @@
   <h1 class="display-3"><span class="fa fa-lock"></span> Latest updates</h1>
 
   <p>Work in progress </p>
+  <ul class="list-group text-md-left">
+    <% latest.forEach((item) => {%>
+    <a class="list-group-item list-group-item-action" href="/<%- slug(item.novel.title) + "/" + item.number %>"><%= item.novel.title %> - <strong><%= item.number %></strong> <small class="text-muted"><i><%= item.title %></i></small></a>
+    <% });%>
+  </ul>
 </div>
