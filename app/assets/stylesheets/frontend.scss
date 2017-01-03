@@ -60,7 +60,7 @@ blockquote {
   @extend .blockquote;
 }
 
-.content {
+.synopsis, .chapter-content, .author-note {
   @extend .text-justify;
 
   img {

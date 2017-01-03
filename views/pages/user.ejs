@@ -15,7 +15,7 @@ title = user.displayName();
       <%- user.bio || "<i>This user does not yet have a bio.</i>" %>
     </div>
   </div>
-  <%if (user.novels) { %>
+  <%if (user.novels && user.novels.length > 0) { %>
   <h2>Novels</h2>
   <ul class="list-group">
     <% user.novels.forEach( (novel) => { %>

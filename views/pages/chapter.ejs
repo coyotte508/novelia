@@ -11,7 +11,7 @@ num = +req.params.chapter;
   <h2 class="text-md-center"><a href="<%= novel.getLink() %>"><%= novel.title %></a> - <%= num %> <% if (isGod) {%><small><a href="<%= novelLink + "/" + num  + "/edit" %>"><small><span class="fa fa-pencil-square-o smaller"></span></small></a></small><% } %></h2>
   <hr/>
   <h3 class="text-md-center"><%= chapter.title %></h3>
-  <div class="chapter-content text-justify">
+  <div class="chapter-content">
     <%- chapter.content %>
   </div>
 
@@ -20,7 +20,7 @@ num = +req.params.chapter;
   <div class="card">
     <div class="card-block bg-faded">
       <h6 class="card-title">Author's note</h6>
-      <div class="text-justify">
+      <div class="author-note">
         <%- chapter.authorNote %>
       </div>
     </div>
