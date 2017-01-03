@@ -9,23 +9,18 @@ const utils = require("./utils");
 const router = require("express").Router();
 const limiter = require("../../config/limits");
 
-router.get('/addchapter', utils.isLoggedIn, (req, res, next) => {
+router.get('/addchapter', utils.canTouchNovel, (req, res, next) => {
   co(function*() {
-    var novel = req.novel;
-
-    utils.assert403(novel.author.ref == req.user.id, "You can only change your own novels");
-
-    res.render('pages/addchapter', {req, novel, message: ""});  
+    res.render('pages/addchapter', {req, novel: req.novel, message: ""});  
   }).catch((err) => next(err));
 });
 
-router.post('/addchapter', utils.isLoggedIn, (req, res, next) => {
+router.post('/addchapter', utils.canTouchNovel, (req, res, next) => {
   /* Todo: check if user can post new novel */
   co(function*() {
     var novel = req.novel;
     var prologue = (req.body.options||"").split(",").indexOf("prologue") != -1;
     try {
-      utils.assert403(novel.author.ref == req.user.id, "You can only change your own novels");
       utils.assert403(!(novel.prologue && prologue), "There is already a prologue, you can't add another one.");
 
       var title = val.validateTitle(req.body.chapterTitle);
@@ -86,24 +81,18 @@ router.get('/:chapter(\\d+)/', (req, res, next) => {
   }).catch((err) => next(err));
 });
 
-router.get('/:chapter(\\d+)/edit', utils.isLoggedIn, (req, res, next) => {
+router.get('/:chapter(\\d+)/edit',utils.canTouchNovel, (req, res, next) => {
   co(function*() {
-    var novel = req.novel;
-
-    utils.assert403(novel.author.ref == req.user.id, "You can only change your own novels");
-
-    res.render('pages/editchapter', {req, novel, chapter: req.chapter, toMarkdown, message: ""});  
+    res.render('pages/editchapter', {req, novel: req.novel, chapter: req.chapter, toMarkdown, message: ""});  
   }).catch((err) => next(err));
 });
 
 
-router.post('/:chapter(\\d+)/edit', utils.isLoggedIn, (req, res, next) => {
+router.post('/:chapter(\\d+)/edit', utils.canTouchNovel, (req, res, next) => {
   /* Todo: check if user can post new novel */
   co(function*() {
     var novel = req.novel;
     try {
-      utils.assert403(novel.author.ref == req.user.id, "You can only change your own novels");
-
       var title = val.validateTitle(req.body.chapterTitle);
       var content = val.validateChapter(req.body.chapterContent);
       var authorNote = val.validateDescription(req.body.authorNote);
@@ -122,13 +111,12 @@ router.post('/:chapter(\\d+)/edit', utils.isLoggedIn, (req, res, next) => {
   }).catch((err) => next(err));
 });
 
-router.all('/:chapter(\\d+)/delete', utils.isLoggedIn, (req, res, next) => {
+router.all('/:chapter(\\d+)/delete', utils.canTouchNovel, (req, res, next) => {
   /* Todo: check if user can post new novel */
   co(function*() {
     var novel = req.novel;
     var num = req.params.chapter;
     var chapter = req.chapter;
-    utils.assert403(novel.author.ref == req.user.id, "You can only delete your own novels");
     utils.assert403(novel.numChapters >= num, "You can only delete the last chapter");
 
     if (req.params.chapter == 0) {

@@ -70,38 +70,32 @@ router.get('/:novel', (req, res, next) => {
   }).catch((err) => next(err));
 });
 
-router.get('/:novel/edit', utils.isLoggedIn, (req, res, next) => {
+router.get('/:novel/edit', utils.canTouchNovel, (req, res, next) => {
   co(function*() {
-    var novel = req.novel;
-    utils.assert403(novel.author.ref == req.user.id, "You can only change your own novels");
-
-    res.render('pages/editnovel', {req, novel, toMarkdown, message: ""});
+    res.render('pages/editnovel', {req, novel: req.novel, toMarkdown, message: ""});
   }).catch((err) => next(err));
 });
 
-router.post('/:novel/edit', utils.isLoggedIn, (req, res) => {
+router.post('/:novel/edit', utils.canTouchNovel, (req, res) => {
   /* Todo: check if user can post new novel */
   co(function*() {
     try {
-      var novel = req.novel;
-      utils.assert403(novel.author.ref == req.user.id, "You can only change your own novels");
       var description = val.validateDescription(req.body.novelDescription);
 
       yield novel.update({description});
 
-      res.redirect(novel.getLink());
+      res.redirect(req.novel.getLink());
     } catch (err) {
       res.status(err.statusCode || 500);
-      res.render('pages/editnovel', {req, novel, toMarkdown, message: err.message});
+      res.render('pages/editnovel', {req, novel: req.novel, toMarkdown, message: err.message});
     }
   });
 });
 
-router.all('/:novel/delete', utils.isLoggedIn, (req, res, next) => {
+router.all('/:novel/delete', utils.canTouchNovel, (req, res, next) => {
   /* Todo: check if user can post new novel */
   co(function*() {
     var novel = req.novel;
-    utils.assert403(novel.author.ref == req.user.id, "You can only delete your own novels");
     utils.assert403(novel.numChapters == 0, "You can only delete empty novels");
 
     //not using req.user since admin may in the future be able to delete others' novels
@@ -116,6 +110,27 @@ router.all('/:novel/delete', utils.isLoggedIn, (req, res, next) => {
   }).catch(err => next(err));
 });
 
+router.all('/:novel/show', utils.canTouchNovel, (req, res, next) => {
+  /* Todo: check if user can post new novel */
+  co(function*() {
+    var novel = req.novel;
+
+    yield novel.update({public: true});
+
+    res.redirect(novel.getLink());
+  }).catch(err => next(err));
+});
+
+router.all('/:novel/hide', utils.canTouchNovel, (req, res, next) => {
+  /* Todo: check if user can post new novel */
+  co(function*() {
+    var novel = req.novel;
+
+    yield novel.update({public: false});
+
+    res.redirect(novel.getLink());
+  }).catch(err => next(err));
+});
 
 router.use("/:novel/", require("./chapter"));
 

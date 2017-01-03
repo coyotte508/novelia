@@ -37,8 +37,20 @@ function isLoggedIn(req, res, next) {
   res.redirect('/login?referrer='+req.url);
 }
 
+function canTouchNovel(req, res, next) { 
+  isLoggedIn(req, res, () => {
+    try {
+      assert403(req.novel.author.ref == req.user.id, "You are not authorized to manage this novel.");
+      next();  
+    } catch (err) {
+      next(err);
+    }
+  });
+}
+
 module.exports = {
   isLoggedIn,
+  canTouchNovel,
   HttpError, 
   assert403, 
   assert404

@@ -44,6 +44,11 @@ authorName = author.displayName();
   <% if (isGod) {%> 
   <div>
     <p>
+      <% if (novel.public) {%>
+      <a href="<%= nLink %>/hide" class="btn btn-primary"><span class="fa fa-eye-slash"></span> Make private</a>
+      <% } else { %>
+      <a href="<%= nLink %>/show" class="btn btn-primary"><span class="fa fa-eye"></span> Make public</a>
+      <% } %>
       <a href="<%= nLink %>/delete" class="btn btn-danger<% if (novel.numChapters > 0) {%> disabled" title="You can't delete a novel with chapters in it"<% }else{ %>"<%}%>><span class="fa fa-trash"></span> Delete novel</a>
     </p>
   </div>
