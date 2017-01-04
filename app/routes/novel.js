@@ -6,7 +6,6 @@ const User = require("../models/user");
 const utils = require("./utils");
 const router = require("express").Router();
 const limiter = require("../../config/limits");
-const toMarkdown = require("to-markdown");
 
 const mongoose = require("mongoose");
 
@@ -72,7 +71,7 @@ router.get('/:novel', (req, res, next) => {
 
 router.get('/:novel/edit', utils.canTouchNovel, (req, res, next) => {
   co(function*() {
-    res.render('pages/editnovel', {req, novel: req.novel, toMarkdown, message: ""});
+    res.render('pages/editnovel', {req, novel: req.novel, val, message: ""});
   }).catch((err) => next(err));
 });
 
@@ -87,7 +86,7 @@ router.post('/:novel/edit', utils.canTouchNovel, (req, res) => {
       res.redirect(req.novel.getLink());
     } catch (err) {
       res.status(err.statusCode || 500);
-      res.render('pages/editnovel', {req, novel: req.novel, toMarkdown, message: err.message});
+      res.render('pages/editnovel', {req, novel: req.novel, val, message: err.message});
     }
   });
 });

@@ -1,7 +1,6 @@
 const val = require("validator");
 const co = require("co");
 const assert = require("assert");
-const toMarkdown = require("to-markdown");
 const Novel = require("../models/novel");
 const User = require("../models/user");
 const Chapter = require("../models/chapter");
@@ -83,7 +82,7 @@ router.get('/:chapter(\\d+)/', (req, res, next) => {
 
 router.get('/:chapter(\\d+)/edit',utils.canTouchNovel, (req, res, next) => {
   co(function*() {
-    res.render('pages/editchapter', {req, novel: req.novel, chapter: req.chapter, toMarkdown, message: ""});  
+    res.render('pages/editchapter', {req, novel: req.novel, chapter: req.chapter, val, message: ""});  
   }).catch((err) => next(err));
 });
 
@@ -106,7 +105,7 @@ router.post('/:chapter(\\d+)/edit', utils.canTouchNovel, (req, res, next) => {
       res.redirect(novel.getLink() + "/" + req.params.chapter);
     } catch (err) {
       res.status(err.statusCode || 500);
-      res.render('pages/editchapter', {req, novel: novel || {}, chapter: req.chapter, toMarkdown, message: err.message});
+      res.render('pages/editchapter', {req, novel: novel || {}, chapter: req.chapter, val, message: err.message});
     }
   }).catch((err) => next(err));
 });

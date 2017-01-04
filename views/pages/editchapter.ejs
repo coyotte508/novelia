@@ -26,11 +26,11 @@ You can try **bold** text, *italics*, [link description](url), or:
 - This is a 
 - two-item list 
 
-and all the other things possible with Markdown, including tables!" minlength="100" maxlength="50000" required><%- req.body.chapterContent || toMarkdown(chapter.content, {gfm:true}) %></textarea>
+and all the other things possible with Markdown, including tables!" minlength="100" maxlength="50000" required><%- req.body.chapterContent || val.dbToText(chapter.content) %></textarea>
   </div>
   <div class="form-group">
     <label for="authorNote">Author's note</label>
-    <textarea class="form-control" name="authorNote" id="authorNote" rows="4" placeholder="Optional, if you have something more to say" maxlength="2000"><%- req.body.authorNote || toMarkdown(chapter.authorNote, {gfm:true}) %></textarea>
+    <textarea class="form-control" name="authorNote" id="authorNote" rows="4" placeholder="Optional, if you have something more to say" maxlength="2000"><%- req.body.authorNote || val.dbToText(chapter.authorNote) %></textarea>
   </div>
   <button type="submit" class="btn btn-primary">Edit chapter</button>
 </form>
