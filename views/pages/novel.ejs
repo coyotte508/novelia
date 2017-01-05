@@ -3,6 +3,8 @@ title = novel.title;
 isGod = req.user && author && req.user.id == author.id;
 nLink = novel.getLink();
 authorName = author.displayName();
+liked = req.user && req.user.isLikeNovel(novel.id);
+followed = req.user && req.user.isFollowNovel(novel.id);
 %>
 
 <%- contentFor('body') %>
@@ -17,7 +19,11 @@ authorName = author.displayName();
 <div>
   <h2 class="text-md-center"><%= title %> <small>by <a href="<%= author.getLink() %>"><%= authorName %></a></small></h2>
   <hr/>
-  <p><br/><br/><br/><br/><br/></p>
+  <div>
+    <a href="<%= novel.getLink() + (liked ? "/unlike": "/like") %>" class="btn btn-sm btn-secondary<%- liked ? " active" : "" %>"  aria-pressed="<%- liked ? "true" : "false" %>"><span class="fa fa-thumbs-o-up"></span> Like <span class="tag tag-default"><%- novel.likes %></span></a>
+    <a href="<%= novel.getLink() + (followed ? "/unfollow" : "/follow") %>" class="btn btn-sm btn-secondary<%- followed ? " active" : "" %>" aria-pressed="<%- followed ? "true" : "false" %>"><span class="fa fa-plus"></span> Follow <span class="tag tag-default"><%- novel.follows %></span></a>
+  </div>
+  <p><br/><br/></p>
   <hr/>
   <div>
     <h4>Synopsis</h4>

@@ -3,6 +3,7 @@ const User = require("../models/user")
 const passport = require("passport");
 const utils = require("./utils");
 const router = require("express").Router();
+const slug = require("slug");
 
 router.get("/login", (req, res) => {
   if (req.isAuthenticated()) {
@@ -35,7 +36,7 @@ router.post('/signup', (req, res, next) => {
 });
 
 router.get('/profile', utils.isLoggedIn, function(req, res) {
-  res.render('pages/profile', {user: req.user, req});
+  res.render('pages/profile', {user: req.user, req, slug});
 });
 
 router.param('user', function(req, res, next, user) {
@@ -56,7 +57,7 @@ router.get('/u/:user', function(req, res, next) {
   co(function*() {
     var user = req.viewedUser;
     
-    res.render('pages/user', {req, user});
+    res.render('pages/user', {req, user, slug});
   }).catch((err) => next(err));
 });
 

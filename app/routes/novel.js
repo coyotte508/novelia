@@ -5,7 +5,7 @@ const Chapter = require("../models/chapter");
 const User = require("../models/user");
 const utils = require("./utils");
 const router = require("express").Router();
-const limiter = require("../../config/limits");
+const limiter = require("mongo-limiter");
 
 const mongoose = require("mongoose");
 
@@ -20,7 +20,7 @@ router.post('/addnovel', utils.isLoggedIn, (req, res) => {
       var title = val.validateTitle(req.body.novelTitle);
       var description = val.validateDescription(req.body.novelDescription);
 
-      if (yield limiter.attempt(req.user.id, 'addnovel', title)) {
+      if (!(yield limiter.attempt(req.user.id, 'addnovel', title))) {
         throw new utils.HttpError(`You can only add ${limiter.limits().addnovel.limit} novels per day`, 403);
       }
 
@@ -63,7 +63,7 @@ router.get('/:novel', (req, res, next) => {
   co(function*() {
     var novel = req.novel;
 
-    var author = yield User.findById(novel.author.ref); 
+    var author = yield User.findById(novel.author.ref, User.basics()); 
 
     res.render('pages/novel', {req, novel, author});
   }).catch((err) => next(err));
@@ -98,7 +98,7 @@ router.all('/:novel/delete', utils.canTouchNovel, (req, res, next) => {
     utils.assert403(novel.numChapters == 0, "You can only delete empty novels");
 
     //not using req.user since admin may in the future be able to delete others' novels
-    yield User.findByIdAndUpdate(novel.author.ref, {$pull: {"novels": {ref: novel.id}}});
+    yield User.where({_id: novel.author.ref}).update({$pull: {"novels": {ref: novel.id}}}).exec();
 
     if (novel.prologue) {
       Chapter.findOneAndRemove(novel.chapters[0].ref).exec();
@@ -113,6 +113,10 @@ router.all('/:novel/show', utils.canTouchNovel, (req, res, next) => {
   /* Todo: check if user can post new novel */
   co(function*() {
     var novel = req.novel;
+
+    if (!(yield limiter.attempt(req.user.id, 'shownovel', novel.title))) {
+      throw new utils.HttpError(`You can only change your novels' viewable settings ${limiter.limits().shownovel.limit} times per hour`, 403);
+    }
 
     Chapter.update({"novel.ref": novel.id}, {public: true}, {multi: true}).then();
     yield novel.update({public: true});
@@ -132,6 +136,28 @@ router.all('/:novel/hide', utils.canTouchNovel, (req, res, next) => {
     res.redirect(novel.getLink());
   }).catch(err => next(err));
 });
+
+// router.all('/:novel/like', utils.isLoggedIn, (req, res, next) => {
+//   var free = () => ();
+//   co(function*() {
+//     var novel = req.novel;
+
+//     if (!yield limiter.attempt(req.user.id, 'like', novel.title)) {
+//       throw new utils.HttpError(`You can only like ${limiter.limits().like.limit} times per hour`, 403);
+//     }
+
+//     try {
+//       free = yield new MongooseMutex(req.user.id + "-like").promise;
+//       var user = yield User.findById(req.user.id); //Force update after lock
+
+//       yield user.likeNovel({ref: novel.id, title: novel.title});
+//       yield novel.update({$inc: {likes: 1}});
+//     } catch () {}
+
+//     free();
+//     return res.redirect(novel.getLink());
+//   }).catch(err => next(err));
+// });
 
 router.use("/:novel/", require("./chapter"));
 

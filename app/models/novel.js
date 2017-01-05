@@ -39,27 +39,18 @@ var novelSchema = new Schema({
   numChapters: {
     type: Number,
     default: 0
+  },
+  follows: {
+    type: Number,
+    default: 0
+  },
+  likes: {
+    type: Number,
+    default: 0
   }
-  /* code: {
-    type: String,
-    unique: true
-  } */
 });
 
 //novelSchema.index({"title": "text"});
-
-/* Generate a xxxx000 slug */
-// novelSchema.methods.generateCode = function() {
-//   var ret = '';
-//   for (var i = 0, i < 4; i++) {
-//     ret.push(String.fromCharCode('a'.charCodeAt(0)+randomInt(0,25)));
-//   }
-//   for (i = 0; i < 3; i++) {
-//     ret += randomInt(0,9);
-//   }
-
-//   this.code = ret;
-// };
 
 novelSchema.pre("save", function(next) {
   this.slug = slug(this.title, {lower: true});

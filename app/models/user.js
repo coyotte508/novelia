@@ -1,6 +1,7 @@
 const validator = require('validator');
 const mongoose = require('mongoose');
 const bcrypt   = require('bcrypt');
+const assert = require('assert');
 
 const Schema = mongoose.Schema;
 
@@ -21,7 +22,9 @@ var userSchema = new Schema({
         ip           : String,
         date         : Date
     },
-    novels           : [{title: String, ref: Schema.Types.ObjectId, slug: String}]
+    novels           : [{title: String, ref: Schema.Types.ObjectId}],
+    likedNovels      : [{title: String, ref: Schema.Types.ObjectId}],
+    followedNovels   : [{title: String, ref: Schema.Types.ObjectId}]
 });
 
 userSchema.index({"local.username": "text"}, {unique: true, sparse: true});
@@ -45,6 +48,38 @@ userSchema.methods.getLink = function() {
     return "/u/" + (this.local.username || "g-"+ this.google.id);
 };
 
+userSchema.methods.isLikeNovel = function(novelid) {
+    return this.likedNovels.some(item => item.ref == novelid);
+}
+
+userSchema.methods.likeNovel = function(item) {
+    assert(!this.isLikeNovel(item.ref));
+
+    return this.update({$push: {likedNovels: item}});
+}
+
+userSchema.methods.unlikeNovel = function(ref) {
+    assert(this.isLikeNovel(item.ref));
+
+    return this.update({$pull: {likedNovels: {ref}}});
+}
+
+userSchema.methods.isFollowNovel = function(novelid) {
+    return this.followedNovels.some(item => item.ref == novelid);
+}
+
+userSchema.methods.followNovel = function(item) {
+    assert(!this.isFollowNovel(item.ref));
+
+    return this.update({$push: {likedNovels: item}});
+}
+
+userSchema.methods.unfollowNovel = function(ref) {
+    assert(this.isFollowNovel(item.ref));
+
+    return this.update({$pull: {followedNovels: {ref}}});
+}
+
 var User = mongoose.model('User', userSchema);
 
 User.findByUrl = function(id) {
@@ -53,6 +88,11 @@ User.findByUrl = function(id) {
     } else {
         return User.findOne({"local.username": id});
     }
+}
+
+/* Basic projection */
+User.basics = function() {
+    return "local.username google.name google.id";
 }
 
 // create the model for users and expose it to our app

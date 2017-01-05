@@ -6,7 +6,7 @@ const User = require("../models/user");
 const Chapter = require("../models/chapter");
 const utils = require("./utils");
 const router = require("express").Router();
-const limiter = require("../../config/limits");
+const limiter = require("mongo-limiter");
 
 router.get('/addchapter', utils.canTouchNovel, (req, res, next) => {
   co(function*() {
@@ -26,7 +26,7 @@ router.post('/addchapter', utils.canTouchNovel, (req, res, next) => {
       var content = val.validateChapter(req.body.chapterContent);
       var authorNote = val.validateDescription(req.body.authorNote);
 
-      if (yield limiter.attempt(req.user.id, 'addchapter', title)) {
+      if (!(yield limiter.attempt(req.user.id, 'addchapter', title))) {
         throw new utils.HttpError(`You can only add ${limiter.limits().addchapter.limit} chapters per day`, 403);
       }
 

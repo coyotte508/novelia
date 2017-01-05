@@ -19,7 +19,7 @@ title = user.displayName();
   <h2>Novels</h2>
   <ul class="list-group">
     <% user.novels.forEach( (novel) => { %>
-      <a href="/<%= novel.slug %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
+      <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
     <% }); %>
   </ul>
   <% } %>

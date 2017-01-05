@@ -2,7 +2,6 @@ const co = require('co');
 const fs = require('fs-extra');
 const passport = require('passport');
 const mongoose = require('mongoose');
-const limiter = require('mongo-limiter');
 
 /* Express stuff */
 const express = require('express');
@@ -20,6 +19,7 @@ const configAuth = require('./config/auth');
 const configDB = require('./config/database');
 const router = require('./app/routes/routes');
 require('./config/validator');
+require('./config/limits');
 
 var app = express();
 const port = process.env.port || 8080;
@@ -32,6 +32,7 @@ mongoose.connection.on("error", (err) => {
   console.log(err);
 });
 
+
 // mongoose.connection.once("open", () => {
 //   const Chapter = require("./app/models/chapter");
 //   const Novel = require("./app/models/novel");
@@ -41,8 +42,7 @@ mongoose.connection.on("error", (err) => {
 //   User.collection.dropAllIndexes();
 // });
 
-/* Mongo db limits, AFTER mongoose.connect */
-require('./config/limits');
+
 
 /* Configure passport */
 require('./config/passport')(passport);
