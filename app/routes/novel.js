@@ -153,7 +153,7 @@ router.all('/:novel/like', utils.isLoggedIn, (req, res, next) => {
       console.error(err);
     }
 
-    res.redirect(novel.getLink());
+    res.redirect(req.get('Referrer') || novel.getLink());
   }).catch(next).then(() => free(), () => free());
 });
 
@@ -173,7 +173,7 @@ router.all('/:novel/unlike', utils.isLoggedIn, (req, res, next) => {
       console.error(err);
     }
 
-    res.redirect(novel.getLink());
+    res.redirect(req.get('Referrer') || novel.getLink());
   }).catch(next).then(() => free(), () => free());
 });
 
@@ -197,7 +197,7 @@ router.all('/:novel/follow', utils.isLoggedIn, (req, res, next) => {
       console.error(err);
     }
 
-    res.redirect(novel.getLink());
+    res.redirect(req.get('Referrer') || novel.getLink());
   }).catch(next).then(() => free(), () => free());
 });
 
@@ -217,7 +217,7 @@ router.all('/:novel/unfollow', utils.isLoggedIn, (req, res, next) => {
       console.error(err);
     }
 
-    res.redirect(novel.getLink());
+    res.redirect(req.get('Referrer') || novel.getLink());
   }).catch(next).then(() => free(), () => free());
 });
 
