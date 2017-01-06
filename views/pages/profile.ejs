@@ -7,17 +7,8 @@
   <a href="/logout" class="btn btn-secondary btn-sm">Logout</a>
 </div>
 
-<div>
-  <h2>Novels</h2>
-  <p>
-    <ul class="list-group">
-      <% user.novels.forEach( (novel) => { %>
-        <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
-      <% }); %>
-    </ul>
-  </p>
-  <p><a href="/addnovel"><span class="fa fa-plus"></span> New novel</a></p>
-</div>
+<%- include("user-details") %>
+
 <div>
   <h2>Personal details</h2><hr>
   <!-- LOCAL INFORMATION -->
@@ -52,6 +43,4 @@
     </div>
   </div>
   <% } %>
-
-
 </div>

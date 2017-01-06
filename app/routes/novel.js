@@ -6,6 +6,7 @@ const User = require("../models/user");
 const utils = require("./utils");
 const router = require("express").Router();
 const limiter = require("mongo-limiter");
+const locks = require("mongo-locks");
 
 const mongoose = require("mongoose");
 
@@ -14,7 +15,6 @@ router.get('/addnovel', utils.isLoggedIn, (req, res) => {
 });
 
 router.post('/addnovel', utils.isLoggedIn, (req, res) => {
-  /* Todo: check if user can post new novel */
   co(function*() {
     try {
       var title = val.validateTitle(req.body.novelTitle);
@@ -76,7 +76,6 @@ router.get('/:novel/edit', utils.canTouchNovel, (req, res, next) => {
 });
 
 router.post('/:novel/edit', utils.canTouchNovel, (req, res) => {
-  /* Todo: check if user can post new novel */
   co(function*() {
     try {
       var description = val.validateDescription(req.body.novelDescription);
@@ -92,7 +91,6 @@ router.post('/:novel/edit', utils.canTouchNovel, (req, res) => {
 });
 
 router.all('/:novel/delete', utils.canTouchNovel, (req, res, next) => {
-  /* Todo: check if user can post new novel */
   co(function*() {
     var novel = req.novel;
     utils.assert403(novel.numChapters == 0, "You can only delete empty novels");
@@ -106,11 +104,10 @@ router.all('/:novel/delete', utils.canTouchNovel, (req, res, next) => {
     novel.remove();
 
     res.redirect("/profile");
-  }).catch(err => next(err));
+  }).catch(next);
 });
 
 router.all('/:novel/show', utils.canTouchNovel, (req, res, next) => {
-  /* Todo: check if user can post new novel */
   co(function*() {
     var novel = req.novel;
 
@@ -126,7 +123,6 @@ router.all('/:novel/show', utils.canTouchNovel, (req, res, next) => {
 });
 
 router.all('/:novel/hide', utils.canTouchNovel, (req, res, next) => {
-  /* Todo: check if user can post new novel */
   co(function*() {
     var novel = req.novel;
 
@@ -137,27 +133,94 @@ router.all('/:novel/hide', utils.canTouchNovel, (req, res, next) => {
   }).catch(err => next(err));
 });
 
-// router.all('/:novel/like', utils.isLoggedIn, (req, res, next) => {
-//   var free = () => ();
-//   co(function*() {
-//     var novel = req.novel;
+router.all('/:novel/like', utils.isLoggedIn, (req, res, next) => {
+  var free = () => {};
+  co(function*() {
+    var novel = req.novel;
 
-//     if (!yield limiter.attempt(req.user.id, 'like', novel.title)) {
-//       throw new utils.HttpError(`You can only like ${limiter.limits().like.limit} times per hour`, 403);
-//     }
+    if (!(yield limiter.attempt(req.user.id, 'like', novel.title))) {
+      throw new utils.HttpError(`You can only like ${limiter.limits().like.limit} times per hour`, 403);
+    }
 
-//     try {
-//       free = yield new MongooseMutex(req.user.id + "-like").promise;
-//       var user = yield User.findById(req.user.id); //Force update after lock
+    try {
+      free = yield locks.lock("likeNovel", req.user.id, novel.id);
 
-//       yield user.likeNovel({ref: novel.id, title: novel.title});
-//       yield novel.update({$inc: {likes: 1}});
-//     } catch () {}
+      var user = yield User.findById(req.user.id); //Force update after lock
 
-//     free();
-//     return res.redirect(novel.getLink());
-//   }).catch(err => next(err));
-// });
+      yield user.likeNovel({ref: novel.id, title: novel.title});
+      yield novel.update({$inc: {likes: 1}});
+    } catch (err) {
+      console.error(err);
+    }
+
+    res.redirect(novel.getLink());
+  }).catch(next).then(() => free(), () => free());
+});
+
+router.all('/:novel/unlike', utils.isLoggedIn, (req, res, next) => {
+  var free = () => {};
+  co(function*() {
+    var novel = req.novel;
+
+    try {
+      free = yield locks.lock("likeNovel", req.user.id, novel.id);
+
+      var user = yield User.findById(req.user.id); //Force update after lock
+
+      yield user.unlikeNovel(novel.id);
+      yield novel.update({$inc: {likes: -1}});
+    } catch (err) {
+      console.error(err);
+    }
+
+    res.redirect(novel.getLink());
+  }).catch(next).then(() => free(), () => free());
+});
+
+router.all('/:novel/follow', utils.isLoggedIn, (req, res, next) => {
+  var free = () => {};
+  co(function*() {
+    var novel = req.novel;
+
+    if (!(yield limiter.attempt(req.user.id, 'follow', novel.title))) {
+      throw new utils.HttpError(`You can only follow ${limiter.limits().follow.limit} times per hour`, 403);
+    }
+
+    try {
+      free = yield locks.lock("followNovel", req.user.id, novel.id);
+
+      var user = yield User.findById(req.user.id); //Force update after lock
+
+      yield user.followNovel({ref: novel.id, title: novel.title});
+      yield novel.update({$inc: {follows: 1}});
+    } catch (err) {
+      console.error(err);
+    }
+
+    res.redirect(novel.getLink());
+  }).catch(next).then(() => free(), () => free());
+});
+
+router.all('/:novel/unfollow', utils.isLoggedIn, (req, res, next) => {
+  var free = () => {};
+  co(function*() {
+    var novel = req.novel;
+
+    try {
+      free = yield locks.lock("followNovel", req.user.id, novel.id);
+
+      var user = yield User.findById(req.user.id); //Force update after lock
+
+      yield user.unfollowNovel(novel.id);
+      yield novel.update({$inc: {follows: -1}});
+    } catch (err) {
+      console.error(err);
+    }
+
+    res.redirect(novel.getLink());
+  }).catch(next).then(() => free(), () => free());
+});
+
 
 router.use("/:novel/", require("./chapter"));
 

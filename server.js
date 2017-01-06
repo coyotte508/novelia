@@ -2,6 +2,7 @@ const co = require('co');
 const fs = require('fs-extra');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const locks = require('mongo-locks');
 
 /* Express stuff */
 const express = require('express');
@@ -14,6 +15,7 @@ const MongoStore = require('connect-mongo')(session);
 const morgan = require('morgan');
 const flash = require('connect-flash');
 
+/* Local stuff */
 const pjson = require('./package.json');
 const configAuth = require('./config/auth');
 const configDB = require('./config/database');
@@ -32,6 +34,7 @@ mongoose.connection.on("error", (err) => {
   console.log(err);
 });
 
+locks.init(mongoose.connection);
 
 // mongoose.connection.once("open", () => {
 //   const Chapter = require("./app/models/chapter");
@@ -41,8 +44,6 @@ mongoose.connection.on("error", (err) => {
 //   Novel.collection.dropAllIndexes();
 //   User.collection.dropAllIndexes();
 // });
-
-
 
 /* Configure passport */
 require('./config/passport')(passport);

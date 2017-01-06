@@ -7,6 +7,7 @@ const Chapter = require("../models/chapter");
 const utils = require("./utils");
 const router = require("express").Router();
 const limiter = require("mongo-limiter");
+const locks = require("mongo-locks");
 
 router.get('/addchapter', utils.canTouchNovel, (req, res, next) => {
   co(function*() {
@@ -16,19 +17,23 @@ router.get('/addchapter', utils.canTouchNovel, (req, res, next) => {
 
 router.post('/addchapter', utils.canTouchNovel, (req, res, next) => {
   /* Todo: check if user can post new novel */
+  var free = ()=>{};
   co(function*() {
     var novel = req.novel;
     var prologue = (req.body.options||"").split(",").indexOf("prologue") != -1;
     try {
-      utils.assert403(!(novel.prologue && prologue), "There is already a prologue, you can't add another one.");
+      if (!(yield limiter.possible(req.user.id, 'addchapter'))) {
+        throw new utils.HttpError(`You can only add ${limiter.limits().addchapter.limit} chapters per day`, 403);
+      }
 
       var title = val.validateTitle(req.body.chapterTitle);
       var content = val.validateChapter(req.body.chapterContent);
       var authorNote = val.validateDescription(req.body.authorNote);
 
-      if (!(yield limiter.attempt(req.user.id, 'addchapter', title))) {
-        throw new utils.HttpError(`You can only add ${limiter.limits().addchapter.limit} chapters per day`, 403);
-      }
+      free = yield locks.lock("major-novel-change", novel.id);
+      
+      novel = yield Novel.findById(novel.id); //force refresh
+      utils.assert403(!(novel.prologue && prologue), "There is already a prologue, you can't add another one.");
 
       var chapter = new Chapter();
       chapter.title = title;
@@ -45,15 +50,14 @@ router.post('/addchapter', utils.canTouchNovel, (req, res, next) => {
         yield novel.update({$inc: {"numChapters": 1}, $push: {"chapters": {title, ref: chapter.id}}});
       }
 
-      console.log("saved chapter");
+      limiter.addAction(req.user.id, "addchapter", title);
 
-      // req.flash('addnovelMessage', "New novel added (sort of)");
       res.redirect(novel.getLink() + "/" + (prologue ? 0 : novel.numChapters + 1));
     } catch (err) {
       res.status(err.statusCode || 500);
       res.render('pages/addchapter', {req, novel: novel || {}, message: err.message});
     }
-  }).catch((err) => next(err));
+  }).catch(next).then(() => free(), () => free());
 });
 
 router.param('chapter', function(req, res, next, chapterNum) {
@@ -88,7 +92,6 @@ router.get('/:chapter(\\d+)/edit',utils.canTouchNovel, (req, res, next) => {
 
 
 router.post('/:chapter(\\d+)/edit', utils.canTouchNovel, (req, res, next) => {
-  /* Todo: check if user can post new novel */
   co(function*() {
     var novel = req.novel;
     try {
@@ -111,9 +114,11 @@ router.post('/:chapter(\\d+)/edit', utils.canTouchNovel, (req, res, next) => {
 });
 
 router.all('/:chapter(\\d+)/delete', utils.canTouchNovel, (req, res, next) => {
-  /* Todo: check if user can post new novel */
+  var free = ()=>{};
   co(function*() {
-    var novel = req.novel;
+    free = yield locks.lock("major-novel-change", novel.id);
+    var novel = yield(Novel.findById(req.novel.id)); //force refresh
+
     var num = req.params.chapter;
     var chapter = req.chapter;
     utils.assert403(novel.numChapters >= num, "You can only delete the last chapter");
@@ -127,7 +132,7 @@ router.all('/:chapter(\\d+)/delete', utils.canTouchNovel, (req, res, next) => {
     chapter.remove();
 
     res.redirect(novel.getLink());
-  }).catch(err => next(err));
+  }).catch(next).then(free, free);
 });
 
 module.exports = router;

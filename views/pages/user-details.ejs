@@ -1,0 +1,25 @@
+<%
+  var isDisplayedUser = req.user && req.user.id == user.id;
+%>
+
+
+  <h2>Bio</h2>
+  <div class="card">
+    <div class="card-block">
+      <%- user.bio || "<i>This user does not yet have a bio.</i>" %>
+    </div>
+  </div>
+  <% if (user.novels.length > 0 || isDisplayedUser) { %>
+  <h2>Novels</h2>
+  <p>
+    <ul class="list-group">
+      <% user.novels.forEach( (novel) => { %>
+        <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
+      <% }); %>
+    </ul>
+  </p>
+  <% if (isDisplayedUser) { %>
+  <p><a href="/addnovel"><span class="fa fa-plus"></span> New novel</a></p>
+  <% } 
+  }
+  %>

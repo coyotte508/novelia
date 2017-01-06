@@ -59,7 +59,7 @@ userSchema.methods.likeNovel = function(item) {
 }
 
 userSchema.methods.unlikeNovel = function(ref) {
-    assert(this.isLikeNovel(item.ref));
+    assert(this.isLikeNovel(ref));
 
     return this.update({$pull: {likedNovels: {ref}}});
 }
@@ -71,11 +71,11 @@ userSchema.methods.isFollowNovel = function(novelid) {
 userSchema.methods.followNovel = function(item) {
     assert(!this.isFollowNovel(item.ref));
 
-    return this.update({$push: {likedNovels: item}});
+    return this.update({$push: {followedNovels: item}});
 }
 
 userSchema.methods.unfollowNovel = function(ref) {
-    assert(this.isFollowNovel(item.ref));
+    assert(this.isFollowNovel(ref));
 
     return this.update({$pull: {followedNovels: {ref}}});
 }
