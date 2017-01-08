@@ -1,6 +1,7 @@
 const validator = require('validator');
 const co = require('co');
-const limiter = require("../limits");
+const limiter = require("./limits");
+const locks = require("mongo-locks");
 
 var LocalStrategy   = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -44,17 +45,20 @@ module.exports = function(passport) {
     },
     function(req, email, password, done) {
       var process_signup = () => co(function*() { 
+        var free = () => {};
         try {
-          var count = yield User.count({"security.lastIp": req.ip}).limit(limiter.maxAccountsPerIp);
-          if (count >= limiter.maxAccountsPerIp) {
-            throw new Error("Too many users with that ip, you can't create a new account");
-          }
-
           // find a user whose email is the same as the forms email
           // we are checking to see if the user trying to login already exists
           var username = validator.validateUser(req.body.username);
           email = validator.validateEmail(email);
           validator.validatePassword(password);
+
+          var count = yield User.count({"security.lastIp": req.ip}).limit(limiter.maxAccountsPerIp);
+          if (count >= limiter.maxAccountsPerIp || !(yield limiter.possible(req.ip, "accountip"))) {
+            throw new Error("Too many users with that ip, you can't create a new account");
+          }
+
+          free = yield locks.lock("account", req.ip);
 
           var user = yield User.findOne().or([
             { $text : { $search : username } },
@@ -89,9 +93,11 @@ module.exports = function(passport) {
           // save the user
           yield newUser.save();
 
+          yield limiter.addAction(req.ip, "accountip", email);
+
           return done(null, newUser);
         } catch (err) {
-          //return done(err);
+          free();
           return done(null, false, req.flash('signupMessage', err.message));
         }
       });
