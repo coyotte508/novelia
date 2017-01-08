@@ -1,5 +1,6 @@
 const validator = require('validator');
 const co = require('co');
+const limiter = require("../limits");
 
 var LocalStrategy   = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -44,6 +45,11 @@ module.exports = function(passport) {
     function(req, email, password, done) {
       var process_signup = () => co(function*() { 
         try {
+          var count = yield User.count({"security.lastIp": req.ip}).limit(limiter.maxAccountsPerIp);
+          if (count >= limiter.maxAccountsPerIp) {
+            throw new Error("Too many users with that ip, you can't create a new account");
+          }
+
           // find a user whose email is the same as the forms email
           // we are checking to see if the user trying to login already exists
           var username = validator.validateUser(req.body.username);
