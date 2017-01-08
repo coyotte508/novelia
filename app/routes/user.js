@@ -24,7 +24,7 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.get("/goldfish", (req, res) => {
+router.get("/goldfish", utils.isNotLoggedIn, (req, res) => {
   res.render('pages/forget', {message: req.flash('forgetMessage'), req});
 });
 
@@ -67,14 +67,23 @@ router.post('/goldfish', (req, res, next) => {
   });
 });
 
-router.get("/signup", (req, res) => {
+router.get('/reset', utils.isNotLoggedIn, (req, res) => {
+  res.render("pages/reset", {message: req.flash('resetMessage'), req});
+});
+
+router.post('/reset', utils.isNotLoggedIn, (req, res, next) => {
+  passport.authenticate('local-reset', {
+    successRedirect : "/profile",
+    failureRedirect : req.originalUrl,
+    failureFlash : true 
+  })(req, res, next);
+});
+
+router.get("/signup", utils.isNotLoggedIn, (req, res) => {
   res.render('pages/signup', {message: req.flash('signupMessage'), req});
 });
 
-router.post('/signup', (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return res.redirect('/profile');
-  }
+router.post('/signup', utils.isNotLoggedIn, (req, res, next) => {
   passport.authenticate('local-signup', {
     successRedirect : req.body.referrer || "/profile",
     failureRedirect : '/signup',

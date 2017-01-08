@@ -37,6 +37,14 @@ function isLoggedIn(req, res, next) {
   res.redirect('/login?referrer='+req.url);
 }
 
+function isNotLoggedIn(req, res, next) {
+  if (!req.isAuthenticated()) {
+    return next();
+  }
+
+  res.redirect('/profile');
+}
+
 function canTouchNovel(req, res, next) { 
   isLoggedIn(req, res, () => {
     try {
@@ -50,6 +58,7 @@ function canTouchNovel(req, res, next) {
 
 module.exports = {
   isLoggedIn,
+  isNotLoggedIn,
   canTouchNovel,
   HttpError, 
   assert403, 

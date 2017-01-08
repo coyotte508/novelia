@@ -93,6 +93,53 @@ module.exports = function(passport) {
     })
   );
 
+  passport.use('local-reset', new LocalStrategy({
+      // by default, local strategy uses username and password, we will override with email
+      usernameField : 'email',
+      passwordField : 'password',
+      passReqToCallback : true // allows us to pass back the entire request to the callback
+    },
+    function(req, email, password, done) {
+      var process_reset = () => co(function*() { 
+        try {
+          // find a user whose email is the same as the forms email
+          // we are checking to see if the user trying to login already exists
+          email = validator.validateEmail(email);
+          validator.validatePassword(password);
+
+          var user = yield User.findOne({'local.email': email});
+
+          // check to see if theres already a user with that email
+          if (!user || !user.local.resetKey || user.local.resetKey != req.body.resetKey) {
+            throw new Error("A user with that email does not exist or the reset link is not meant for that user.");
+          }
+
+          var resetIssued = new Date(user.local.resetIssued);
+          if (Date.now() - resetIssued.getTime() > 24*3600*1000) {
+            throw new Error("The reset link is more than a day old, you need a new link to reset your password.")
+          }
+
+          // set the user's local credentials
+          user.local.password = yield user.generateHash(password);
+
+          // save the user
+          yield user.update({
+            "local.password"  : user.local.password,
+            "local.resetKey"  : null,
+            "local.resetDate" : null
+          });
+
+          return done(null, user);
+        } catch (err) {
+          //return done(err);
+          return done(null, false, req.flash('resetMessage', err.message));
+        }
+      });
+
+      process.nextTick(process_reset);
+    })
+  );
+
   // =========================================================================
   // LOCAL LOGIN =============================================================
   // =========================================================================
