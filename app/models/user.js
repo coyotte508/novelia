@@ -96,6 +96,13 @@ userSchema.methods.resetKey = function() {
     return this.local.resetKey;
 }
 
+userSchema.methods.notifyLogin = function(ip) {
+    return this.update({
+        "lastLogin.date" : Date.now(),
+        "lastLogin.ip"   : ip
+    });
+}
+
 var User = mongoose.model('User', userSchema);
 
 User.findByUrl = function(id) {

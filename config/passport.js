@@ -78,6 +78,8 @@ module.exports = function(passport) {
           newUser.local.username = username;
           newUser.local.email    = email;
           newUser.local.password = yield newUser.generateHash(password);
+          newUser.lastLogin.date = Date.now();
+          newUser.lastLogin.ip   = req.ip;
 
           // save the user
           yield newUser.save();
@@ -126,7 +128,9 @@ module.exports = function(passport) {
           yield user.update({
             "local.password"  : user.local.password,
             "local.resetKey"  : null,
-            "local.resetDate" : null
+            "local.resetDate" : null,
+            "lastLogin.date"  : Date.now(),
+            "lastLogin.ip"    : req.ip
           });
 
           return done(null, user);
@@ -165,6 +169,8 @@ module.exports = function(passport) {
             return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
         // all is well, return successful user
+        yield user.notifyLogin(req.ip);
+
         return done(null, user);
       }).catch(done);
     })
@@ -191,7 +197,7 @@ module.exports = function(passport) {
 
           if (user) {
             // if a user is found, log them in
-            return done(null, user);
+            return user.notifyLogin(req.ip).then(() => done(null, user), done);
           }
           
           // if the user isnt in our database, create a new user
@@ -202,6 +208,8 @@ module.exports = function(passport) {
           newUser.google.token = token;
           newUser.google.name  = profile.displayName;
           newUser.google.email = profile.emails[0].value; // pull the first email
+          newUser.lastLogin.date = Date.now();
+          newUser.lastLogin.ip = req.ip;
 
           // save the user
           newUser.save(function(err) {

@@ -119,6 +119,7 @@ router.get('/u/:user', function(req, res, next) {
 
 router.get('/logout', (req, res) => {
   req.logout();
+  req.session.destroy();
   res.redirect('/');
 });
 
