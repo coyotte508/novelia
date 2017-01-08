@@ -51,7 +51,7 @@ userSchema.methods.validPassword = function(password) {
 };
 
 userSchema.methods.resetPassword = function(password) {
-    this.generateHash(password).then((hash) => {
+    return this.generateHash(password).then((hash) => {
         return this.update({
             "local.password"  : hash,
             "security.reset"  : null
