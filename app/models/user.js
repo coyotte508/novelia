@@ -119,7 +119,7 @@ userSchema.methods.validateResetKey = function(key) {
     if (this.security.reset.key != key) {
         throw new Error("The password reset link was not given for that user.");
     }
-    var resetIssued = new Date(user.security.reset.issued);
+    var resetIssued = new Date(this.security.reset.issued);
     if (Date.now() - resetIssued.getTime() > 24*3600*1000) {
         throw new Error("The reset link is more than a day old, you need a new link to reset your password.");
     }
