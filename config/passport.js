@@ -78,8 +78,7 @@ module.exports = function(passport) {
           newUser.local.username = username;
           newUser.local.email    = email;
           newUser.local.password = yield newUser.generateHash(password);
-          newUser.lastLogin.date = Date.now();
-          newUser.lastLogin.ip   = req.ip;
+          newUser.fillInSecurity(req.ip);
 
           // save the user
           yield newUser.save();
@@ -112,26 +111,16 @@ module.exports = function(passport) {
           var user = yield User.findOne({'local.email': email});
 
           // check to see if theres already a user with that email
-          if (!user || !user.local.resetKey || user.local.resetKey != req.body.resetKey) {
-            throw new Error("A user with that email does not exist or the reset link is not meant for that user.");
+          if (!user) {
+            throw new Error("A user with that email does not exist.");
           }
 
-          var resetIssued = new Date(user.local.resetIssued);
-          if (Date.now() - resetIssued.getTime() > 24*3600*1000) {
-            throw new Error("The reset link is more than a day old, you need a new link to reset your password.")
-          }
+          user.validateResetKey(req.body.key);
 
           // set the user's local credentials
-          user.local.password = yield user.generateHash(password);
+          yield user.resetPassword(password);
 
-          // save the user
-          yield user.update({
-            "local.password"  : user.local.password,
-            "local.resetKey"  : null,
-            "local.resetDate" : null,
-            "lastLogin.date"  : Date.now(),
-            "lastLogin.ip"    : req.ip
-          });
+          yield user.notifyLogin(req.ip);
 
           return done(null, user);
         } catch (err) {
@@ -208,8 +197,7 @@ module.exports = function(passport) {
           newUser.google.token = token;
           newUser.google.name  = profile.displayName;
           newUser.google.email = profile.emails[0].value; // pull the first email
-          newUser.lastLogin.date = Date.now();
-          newUser.lastLogin.ip = req.ip;
+          newUser.fillInSecurity(req.ip);
 
           // save the user
           newUser.save(function(err) {

@@ -11,7 +11,7 @@
 
 <div>
   <h2>Personal details</h2><hr>
-  <!-- LOCAL INFORMATION -->
+
   <% if(user.local.email) { %>
   <div class="col-md-6">
     <div class="card well">
@@ -27,7 +27,6 @@
   </div>
   <% } %>
 
-  <!-- GOOGLE INFORMATION -->
   <% if(user.google.token) { %>
   <div class="col-md-6">
     <div class="card well">
@@ -38,6 +37,22 @@
           <strong>id</strong>: <%= user.google.id %><br>
           <strong>email</strong>: <%= user.google.email %><br>
           <strong>name</strong>: <%= user.google.name %>
+        </p>        
+      </div>
+    </div>
+  </div>
+  <% } %>
+
+  <% if(user.security) { %>
+  <div class="col-md-6">
+    <div class="card well">
+      <div class="card-block">
+        <h4 class="card-title text-danger"><span class="fa fa-shield"></span> Security</h4>
+        <p>
+          <strong>last login</strong>: <%= user.security.lastLogin.date %> <br>
+          <strong>last ip</strong>: <%= user.security.lastIp %><br>
+          <strong>confirmed</strong>: <%= user.security.confirmed ? "true": "false" %><br>
+          <strong>reset link</strong>: <%= user.security.reset.key || "none" %>
         </p>        
       </div>
     </div>
