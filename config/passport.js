@@ -115,7 +115,7 @@ module.exports = function(passport) {
             throw new Error("A user with that email does not exist.");
           }
 
-          user.validateResetKey(req.body.key);
+          user.validateResetKey(req.body.resetKey);
 
           // set the user's local credentials
           yield user.resetPassword(password);
