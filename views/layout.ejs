@@ -1,6 +1,6 @@
 <% 
-  if (typeof description == "undefined") {
-    description = "";
+  if (typeof description == "undefined" || !description) {
+    description = "Plenty of original novels updated daily to read, with genres including fantasy, litrpg and martial arts.";
   }
 %><!DOCTYPE html>  
 <html lang="en">  
@@ -49,7 +49,7 @@
                    <div class="form-group">
                      <label class="sr-only" for="password">Password</label>
                      <input type="password" class="form-control" id="password" placeholder="Password" name="password" required>
-                     <div class="help-block text-right"><a href="">Forget the password ?</a></div>
+                     <div class="help-block text-right"><a href="/goldfish">Forgot the password ?</a></div>
                    </div>
                    <input type="hidden" name="referrer" value="<%= req.originalUrl %>">
                    <div class="form-group">

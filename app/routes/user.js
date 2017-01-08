@@ -4,6 +4,10 @@ const passport = require("passport");
 const utils = require("./utils");
 const router = require("express").Router();
 const slug = require("slug");
+const val = require("validator");
+const limiter = require("mongo-limiter");
+const config = require('../../config/general');
+const sendmail = require("sendmail")();
 
 router.get("/login", (req, res) => {
   if (req.isAuthenticated()) {
@@ -18,6 +22,49 @@ router.post('/login', (req, res, next) => {
     failureRedirect : '/login',
     failureFlash : true 
   })(req, res, next);
+});
+
+router.get("/goldfish", (req, res) => {
+  res.render('pages/forget', {message: req.flash('forgetMessage'), req});
+});
+
+router.post('/goldfish', (req, res, next) => {
+  return co(function*() {
+    var email = val.validateEmail(req.body.email);
+
+    if (!(yield limiter.attempt(req.ip, 'forgetip', email)) || !(yield limiter.attempt(email, 'forget', email))) {
+      throw new Error("Max number of attempts reached.");
+    }
+
+    var user = yield User.findOne().or([
+      {'local.email': email},
+      {'google.email': email}
+    ]);
+
+    // check to see if theres already a user with that email
+    if (user && user.local.email != email) {
+      throw new Error("This email is linked to a social account, log in using the social button!");
+    }
+
+    if (!user) {
+      throw new Error("No such user found");
+    }
+
+    yield user.generateResetLink();
+
+    sendmail({
+      from: config.noreply,
+      to: email,
+      subject: 'Forgotten password',
+      html: `<p>A password reset was requested for your account ${user.local.username}, click <a href='http://www.${config.domain}/reset?key=${user.resetKey()}'>this link</a></p> to proceed with it.
+
+<p>If you didn't request a password reset, then just ignore this email.</p>`,
+    });
+
+    res.render('pages/forget', {message: `A mail has been sent to ${email}, with a link to reset the password.` , req});
+  }).catch(err => {
+    res.render('pages/forget', {message: err.message, req});
+  });
 });
 
 router.get("/signup", (req, res) => {

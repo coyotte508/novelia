@@ -1,6 +1,7 @@
 const validator = require('validator');
 const mongoose = require('mongoose');
 const bcrypt   = require('bcrypt');
+const sha1     = require('sha1');
 const assert = require('assert');
 
 const Schema = mongoose.Schema;
@@ -11,6 +12,8 @@ var userSchema = new Schema({
         username     : String,
         email        : {type: String, unique: true, sparse: true},
         password     : String,
+        resetKey     : String, 
+        resetIssued  : Date
     },
     google           : {
         id           : String,
@@ -32,12 +35,12 @@ userSchema.index({"local.username": "text"}, {unique: true, sparse: true});
 // methods ======================
 // generating a hash
 userSchema.methods.generateHash = function(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+    return bcrypt.hash(password, 8);
 };
 
 // checking if password is valid
 userSchema.methods.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.local.password);
+    return bcrypt.compare(password, this.local.password);
 };
 
 userSchema.methods.displayName = function() {
@@ -78,6 +81,19 @@ userSchema.methods.unfollowNovel = function(ref) {
     assert(this.isFollowNovel(ref));
 
     return this.update({$pull: {followedNovels: {ref}}});
+}
+
+userSchema.methods.generateResetLink = function() {
+    this.local.resetKey  = sha1(this.local.username + '/' + mongoose.Types.ObjectId());
+
+    return this.update({
+        "local.resetIssued" : Date.now(),
+        "local.resetKey"    : this.local.resetKey
+    });
+}
+
+userSchema.methods.resetKey = function() {
+    return this.local.resetKey;
 }
 
 var User = mongoose.model('User', userSchema);

@@ -10,7 +10,9 @@ limiter.setLimits({
   addnovel: {limit: 3, duration: 3600*24},
   like: {limit: 50, duration: 3600},
   follow: {limit: 50, duration: 3600},
-  shownovel: {limit: 20, duration: 3600}
+  shownovel: {limit: 20, duration: 3600},
+  forgetip: {limit: 5, duration: 3600*12},
+  forget: {limit: 3, duration: 3600*12}
 })
 
 module.exports = limiter;

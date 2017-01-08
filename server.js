@@ -18,7 +18,7 @@ const flash = require('connect-flash');
 /* Local stuff */
 const pjson = require('./package.json');
 const configAuth = require('./config/auth');
-const configDB = require('./config/database');
+const configDB = require('./config/general');
 const router = require('./app/routes/routes');
 require('./config/validator');
 require('./config/limits');
@@ -27,7 +27,7 @@ var app = express();
 const port = process.env.port || 8080;
 
 /* Configuration */
-mongoose.connect(configDB.url, {server: {reconnectTries: Number.MAX_VALUE, reconnectInterval: 1000}});
+mongoose.connect(configDB.dburl, {server: {reconnectTries: Number.MAX_VALUE, reconnectInterval: 1000}});
 mongoose.Promise = global.Promise; //native promises
 
 mongoose.connection.on("error", (err) => {
@@ -53,8 +53,9 @@ app.use(morgan('dev'));
 
 app.set('view engine', 'ejs'); 
 
-app.set("layout extractScripts", true)
-app.set("layout extractMetas", true)
+app.set("layout extractScripts", true);
+app.set("layout extractMetas", true);
+app.set('trust proxy', 'loopback');
 app.use(expressLayouts);
 app.use(compression());
 app.use(bodyParser.json());
