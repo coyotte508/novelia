@@ -137,6 +137,10 @@ userSchema.methods.generateConfirmKey = function() {
     return this.update({"security.confirmKey": this.security.confirmKey});
 }
 
+userSchema.methods.confirmKey = function() {
+    return this.security.confirmKey;
+}
+
 userSchema.methods.confirm = function(key) {
     assert(this.confirmed(), "User is already confirmed.");
     assert(key && this.confirmKey() == key, "Invalid confirmation key.");
