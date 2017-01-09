@@ -62,7 +62,9 @@ title = "Profile";
           <strong>last ip</strong>: <%= user.security.lastIp %><br>
           <strong>confirmed</strong>: <%- user.confirmed() ? "yes": "no - <a href='/confirm'>Resend confirmation link</a>" %><br>
           <strong>reset link</strong>: <%= user.security.reset.key || "none" %>
-        </p>        
+        </p>
+
+        <p>You can change your details <a href="/security">here</a>.</p>        
       </div>
     </div>
   </div>

@@ -14,7 +14,8 @@ limiter.setLimits({
   forgetip: {limit: 5, duration: 3600*12},
   forget: {limit: 3, duration: 3600*12},
   accountip: {limit: 3, duration: 3600*24},
-  confirm: {limit: 3, duration: 3600*12}
+  confirm: {limit: 3, duration: 3600*12},
+  security: {limit: 20, duration: 3600*12}
 });
 
 limiter.maxAccountsPerIp = 10;

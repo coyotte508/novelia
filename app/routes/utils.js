@@ -57,11 +57,22 @@ function canTouchNovel(req, res, next) {
   });
 }
 
+function isLoggedInAndNotSocial(req, res, next) {
+  isLoggedIn(req, res, () => {
+    if (!req.user.isSocialAccount()) {
+      return next();
+    }
+
+    res.redirect('/profile');
+  });
+}
+
 module.exports = {
   isLoggedIn,
   isNotLoggedIn,
   canTouchNovel,
   HttpError, 
   assert403, 
-  assert404
+  assert404,
+  isLoggedInAndNotSocial
 };

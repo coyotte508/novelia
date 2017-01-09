@@ -8,6 +8,7 @@ const val = require("validator");
 const limiter = require("mongo-limiter");
 const config = require('../../config/general');
 const sendmail = require("sendmail")();
+const assert = require("assert");
 
 router.get("/login", (req, res) => {
   if (req.isAuthenticated()) {
@@ -128,6 +129,40 @@ router.post('/signup', utils.isNotLoggedIn, (req, res, next) => {
 
 router.get('/profile', utils.isLoggedIn, function(req, res) {
   res.render('pages/profile', {user: req.user, req, slug, message: req.flash('profileMessage')});
+});
+
+router.get('/security', utils.isLoggedInAndNotSocial, function(req, res) {
+  res.render("pages/security", {user: req.user, req, message: req.flash('securityMessage')});
+});
+
+router.post('/security', utils.isLoggedInAndNotSocial, function(req, res) {
+  var user = req.user;
+
+  co(function*() {
+    var newPw = req.body.newPassword ? val.validatePassword(req.body.newPassword) : "";
+    var email = val.validateEmail(req.body.email);
+
+    assert(yield limiter.attempt(req.user.id, "security"), "Too many security changes or attempts, wait 24 hours.");
+
+    assert(yield user.validPassword(req.body.password), "Wrong current password.");
+
+    if (newPw) {
+      yield user.resetPassword(newPw);
+    }
+
+    if (email != user.email()) {
+      yield user.changeEmail(email);
+      user.sendConfirmationEmail();
+
+      req.flash("profileMessage", "Details changed! A confirmation email was sent to your new email address.");
+    } else {
+      req.flash("profileMessage", "Details changed!");
+    }
+
+    res.redirect("/profile");
+  }).catch((err) => {
+    res.render("pages/security", {user: req.user, req, message: err.message});
+  });
 });
 
 router.param('user', function(req, res, next, user) {

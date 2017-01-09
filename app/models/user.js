@@ -5,6 +5,7 @@ const sha1     = require('sha1');
 const sendmail = require('sendmail')();
 const config = require('../../config/general');
 const assert = require('assert');
+const locks = require('mongo-locks');
 
 const Schema = mongoose.Schema;
 
@@ -68,6 +69,20 @@ userSchema.methods.displayName = function() {
 userSchema.methods.email = function () {
     return this.local.email || this.google.email;
 };
+
+userSchema.methods.changeEmail = function(email) {
+    return co(function*() {
+        assert(!this.isSocialAccount(), "You can't change the email of a social account.");
+
+        assert(!(yield User.findByEmail(email)), "A user already exists with that email.");
+
+        this.local.email = email;
+        this.security.confirmed = false;
+        this.security.confirmKey = sha1(this.displayName() + '/confirm/' + mongoose.Types.ObjectId());
+
+        yield this.update({"local.email" : email, "security.confirmed": false, "security.confirmKey": this.security.confirmKey});
+    });
+}
 
 userSchema.methods.getLink = function() {
     return "/u/" + (this.local.username || "g-"+ this.google.id);
@@ -212,6 +227,13 @@ User.findByUrl = function(id) {
     } else {
         return User.findOne({"local.username": id});
     }
+}
+
+User.findByEmail = function(email) {
+    return User.findOne().or([
+        {'local.email': email},
+        {'google.email': email}
+    ]);
 }
 
 /* Basic projection */
