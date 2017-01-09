@@ -14,24 +14,38 @@ body {
   background: url('https://i.ytimg.com/vi/7avGPDl1wog/maxresdefault.jpg') fixed;
 }
 
-.main-container {
-  background: #fff;
-  min-height: 100%;
-
+.varying-container {
   @include make-container();
   
   /* Fluid */
   @include media-breakpoint-only(md) {
     margin-left: 40px;
     margin-right: 40px;
+
+    .navbar & {
+      margin-left: 24px;
+      margin-right: 24px;
+    }
   }
   @include media-breakpoint-down(sm) {
     margin-left: 20px;
     margin-right: 20px;
+
+    .navbar & {
+      margin-left: 4px;
+      margin-right: 4px;
+    }
   }
   @include media-breakpoint-up(lg) {
     @include make-container-max-widths();
   }
+}
+
+.main-container {
+  background: #fff;
+  min-height: 100%;
+
+  @extend .varying-container;
 }
 
 .navbar-md-right {
