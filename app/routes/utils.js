@@ -31,6 +31,7 @@ const assert403 = (condition, message) => {
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
+    req.user.notifyLastIp(req.ip);
     return next();
   }
 

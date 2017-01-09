@@ -143,6 +143,13 @@ userSchema.methods.notifyLogin = function(ip) {
     });
 }
 
+userSchema.methods.notifyLastIp = function(ip) {
+    if (this.security.lastIp != ip) {
+        this.security.lastIp = ip;
+        this.update({"security.lastIp": ip}).exec();
+    }
+}
+
 var User = mongoose.model('User', userSchema);
 
 User.findByUrl = function(id) {
