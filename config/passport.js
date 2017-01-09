@@ -93,7 +93,7 @@ module.exports = function(passport) {
           // save the user
           yield newUser.save();
 
-          yield limiter.addAction(req.ip, "accountip", email);
+          yield limiter.action(req.ip, "accountip", email);
 
           newUser.sendConfirmationEmail();
 

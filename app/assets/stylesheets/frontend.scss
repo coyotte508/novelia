@@ -71,6 +71,11 @@ body {
   text-align: center;
 }
 
+/* For author link below chapter title */
+.text-muted a {
+  color: $text-muted;
+}
+
 .well {
   background-color: #eee;
   border-color: #eee;

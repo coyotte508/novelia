@@ -12,7 +12,8 @@ var novelSchema = new Schema({
   author: {
     type: {
       ref: Schema.Types.ObjectId,
-      name: String
+      name: String,
+      link: String
     },
     required: true
   },

@@ -31,7 +31,7 @@ router.post('/addnovel', utils.isLoggedIn, (req, res) => {
       var novel = new Novel();
       novel.title = title;
       novel.description = description;
-      novel.author = {ref: req.user.id, name: req.user.displayName()};
+      novel.author = {ref: req.user.id, name: req.user.displayName(), link: req.user.getLink()};
 
       yield novel.save();
       yield req.user.update({$push: {"novels": {title, ref: novel.id, slug: novel.classySlug()}}});
