@@ -2,7 +2,7 @@ const validator = require('validator');
 const mongoose = require('mongoose');
 const bcrypt   = require('bcrypt');
 const sha1     = require('sha1');
-const sendmail = require('sendmail')({logger: {warn: console.warn,error: console.error}});
+const sendmail = require('sendmail')();
 const config = require('../../config/general');
 const assert = require('assert');
 
