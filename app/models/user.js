@@ -6,6 +6,7 @@ const sendmail = require('sendmail')();
 const config = require('../../config/general');
 const assert = require('assert');
 const locks = require('mongo-locks');
+const co = require("co");
 
 const Schema = mongoose.Schema;
 
@@ -71,16 +72,17 @@ userSchema.methods.email = function () {
 };
 
 userSchema.methods.changeEmail = function(email) {
+    var self = this;
     return co(function*() {
-        assert(!this.isSocialAccount(), "You can't change the email of a social account.");
+        assert(!self.isSocialAccount(), "You can't change the email of a social account.");
 
         assert(!(yield User.findByEmail(email)), "A user already exists with that email.");
 
-        this.local.email = email;
-        this.security.confirmed = false;
-        this.security.confirmKey = sha1(this.displayName() + '/confirm/' + mongoose.Types.ObjectId());
+        self.local.email = email;
+        self.security.confirmed = false;
+        self.security.confirmKey = sha1(self.displayName() + '/confirm/' + mongoose.Types.ObjectId());
 
-        yield this.update({"local.email" : email, "security.confirmed": false, "security.confirmKey": this.security.confirmKey});
+        yield self.update({"local.email" : email, "security.confirmed": false, "security.confirmKey": self.security.confirmKey});
     });
 }
 
