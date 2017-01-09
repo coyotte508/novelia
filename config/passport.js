@@ -161,7 +161,7 @@ module.exports = function(passport) {
     },
     function(req, email, password, done) {
       return co(function*() {
-        email = validator.normalizeEmail(email);
+        email = validator.validateEmail(email);
         var user = yield User.findOne({ 'local.email' :  email });
         // if no user is found, return the message
         if (!user)
@@ -191,9 +191,11 @@ module.exports = function(passport) {
       // make the code asynchronous
       // User.findOne won't fire until we have all our data back from Google
       process.nextTick(function() {
+        var email = validator.validateEmail(profile.emails[0].value);
+
         // try to find the user based on their google id
         User.findOne().or([{ 'google.id' : profile.id },
-          {'local.email': profile.emails[0].value}]).exec((err, user) => {
+          {'local.email': email}]).exec((err, user) => {
           if (err) {
             return done(err);
           }
@@ -210,7 +212,7 @@ module.exports = function(passport) {
           newUser.google.id    = profile.id;
           newUser.google.token = token;
           newUser.google.name  = profile.displayName;
-          newUser.google.email = profile.emails[0].value; // pull the first email
+          newUser.google.email = email; // pull the first email
           newUser.fillInSecurity(req.ip);
 
           // save the user
