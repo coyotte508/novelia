@@ -5,6 +5,7 @@ nLink = novel.getLink();
 authorName = author.displayName();
 liked = req.user && req.user.isLikeNovel(novel.id);
 followed = req.user && req.user.isFollowNovel(novel.id);
+  
 %>
 
 <%- contentFor('body') %>
@@ -37,7 +38,7 @@ followed = req.user && req.user.isFollowNovel(novel.id);
     <p><ul class="list-group">
     <% if (!isGod) {
        novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>
-      <a class="list-group-item list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %></a>
+      <a class="list-group-item list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %><time class="float-xs-right text-muted" format="ago" unixtime="<%= req.unixTime(item.id) %>"><%= req.timeSince(item.id) %> ago</time></a>
     <% } });
      } else { %>
     <% novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>

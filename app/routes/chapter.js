@@ -46,7 +46,7 @@ router.post('/addchapter', utils.canTouchNovel, (req, res, next) => {
       yield chapter.save();
 
       if (prologue) {
-        yield novel.update({prologue: true, "chapters.0.title": title, "chapters.0.ref": chapter.id});
+        yield novel.update({prologue: true, "chapters.0": {title, ref}});
       } else {
         yield novel.update({$inc: {"numChapters": 1}, $push: {"chapters": {title, ref: chapter.id}}});
       }
@@ -117,7 +117,7 @@ router.post('/:chapter(\\d+)/edit', utils.canTouchNovel, (req, res, next) => {
 router.all('/:chapter(\\d+)/delete', utils.canTouchNovel, (req, res, next) => {
   var free = ()=>{};
   co(function*() {
-    free = yield locks.lock("major-novel-change", novel.id);
+    free = yield locks.lock("major-novel-change", req.novel.id);
     var novel = yield(Novel.findById(req.novel.id)); //force refresh
 
     var num = req.params.chapter;
