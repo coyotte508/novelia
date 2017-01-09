@@ -15,7 +15,7 @@ num = +req.params.chapter;
     <h6 class="text-xs-center text-muted">
       by <a href="<%= novel.author.link || ("/u/"+novel.author.name) %>"><%= novel.author.name %></a>
     </h6>
-    <time class="float-xs-right text-muted pos-a" format="ago" unixtime="<%= req.unixTime(chapter.id) %>" style="right: 0; bottom: -25%"><%= req.timeSince(chapter.id) %> ago</time>
+    <small><time class="float-xs-right text-muted pos-a" format="ago" unixtime="<%= req.unixTime(chapter.id) %>" style="right: 0; bottom: -10%"><%= req.timeSince(chapter.id) %> ago</time></small>
   </div>
   <hr/>
   <h3 class="text-xs-center"><%= chapter.title %></h3>
