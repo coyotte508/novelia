@@ -41,6 +41,7 @@ router.post('/addchapter', utils.canTouchNovel, (req, res, next) => {
       chapter.authorNote = authorNote;
       chapter.novel = {ref: novel.id, title: novel.title};
       chapter.number = prologue ? 0 : (novel.numChapters+1);
+      chapter.public = novel.public;
 
       yield chapter.save();
 
