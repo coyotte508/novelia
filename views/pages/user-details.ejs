@@ -12,12 +12,14 @@
 <% if (user.novels.length > 0 || isDisplayedUser) { %>
 <h2>Novels</h2>
 <div>
-  <ul class="list-group">
+  <%if (user.novels.length > 0) { %>
+  <p><ul class="list-group">
     <% user.novels.forEach( (novel) => { %>
       <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
     <% }); %>
-  </ul>
-  <% if (isDisplayedUser) { %>
+  </ul></p>
+  <% }
+  if (isDisplayedUser) { %>
   <p><a href="/addnovel"><span class="fa fa-plus"></span> New novel</a></p>
   <% } %>
 </div>
