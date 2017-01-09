@@ -2,6 +2,8 @@ const validator = require('validator');
 const mongoose = require('mongoose');
 const bcrypt   = require('bcrypt');
 const sha1     = require('sha1');
+const sendmail = require('sendmail');
+const config = require('../../config/general');
 const assert = require('assert');
 
 const Schema = mongoose.Schema;
@@ -61,6 +63,10 @@ userSchema.methods.resetPassword = function(password) {
 
 userSchema.methods.displayName = function() {
     return this.local.username || this.google.name;
+};
+
+userSchema.methods.email = function () {
+    return this.local.email || this.google.email;
 };
 
 userSchema.methods.getLink = function() {
@@ -125,6 +131,39 @@ userSchema.methods.validateResetKey = function(key) {
     }
 }
 
+userSchema.methods.generateConfirmKey = function() {
+    this.security.confirmKey = sha1(this.displayName() + '/confirm/' + mongoose.Types.ObjectId());
+
+    return this.update({"security.confirmKey": this.security.confirmKey});
+}
+
+userSchema.methods.confirm = function(key) {
+    assert(this.confirmed(), "User is already confirmed.");
+    assert(key && this.confirmKey() == key, "Invalid confirmation key.");
+    this.security.confirmed = true;
+    this.security.confirmKey = null;
+
+    return this.update({
+        "security.confirmed": true,
+        "security.confirmKey": null,
+    });
+}
+
+userSchema.methods.confirmed = function() {
+    return this.security.confirmed;
+}
+
+userSchema.methods.sendConfirmationEmail = function() {
+    return sendmail({
+      from: config.noreply,
+      to: this.email(),
+      subject: 'Confirm your account',
+      html: `<p>To finish your registration and confirm your account ${this.displayName()}, click <a href='http://www.${config.domain}/confirm?key=${this.confirmKey()}&user=${this.email()}'>this link</a></p>.
+
+<p>If you didn't create an account with us, then just ignore this email.</p>`,
+    });
+}
+
 userSchema.methods.fillInSecurity = function(ip) {
     this.security = {
         lastLogin: {
@@ -133,6 +172,17 @@ userSchema.methods.fillInSecurity = function(ip) {
         },
         lastIp: ip
     };
+
+    /* No need to confirm social accounts */
+    if (this.isSocialAccount()) {
+        this.security.confirmed = true;
+    } else {
+        this.security.confirmKey = sha1(this.displayName() + '/confirm/' + mongoose.Types.ObjectId());
+    }
+}
+
+userSchema.methods.isSocialAccount = function() {
+    return this.google.id ? true : false;
 }
 
 userSchema.methods.notifyLogin = function(ip) {

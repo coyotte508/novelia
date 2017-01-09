@@ -95,6 +95,8 @@ module.exports = function(passport) {
 
           yield limiter.addAction(req.ip, "accountip", email);
 
+          newUser.sendConfirmationEmail();
+
           return done(null, newUser);
         } catch (err) {
           free();

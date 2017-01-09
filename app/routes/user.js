@@ -32,8 +32,12 @@ router.post('/goldfish', (req, res, next) => {
   return co(function*() {
     var email = val.validateEmail(req.body.email);
 
-    if (!(yield limiter.attempt(req.ip, 'forgetip', email)) || !(yield limiter.attempt(email, 'forget', email))) {
-      throw new Error("Max number of attempts reached.");
+    if (!(yield limiter.attempt(req.ip, 'forgetip', email))) {
+      throw new Error(`Max number of attempts reached for your IP (${req.ip}), try again in 24 hours.`);
+    }
+
+    if (!(yield limiter.attempt(email, 'forget', email))) {
+      throw new Error(`Max number of attempts for ${email} reached, try again in 24 hours.`);
     }
 
     var user = yield User.findOne().or([
@@ -79,6 +83,37 @@ router.post('/reset', utils.isNotLoggedIn, (req, res, next) => {
   })(req, res, next);
 });
 
+router.all('/confirm', utils.isLoggedIn, (req, res) => {
+  var user = req.user;
+
+  if (user.confirmed()) {
+    return res.redirect('/profile');
+  }
+  return co(function*() {
+    if (req.query && req.query.key) {
+      yield user.confirm(req.query.key);
+      req.flash('profileMessage', 'You were successfully confirmed!');
+      return res.redirect('/profile');
+    }
+
+    if (!(yield limiter.attempt(user.id, "confirm"))) {
+      throw new Error("Max number of confirmation emails sent, try again tomorrow.");
+    }
+
+    if (!user.confirmKey()) {
+      user.generateConfirmKey();
+    }
+
+    user.sendConfirmationEmail();
+
+    req.flash("profileMessage", `Confirmation email sent to ${user.email()}.`);
+    res.redirect('/profile');
+  }).catch(err => {
+    req.flash("profileMessage", err.message);
+    res.redirect('/profile');
+  });
+});
+
 router.get("/signup", utils.isNotLoggedIn, (req, res) => {
   res.render('pages/signup', {message: req.flash('signupMessage'), req});
 });
@@ -92,7 +127,7 @@ router.post('/signup', utils.isNotLoggedIn, (req, res, next) => {
 });
 
 router.get('/profile', utils.isLoggedIn, function(req, res) {
-  res.render('pages/profile', {user: req.user, req, slug});
+  res.render('pages/profile', {user: req.user, req, slug, message: req.flash('profileMessage')});
 });
 
 router.param('user', function(req, res, next, user) {

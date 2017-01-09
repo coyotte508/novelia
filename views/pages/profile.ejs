@@ -1,4 +1,6 @@
-<% title = "Profile"; %>
+<% 
+title = "Profile"; 
+%>
 
 <%- contentFor('body') %>
 
@@ -6,6 +8,12 @@
   <h1><span class="fa fa-home"></span> Profile Page</h1>
   <a href="/logout" class="btn btn-secondary btn-sm">Logout</a>
 </div>
+
+<!-- show any messages that come back with authentication -->
+<% if (message.length > 0) { %>
+<div class="alert alert-info"><%= message %></div>
+<% } %>
+
 
 <%- include("user-details") %>
 
@@ -52,7 +60,7 @@
           <strong>last login</strong>: <%= user.security.lastLogin.date %> <br>
           <strong>last login ip</strong>: <%= user.security.lastLogin.ip %><br>
           <strong>last ip</strong>: <%= user.security.lastIp %><br>
-          <strong>confirmed</strong>: <%= user.security.confirmed ? "true": "false" %><br>
+          <strong>confirmed</strong>: <%- user.confirmed() ? "yes": "no - <a href='/confirm'>Resend confirmation link</a>" %><br>
           <strong>reset link</strong>: <%= user.security.reset.key || "none" %>
         </p>        
       </div>
