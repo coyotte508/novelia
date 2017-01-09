@@ -142,7 +142,7 @@ userSchema.methods.confirmKey = function() {
 }
 
 userSchema.methods.confirm = function(key) {
-    assert(this.confirmed(), "User is already confirmed.");
+    assert(!this.confirmed(), "User is already confirmed.");
     assert(key && this.confirmKey() == key, "Invalid confirmation key.");
     this.security.confirmed = true;
     this.security.confirmKey = null;
@@ -162,7 +162,7 @@ userSchema.methods.sendConfirmationEmail = function() {
       from: config.noreply,
       to: this.email(),
       subject: 'Confirm your account',
-      html: `<p>To finish your registration and confirm your account ${this.displayName()}, click <a href='http://www.${config.domain}/confirm?key=${this.confirmKey()}&user=${this.email()}'>this link</a></p>.
+      html: `<p>To finish your registration and confirm your account ${this.displayName()}, click <a href='http://www.${config.domain}/confirm?key=${this.confirmKey()}&user=${this.email()}'>this link</a>.</p>
 
 <p>If you didn't create an account with us, then just ignore this email.</p>`,
     });

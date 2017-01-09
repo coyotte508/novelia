@@ -60,7 +60,7 @@ router.post('/goldfish', (req, res, next) => {
       from: config.noreply,
       to: email,
       subject: 'Forgotten password',
-      html: `<p>A password reset was requested for your account ${user.local.username}, click <a href='http://www.${config.domain}/reset?key=${user.resetKey()}'>this link</a></p> to proceed with it.
+      html: `<p>A password reset was requested for your account ${user.local.username}, click <a href='http://www.${config.domain}/reset?key=${user.resetKey()}'>this link</a> to proceed with it.</p>
 
 <p>If you didn't request a password reset, then just ignore this email.</p>`,
     });
