@@ -50,7 +50,7 @@ router.post('/addchapter', utils.canTouchNovel, (req, res, next) => {
         yield novel.update({$inc: {"numChapters": 1}, $push: {"chapters": {title, ref: chapter.id}}});
       }
 
-      limiter.addAction(req.user.id, "addchapter", title);
+      limiter.action(req.user.id, "addchapter", title);
 
       res.redirect(novel.getLink() + "/" + (prologue ? 0 : novel.numChapters + 1));
     } catch (err) {
