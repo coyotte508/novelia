@@ -134,7 +134,7 @@ userSchema.methods.validateResetKey = function(key) {
 userSchema.methods.generateConfirmKey = function() {
     this.security.confirmKey = sha1(this.displayName() + '/confirm/' + mongoose.Types.ObjectId());
 
-    return this.update({"security.confirmKey": this.security.confirmKey});
+    return this.update({"security.confirmKey": this.security.confirmKey}).exec();
 }
 
 userSchema.methods.confirmKey = function() {
@@ -143,14 +143,14 @@ userSchema.methods.confirmKey = function() {
 
 userSchema.methods.confirm = function(key) {
     assert(!this.confirmed(), "User is already confirmed.");
-    assert(key && this.confirmKey() == key, "Invalid confirmation key.");
+    assert(key && this.confirmKey() == key, `Invalid confirmation key.`); //(${key},${this.confirmKey()})
     this.security.confirmed = true;
     this.security.confirmKey = null;
 
     return this.update({
         "security.confirmed": true,
         "security.confirmKey": null,
-    });
+    }).exec();
 }
 
 userSchema.methods.confirmed = function() {
