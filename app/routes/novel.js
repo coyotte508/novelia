@@ -125,6 +125,8 @@ router.all('/:novel/delete', utils.canTouchNovel, (req, res, next) => {
     var novel = req.novel;
     utils.assert403(novel.numChapters == 0, "You can only delete empty novels");
 
+    limiter.action(req.user.id, "delnovel", novel.title);
+
     //not using req.user since admin may in the future be able to delete others' novels
     yield User.where({_id: novel.author.ref}).update({$pull: {"novels": {ref: novel.id}}}).exec();
 

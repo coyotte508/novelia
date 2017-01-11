@@ -46,12 +46,12 @@ router.post('/addchapter', utils.canTouchNovel, (req, res, next) => {
       yield chapter.save();
 
       if (prologue) {
-        yield novel.update({prologue: true, "chapters.0": {title, ref}});
+        yield novel.update({prologue: true, "chapters.0": {title, ref: chapter.id}});
       } else {
         yield novel.update({$inc: {"numChapters": 1}, $push: {"chapters": {title, ref: chapter.id}}});
       }
 
-      limiter.action(req.user.id, "addchapter", title);
+      limiter.action(req.user.id, "addchapter", {title, novel: novel.title});
 
       res.redirect(novel.getLink() + "/" + (prologue ? 0 : novel.numChapters + 1));
     } catch (err) {
@@ -125,15 +125,17 @@ router.all('/:chapter(\\d+)/delete', utils.canTouchNovel, (req, res, next) => {
     utils.assert403(novel.numChapters >= num, "You can only delete the last chapter");
 
     if (req.params.chapter == 0) {
-      yield novel.update({prologue: false, "chapters.0.title": null, "chapters.0.ref": null});
+      yield novel.update({prologue: false, "chapters.0": null});
     } else {
       yield novel.update({$inc: {"numChapters": -1}, $pull: {"chapters": {ref: chapter.id}}});
     }
 
+    limiter.action(req.user.id, "delchapter", {num, title, novel: novel.title});
+
     chapter.remove();
 
     res.redirect(novel.getLink());
-  }).catch(next).then(free, free);
+  }).catch(next).then(() => free (), () => free() );
 });
 
 module.exports = router;
