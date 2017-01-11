@@ -124,7 +124,7 @@ router.all('/:chapter(\\d+)/delete', utils.canTouchNovel, (req, res, next) => {
     var chapter = req.chapter;
     utils.assert403(novel.numChapters >= num, "You can only delete the last chapter");
 
-    if (req.params.chapter == 0) {
+    if (num == 0) {
       yield novel.update({prologue: false, "chapters.0": null});
     } else {
       yield novel.update({$inc: {"numChapters": -1}, $pull: {"chapters": {ref: chapter.id}}});
