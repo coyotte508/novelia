@@ -7,7 +7,8 @@ var router = express.Router();
 
 router.get("/", (req, res, err) => {
   co(function* () {
-    const latest = yield Chapter.find({public: true}, "title novel number").sort({_id: -1}).limit(10);
+    /* Todo: proper map reduce/distinct */
+    const latest = yield Chapter.latestUpdates();
     res.render("pages/index", {error:null, latest, req, slug});
   }).catch(err => next(err));
 });
