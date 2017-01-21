@@ -22,12 +22,13 @@ router.post('/addchapter', utils.canTouchNovel, (req, res, next) => {
   co(function*() {
     var novel = req.novel;
     var prologue = (req.body.options||"").split(",").indexOf("prologue") != -1;
+    var number = prologue ? 0 : (novel.numChapters+1);
     try {
       if (!(yield limiter.possible(req.user.id, 'addchapter'))) {
         throw new utils.HttpError(`You can only add ${limiter.limits().addchapter.limit} chapters per day`, 403);
       }
 
-      var title = val.validateTitle(req.body.chapterTitle);
+      var title = val.validateTitle(req.body.chapterTitle || (""+number));
       var content = val.validateChapter(req.body.chapterContent);
       var authorNote = val.validateDescription(req.body.authorNote);
 
@@ -127,9 +128,9 @@ router.all('/:chapter(\\d+)/delete', utils.canTouchNovel, (req, res, next) => {
     utils.assert403(novel.numChapters >= num, "You can only delete the last chapter");
 
     if (num == 0) {
-      yield novel.update({prologue: false, "chapters.0": null});
+      yield novel.update({$inc: {"totalViews": -chapter.views}, {prologue: false, "chapters.0": null});
     } else {
-      yield novel.update({$inc: {"numChapters": -1}, $pull: {"chapters": {ref: chapter.id}}});
+      yield novel.update({$inc: {"numChapters": -1, "totalViews": -chapter.views}, $pull: {"chapters": {ref: chapter.id}}});
     }
 
     limiter.action(req.user.id, "delchapter", {num, title, novel: novel.title});
