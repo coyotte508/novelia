@@ -33,7 +33,10 @@ var novelSchema = new Schema({
     type: Number,
     default: 0
   },
-  public: Boolean,
+  public: {
+    type: Boolean,
+    default: true
+  },
   prologue: Boolean,
   slug: {
     type: String,
