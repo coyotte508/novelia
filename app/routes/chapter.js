@@ -8,6 +8,7 @@ const utils = require("./utils");
 const router = require("express").Router();
 const limiter = require("mongo-limiter");
 const locks = require("mongo-locks");
+const viewcounter = require("../engine/viewcounter");
 
 router.get('/addchapter', utils.canTouchNovel, (req, res, next) => {
   co(function*() {
@@ -81,6 +82,7 @@ router.param('chapter', function(req, res, next, chapterNum) {
 
 router.get('/:chapter(\\d+)/', (req, res, next) => {
   co(function*() {
+    viewcounter.addView(req);
     res.render('pages/chapter', {req, novel: req.novel, chapter: req.chapter});
   }).catch((err) => next(err));
 });

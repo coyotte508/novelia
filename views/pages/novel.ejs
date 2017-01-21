@@ -23,6 +23,7 @@ followed = req.user && req.user.isFollowNovel(novel.id);
   <div>
     <a href="<%= novel.getLink() + (liked ? "/unlike": "/like") %>" class="btn btn-sm btn-secondary<%- liked ? " active" : "" %>"  aria-pressed="<%- liked ? "true" : "false" %>"><span class="fa fa-thumbs-o-up"></span> Like <span class="tag tag-default"><%- novel.likes %></span></a>
     <a href="<%= novel.getLink() + (followed ? "/unfollow" : "/follow") %>" class="btn btn-sm btn-secondary<%- followed ? " active" : "" %>" aria-pressed="<%- followed ? "true" : "false" %>"><span class="fa fa-plus"></span> Follow <span class="tag tag-default"><%- novel.follows %></span></a>
+    <a class="btn btn-sm btn-secondary"><span class="fa fa-eye"><span class="sr-only">Views: </span></span> <span class="tag tag-default"><%= novel.totalViews %></span></a>
   </div>
   <p><br/><br/></p>
   <hr/>
@@ -38,7 +39,11 @@ followed = req.user && req.user.isFollowNovel(novel.id);
     <p><ul class="list-group">
     <% if (!isGod) {
        novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>
-      <a class="list-group-item list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %><time class="float-xs-right text-muted" format="ago" unixtime="<%= req.unixTime(item.id) %>"><%= req.timeSince(item.id) %> ago</time></a>
+      <a class="list-group-item list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %>
+      <time class="float-xs-right text-muted" format="ago" unixtime="<%= req.unixTime(item.id) %>"><%= req.timeSince(item.id) %> ago</time>
+      <!--<span class="float-xs-right text-muted" >
+        <span class="fa fa-eye"><span class="sr-only">Views: </span></span> <span class="tag tag-default"><%= item.views %> </span>
+      </span>--></a>
     <% } });
      } else { %>
     <% novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>
