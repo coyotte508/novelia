@@ -92,8 +92,14 @@ router.param('novel', function(req, res, next, novel) {
 router.get('/:novel', (req, res, next) => {
   co(function*() {
     var novel = req.novel;
+    var author;
 
-    var author = yield User.findById(novel.author.ref, User.basics()); 
+    yield Promise.all([
+      req.novel.getViews(),
+      User.findById(novel.author.ref, User.basics())
+    ]).then((values) => {
+      author = values[1];
+    }); 
 
     res.render('pages/novel', {req, novel, author});
   }).catch((err) => next(err));

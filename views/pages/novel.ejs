@@ -41,9 +41,9 @@ followed = req.user && req.user.isFollowNovel(novel.id);
        novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>
       <a class="list-group-item list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %>
       <time class="float-xs-right text-muted" format="ago" unixtime="<%= req.unixTime(item.id) %>"><%= req.timeSince(item.id) %> ago</time>
-      <!--<span class="float-xs-right text-muted" >
-        <span class="fa fa-eye"><span class="sr-only">Views: </span></span> <span class="tag tag-default"><%= item.views %> </span>
-      </span>--></a>
+      <span class="float-xs-right text-muted" >
+         <%= item.views %> <span class="fa fa-eye"><span class="sr-only">Views</span></span>&nbsp;&nbsp;&nbsp;&nbsp;
+      </span></a>
     <% } });
      } else { %>
     <% novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>

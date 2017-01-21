@@ -1,7 +1,9 @@
 //const randomInt = require("random-int");
+const co = require("co");
 const mongoose = require('mongoose');
 const slug = require('slug');
 const Schema = mongoose.Schema;
+const Chapter = require("./chapter");
 
 // define the schema for our user model
 var novelSchema = new Schema({
@@ -66,6 +68,19 @@ novelSchema.methods.classySlug = function() {
 novelSchema.methods.getLink = function() {
     return /*"/nv/" +*/ "/" + this.classySlug();
 };
+
+novelSchema.methods.getViews = function() {
+  var self = this;
+  return co(function*() {
+    var views = yield Chapter.find({"novel.ref": self.id}, "views number");
+    views.forEach((chapter) => {
+      if (chapter.number > self.chapters.length) {
+        return;
+      }
+      self.chapters[chapter.number].views = chapter.views;
+    });
+  });
+}
 
 //expose novel model to the app
 module.exports = mongoose.model('Novel', novelSchema);
