@@ -24,7 +24,7 @@ require('./config/validator');
 require('./config/limits');
 
 var app = express();
-const port = process.env.port || 8080;
+const port = process.env.port || 8010;
 
 /* Configuration */
 mongoose.connect(configDB.dburl, {server: {reconnectTries: Number.MAX_VALUE, reconnectInterval: 1000}});
