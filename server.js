@@ -63,9 +63,14 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(flash());
 
-/* For css cache busting */
 app.use(function(req, res, next){
+    /* For css cache busting */
     req.version = pjson.version;
+    req.makeDescription = descr => {
+      descr = descr.replace(/(<([^>]+)>)/g, "") ||"";
+      var index = descr.indexOf(" ", 150);
+      return descr.substr(0, index == -1 ? undefined : index);
+    }
     next();
 });
 

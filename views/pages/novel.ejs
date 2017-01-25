@@ -1,11 +1,13 @@
 <% 
+
 title = novel.title; 
 isGod = req.user && author && req.user.id == author.id;
 nLink = novel.getLink();
 authorName = author.displayName();
 liked = req.user && req.user.isLikeNovel(novel.id);
 followed = req.user && req.user.isFollowNovel(novel.id);
-  
+description = req.makeDescription(novel.description);
+
 %>
 
 <%- contentFor('body') %>
