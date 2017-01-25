@@ -20,7 +20,10 @@ var novelSchema = new Schema({
     required: true
   },
   //updatedAt: Date,
-  categories: [String],
+  categories: {
+    type: [String],
+    index: true
+  },
   chapters: {
     type: [{
       title: String, 
