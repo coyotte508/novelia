@@ -15,11 +15,11 @@
     <small id="titleHelp" class="form-text text-muted">The title can not be changed later on, make sure to spell correctly!</small>
   </div>
   <div class="form-group">
-    <label for="novelCategory">Category</label>
-    <select class="form-control" id="novelCategory" name="novelCategory" value="<%= req.body.novelCategory %>" required>
+    <label for="novelCategory">Main category</label>
+    <select class="form-control" id="novelCategory" name="novelCategory" required>
       <option value="">-- Choose a genre --</option>
       <% categories.forEach(cat => { %>
-        <option value="<%= cat.shortHand %>"><%= cat.name %></option>
+        <option value="<%= cat.shorthand %>" <%- req.body.novelCategory == cat.shorthand ? "selected":"" %>><%= cat.name %></option>
       <% }); %>
     </select>
   </div>
@@ -29,10 +29,10 @@
   </div>
   <div class="form-group">
     <label for="novelCategory2">Additional category</label>
-    <select class="form-control" id="novelCategory2" name="novelCategory2" value="<%= req.body.novelCategory2 %>">
+    <select class="form-control" id="novelCategory2" name="novelCategory2">
       <option value="">-- Choose a genre, if you want --</option>
       <% categories.forEach(cat => { %>
-        <option value="<%= cat.shortHand %>"><%= cat.name %></option>
+        <option value="<%= cat.shorthand %>" <%- req.body.novelCategory2 == cat.shorthand ? "selected":"" %>><%= cat.name %></option>
       <% }); %>
     </select>
   </div>

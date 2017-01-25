@@ -71,7 +71,7 @@ var categories = {
 var categoryList = (function(){
   var ret = [];
   for (var key in categories) {
-    ret.push(_.extend({shortand: key}, categories[key]));
+    ret.push(_.extend({shorthand: key}, categories[key]));
   }
   return ret.sort((a,b) => a.name.localeCompare(b.name));
 })();

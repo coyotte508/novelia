@@ -28,6 +28,15 @@ followed = req.user && req.user.isFollowNovel(novel.id);
   <p><br/><br/></p>
   <hr/>
   <div>
+    <p>
+      <% if (novel.categories[0]) { %>
+        <a href="/category/<%= novel.categories[0] %>"><span class="tag tag-primary"><%= req.categoryName(novel.categories[0]) %></span></a>
+      <% }
+      if (novel.categories[1]) {
+      %>
+        <a href="/category/<%= novel.categories[1] %>"><span class="tag tag-default"><%= req.categoryName(novel.categories[1]) %></span></a>
+      <% }%>
+    </p>
     <h4>Synopsis</h4>
     <div class="synopsis">
       <%- novel.description %>

@@ -2,6 +2,7 @@ const XRegExp = require("xregexp");
 const validator = require('validator');
 const marked = require('marked');
 const toMarkdown = require('to-markdown');
+const assert = require('assert');
 
 // const createDOMPurify = require('dompurify');
 // const jsdom = require('jsdom');
@@ -88,6 +89,18 @@ validator.validateChapter = (text) => {
     throw new Error("The content of the chapter must be less than 2000 characters.");
   }
   return validator.textToDb(text);
+}
+
+validator.validateCategories = ([cat1, cat2], list) => {
+  cat1 = list.find(x => x.shorthand == cat1);
+  if (!cat1) {
+    throw new Error("Invalid category");
+  }
+  cat2 = list.find(x => x.shorthand == cat2);
+
+  assert(cat1 != cat2, "Can't use identical categories");
+
+  return cat2 ? [cat1, cat2] : [cat1];
 }
 
 module.exports = validator;
