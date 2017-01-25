@@ -20,7 +20,7 @@ router.post('/addnovel', utils.isLoggedIn, (req, res) => {
     try {
       var title = val.validateTitle(req.body.novelTitle);
       var description = val.validateDescription(req.body.novelDescription);
-      let cats = val.validateCategories([req.body.novelCategory, req.body.novelCategory2], categories).map(x => x.shorthand);
+      var cats = val.validateCategories([req.body.novelCategory, req.body.novelCategory2], categories).map(x => x.shorthand);
 
       if (!(yield limiter.attempt(req.user.id, 'addnovel', title))) {
         throw new utils.HttpError(`You can only add ${limiter.limits().addnovel.limit} novels per day`, 403);
@@ -120,7 +120,7 @@ router.post('/:novel/edit', utils.canTouchNovel, (req, res) => {
   co(function*() {
     try {
       var description = val.validateDescription(req.body.novelDescription);
-      let cats = val.validateCategories([req.body.novelCategory, req.body.novelCategory2], categories).map(x => x.shorthand);
+      var cats = val.validateCategories([req.body.novelCategory, req.body.novelCategory2], categories).map(x => x.shorthand);
 
       yield req.novel.update({description, categories: cats});
 
