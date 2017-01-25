@@ -91,7 +91,8 @@ validator.validateChapter = (text) => {
   return validator.textToDb(text);
 }
 
-validator.validateCategories = ([cat1, cat2], list) => {
+validator.validateCategories = (cats, list) => {
+  var [cat1, cat2] = cats;
   cat1 = list.find(x => x.shorthand == cat1);
   if (!cat1) {
     throw new Error("Invalid category");
