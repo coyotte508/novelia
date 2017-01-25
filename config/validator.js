@@ -92,7 +92,7 @@ validator.validateChapter = (text) => {
 }
 
 validator.validateCategories = (cats, list) => {
-  var [cat1, cat2] = cats;
+  var cat1 = cats[0], cat2 = cats[1];
   cat1 = list.find(x => x.shorthand == cat1);
   if (!cat1) {
     throw new Error("Invalid category");
