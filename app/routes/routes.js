@@ -18,7 +18,7 @@ router.get("/contact", (req, res) => {
 });
 
 /* Aggregate routers */
-[require("./auth.js"), require("./user.js"), require("./novel.js")].forEach((mod) => router.use("/", mod));
+[require("./admin.js"), require("./auth.js"), require("./user.js"), require("./novel.js")].forEach((mod) => router.use("/", mod));
 
 router.use(function errorHandler (err, req, res, next) {
   console.log(err);

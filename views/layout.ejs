@@ -26,7 +26,11 @@
 
         <ul class="nav navbar-nav navbar-md-right">
           <% if (req.user) { %>
-            <li class="nav-item"><span class="navbar-text text-muted">Welcome, <%= req.user.displayName() %>!</span></li>  
+            <li class="nav-item"><span class="navbar-text text-muted"><% if (req.user.isAdmin()) {%>
+              <a href="/admin">Admin</a>
+            <% } else { %>
+              Welcome, <%= req.user.displayName() %>!
+            <% } %></span></li>  
             <li class="nav-item"><span class="navbar-text text-muted"><a href="/profile">Profile</a></span></li>
           <% } else { %>
           <li class="nav-item"><span class="navbar-text text-muted">Already have an account?</span></li>

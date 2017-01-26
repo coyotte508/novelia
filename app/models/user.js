@@ -36,6 +36,7 @@ var userSchema = new Schema({
             issued   : Date
         }
     },
+    authority: String,
     novels           : [{title: String, ref: Schema.Types.ObjectId}],
     likedNovels      : [{title: String, ref: Schema.Types.ObjectId}],
     followedNovels   : [{title: String, ref: Schema.Types.ObjectId}]
@@ -219,6 +220,10 @@ userSchema.methods.notifyLastIp = function(ip) {
         this.security.lastIp = ip;
         this.update({"security.lastIp": ip}).exec();
     }
+}
+
+userSchema.methods.isAdmin = function() {
+    return this.authority == "admin";
 }
 
 var User = mongoose.model('User', userSchema);

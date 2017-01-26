@@ -49,7 +49,18 @@ function isNotLoggedIn(req, res, next) {
 function canTouchNovel(req, res, next) { 
   isLoggedIn(req, res, () => {
     try {
-      assert403(req.novel.author.ref == req.user.id, "You are not authorized to manage this novel.");
+      assert403(req.user.isAdmin() || req.novel.author.ref == req.user.id, "You are not authorized to manage this novel.");
+      next();  
+    } catch (err) {
+      next(err);
+    }
+  });
+}
+
+function isAdmin(req, res, next) {
+  isLoggedIn(req, res, () => {
+    try {
+      assert403(req.user.isAdmin(), "You are not authorized to access this page.");
       next();  
     } catch (err) {
       next(err);
@@ -71,6 +82,7 @@ module.exports = {
   isLoggedIn,
   isNotLoggedIn,
   canTouchNovel,
+  isAdmin,
   HttpError, 
   assert403, 
   assert404,
