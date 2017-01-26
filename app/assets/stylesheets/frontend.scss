@@ -44,6 +44,9 @@ body {
   @include media-breakpoint-up(lg) {
     @include make-container-max-widths();
   }
+  @media (min-width: 1600px) {
+    width: 72%;
+  }
 }
 
 .main-container {
