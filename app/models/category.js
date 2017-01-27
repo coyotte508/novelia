@@ -65,6 +65,11 @@ var categories = {
     name: "Drama",
     icon: "",
     description: ""
+  },
+  litrpg: {
+    name: "LitRPG",
+    icon: "",
+    description: ""
   }
 };
 
