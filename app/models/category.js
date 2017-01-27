@@ -17,7 +17,7 @@ var categories = {
     description: ""
   },
   military: {
-    name: "Military",
+    name: "War & Military",
     icon: "", 
     description: ""
   },
@@ -46,7 +46,7 @@ var categories = {
     icon: "", 
     description: ""
   },
-  mystery: {
+  horror: {
     name: "Mystery / Horror",
     icon: "", 
     description: ""
@@ -65,12 +65,12 @@ var categories = {
     name: "Drama",
     icon: "",
     description: ""
-  },
+  }/*,
   litrpg: {
     name: "LitRPG",
     icon: "",
     description: ""
-  }
+  }*/
 };
 
 var categoryList = (function(){
