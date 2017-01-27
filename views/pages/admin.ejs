@@ -23,13 +23,15 @@
   </ul>
 </div>
 
-<div class="col-md-6">
+<div class="col-md-12">
   <h2 class="card-title">User Actions</h2>
+  <p class="text-muted">Here are displayed the actions in the last 24 hours</p>
   <table class="table">
     <tr>
       <th>User</th>
       <th>Action</th>
       <th>Info</th>
+      <th>Time</th>
     </tr>
     <% actions.forEach(action => { %>
     <tr>
@@ -38,6 +40,7 @@
       <% } else {%><%= action.user %><% }%></td>
       <td><%= action.action %></td>
       <td><%= action.data %></td>
+      <td><time format="ago" unixtime="<%= req.unixTime(action.id) %>"><%= req.timeSince(action.id) %> ago</time></td>
     </tr>
     <% }); %>
   </table>
