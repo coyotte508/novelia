@@ -1,6 +1,6 @@
 <% 
 title = chapter.title; 
-isGod = req.user && req.user.id == novel.author.ref;
+isGod = req.user && (req.user.isAdmin() || req.user.id == novel.author.ref);
 novelLink = novel.getLink();
 num = +req.params.chapter;
 description = req.makeDescription(chapter.content);

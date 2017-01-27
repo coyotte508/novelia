@@ -36,7 +36,7 @@
     "jsdom": "^9.9.1",
     "lodash": "^4.17.2",
     "marked": "^0.3.6",
-    "mongo-limiter": "^0.2.0",
+    "mongo-limiter": "^0.2.2",
     "mongo-locks": "^0.0.6",
     "mongoose": "^4.7.4",
     "morgan": "^1.7.0",

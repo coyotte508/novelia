@@ -1,7 +1,7 @@
 <% 
 
 title = novel.title; 
-isGod = req.user && author && req.user.id == author.id;
+isGod = req.user && (req.user.isAdmin() || req.user.id == author.id);
 nLink = novel.getLink();
 authorName = author.displayName();
 liked = req.user && req.user.isLikeNovel(novel.id);
@@ -58,7 +58,15 @@ description = req.makeDescription(novel.description);
     <% } });
      } else { %>
     <% novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>
-      <li class="list-group-item"><a class="list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %></a> <span class="float-xs-right"> <a href="<%= nLink + "/" + index  + "/edit" %>"><span class="sr-only">Edit chapter</span><span class="fa fa-pencil-square-o" aria-hidden="true"></span></a> <% if (index == novel.numChapters) {%><a href="<%= nLink + "/" + index  + "/delete" %>"> <span class="sr-only">Delete chapter</span><span class="fa fa-trash" aria-hidden="true"></span></a> <% } %> </span> </li>
+      <li class="list-group-item">
+        <a class="list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %></a> <span class="float-xs-right"> <a href="<%= nLink + "/" + index  + "/edit" %>"><span class="sr-only">Edit chapter</span><span class="fa fa-pencil-square-o" aria-hidden="true"></span></a> 
+        <a href="<%= nLink + "/" + index  + "/delete" %>" <% if (index != novel.numChapters) {%>class="invisible"<%}%>> <span class="sr-only">Delete chapter</span><span class="fa fa-trash" aria-hidden="true"></span></a></span> 
+
+        <time class="float-xs-right text-muted" format="ago" unixtime="<%= req.unixTime(item.id) %>"><%= req.timeSince(item.id) %> ago&nbsp;&nbsp;&nbsp;&nbsp;</time>
+        <span class="float-xs-right text-muted" >
+           <%= item.views %> <span class="fa fa-eye"><span class="sr-only">Views</span></span>&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>
+      </li>
     <% } });
     } %>
     </ul></p>
