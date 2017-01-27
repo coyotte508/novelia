@@ -60,8 +60,8 @@ validator.validatePassword = (password) => {
 //   return text.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
 // }
 
-validator.latinSentenceChar = XRegExp("[\\p{Latin} 0-9 .,!:?'']+");
-validator.latinSentence = XRegExp("^[\\p{Latin} 0-9 .,!:?'']+$");
+validator.latinSentenceChar = XRegExp("[\\p{Latin} 0-9 .,!:?'-]+");
+validator.latinSentence = XRegExp("^[\\p{Latin} 0-9 .,!:?'-]+$");
 
 validator.validateLatinSentence = (text) => {
   if (!validator.latinSentence.test(text)) {
