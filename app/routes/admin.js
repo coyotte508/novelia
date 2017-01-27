@@ -16,6 +16,7 @@ router.get("/admin", utils.isAdmin, (req, res) => {
     users.forEach(x => userD[x.id] = x);
 
     actions.forEach(x => {
+      if (typeof x.data === "object") x.data = JSON.stringify(x.data || "");
       if (x.user in userD) {
         x.userLink = userD[x.user].getLink();
         x.user = userD[x.user].displayName();
