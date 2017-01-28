@@ -19,6 +19,7 @@ const flash = require('connect-flash');
 const pjson = require('./package.json');
 const configAuth = require('./config/auth');
 const configDB = require('./config/general');
+const cs = require('./config/constants');
 const router = require('./app/routes/routes');
 require('./config/validator');
 require('./config/limits');
@@ -66,11 +67,14 @@ app.use(flash());
 app.use(function(req, res, next){
   /* For css cache busting */
   req.version = pjson.version;
+  req.cs = cs;
+
   req.makeDescription = descr => {
     descr = descr.replace(/(<([^>]+)>)/g, "") ||"";
     var index = descr.indexOf(" ", 150);
     return descr.substr(0, index == -1 ? undefined : index);
   }
+
   req.unixTime = function(date) {
     return parseInt(date.substring(0, 8), 16);
   }

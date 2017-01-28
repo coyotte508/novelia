@@ -1,8 +1,19 @@
-<% title = "Add a novel"; %>
+<% 
+if (action == "add") {
+  title = "Add a novel"; 
+  btnText = "Add novel";
+  val = val || {dbToText: ()=>{}};
+  novel = novel || {categories:[]};
+} else {
+  title = "Edit " + novel.title;
+  btnText = "Edit novel";
+}
+
+%>
 
 <%- contentFor('body') %>
 
-<h1 class="text-md-center"><%= title %></h1>
+<h1 class="text-md-center"><%= action == "add" ? title : novel.title %></h1>
 
 <% if (message.length > 0) { %>
   <div class="alert alert-danger"><%= message %></div>
@@ -11,19 +22,19 @@
 <form method="post">
   <div class="form-group">
     <label for="novelTitle">Title of the novel</label>
-    <input type="text" class="form-control" id="novelTitle" name="novelTitle" aria-describedby="titleHelp" placeholder="Awesome title for your novel" maxlength="80" value="<%= req.body.novelTitle %>" required>
-    <small id="titleHelp" class="form-text text-muted">The title can not be changed later on, make sure to spell correctly!</small>
+    <input type="text" class="form-control" id="novelTitle" name="novelTitle" aria-describedby="titleHelp" placeholder="Awesome title for your novel" maxlength="<%- req.cs.titleMaxLength %>" value="<%= novel.title %>" disabled>
+    <small id="titleHelp" class="form-text text-muted">To change the capitalization or punctuation of the title, contact support.</small>
   </div>
   <div class="form-group">
     <label for="novelDescription">Description</label>
-    <textarea class="form-control" name="novelDescription" id="novelDescription" rows="4" placeholder="The description must not be too vague and give readers an idea what they are going to read." maxlength="2000"><%- req.body.novelDescription%></textarea>
+    <textarea class="form-control" name="novelDescription" id="novelDescription" rows="4" placeholder="The description must not be too vague and give readers an idea what they are going to read." maxlength="<%- req.cs.descriptionMaxLength %>"><%- req.body.novelDescription || val.dbToText(novel.description) %></textarea>
   </div>
   <div class="form-group">
     <label for="novelCategory">Main category</label>
     <select class="form-control" id="novelCategory" name="novelCategory" required>
       <option value="">-- Choose a genre --</option>
       <% categories.forEach(cat => { %>
-        <option value="<%= cat.shorthand %>" <%- req.body.novelCategory == cat.shorthand ? "selected":"" %>><%= cat.name %></option>
+        <option value="<%= cat.shorthand %>" <%- (req.body.novelCategory || novel.categories[0]) == cat.shorthand ? "selected":"" %>><%= cat.name %></option>
       <% }); %>
     </select>
   </div>
@@ -32,9 +43,9 @@
     <select class="form-control" id="novelCategory2" name="novelCategory2">
       <option value="">-- Choose a genre, if you want --</option>
       <% categories.forEach(cat => { %>
-        <option value="<%= cat.shorthand %>" <%- req.body.novelCategory2 == cat.shorthand ? "selected":"" %>><%= cat.name %></option>
+        <option value="<%= cat.shorthand %>" <%- (req.body.novelCategory2 || novel.categories[1]) == cat.shorthand ? "selected":"" %>><%= cat.name %></option>
       <% }); %>
     </select>
   </div>
-  <button type="submit" class="btn btn-primary">Add novel</button>
+  <button type="submit" class="btn btn-primary"><%- btnText %></button>
 </form>

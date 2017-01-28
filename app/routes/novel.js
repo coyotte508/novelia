@@ -12,7 +12,7 @@ const categories = require("../models/category").list();
 const mongoose = require("mongoose");
 
 router.get('/addnovel', utils.isLoggedIn, (req, res) => {
-  res.render('pages/addnovel', {req, message: "", categories});
+  res.render('pages/addnovel', {req, message: "", categories, action:'add'});
 });
 
 router.post('/addnovel', utils.isLoggedIn, (req, res) => {
@@ -43,7 +43,7 @@ router.post('/addnovel', utils.isLoggedIn, (req, res) => {
       res.redirect(novel.getLink());
     } catch (err) {
       res.status(err.statusCode || 500);
-      res.render('pages/addnovel', {req, message: err.message, categories});
+      res.render('pages/addnovel', {req, message: err.message, categories, action:'add'});
     }
   });
 });
@@ -82,7 +82,7 @@ router.get('/:novel', (req, res, next) => {
 
 router.get('/:novel/edit', utils.canTouchNovel, (req, res, next) => {
   co(function*() {
-    res.render('pages/editnovel', {req, novel: req.novel, categories, val, message: ""});
+    res.render('pages/addnovel', {req, novel: req.novel, categories, val, message: "", action:'add'});
   }).catch((err) => next(err));
 });
 
@@ -97,7 +97,7 @@ router.post('/:novel/edit', utils.canTouchNovel, (req, res) => {
       res.redirect(req.novel.getLink());
     } catch (err) {
       res.status(err.statusCode || 500);
-      res.render('pages/editnovel', {req, novel: req.novel, categories, val, message: err.message});
+      res.render('pages/addnovel', {req, novel: req.novel, categories, val, message: err.message, action:'edit'});
     }
   });
 });

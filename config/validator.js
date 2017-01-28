@@ -3,6 +3,7 @@ const validator = require('validator');
 const marked = require('marked');
 const toMarkdown = require('to-markdown');
 const assert = require('assert');
+const cs = require('constants');
 
 // const createDOMPurify = require('dompurify');
 // const jsdom = require('jsdom');
@@ -70,23 +71,25 @@ validator.validateLatinSentence = (text) => {
   return text;
 }
 
-validator.validateTitle = (text) => {
-  if (!validator.isLength(text, {min: 1, max: 80})) {
-    throw new Error("The title must be less than 80 characters.");
+validator.validateLength = (text, desc, opt) => {
+  if (!validator.isLength(text, opt)) {
+    throw new Error(`The ${desc} must be more than ${opt.min || 0} and less than ${opt.max} characters`);
   }
+}
+
+validator.validateTitle = (text) => {
+  validator.validateLength(text, "title", {min: 1, max: cs.titleMaxLength});
   return validator.validateLatinSentence(text);
 }
 
 validator.validateDescription = (text) => {
-  if (!validator.isLength(text, {min: 0, max: 2000})) {
-    throw new Error("The description must be less than 2000 characters.");
-  }
+  validator.validateLength(text, "description", {min: 0, max: cs.descriptionMaxLength});
   return validator.textToDb(text);
 }
 
 validator.validateChapter = (text) => {
-  if (!validator.isLength(text, {min: 0, max: 50000})) {
-    throw new Error("The content of the chapter must be less than 2000 characters.");
+  if (!validator.isLength(text, {min: 100, max: 50000})) {
+    throw new Error("The content of the chapter must be less than 50000 characters.");
   }
   return validator.textToDb(text);
 }
