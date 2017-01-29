@@ -12,7 +12,7 @@ const viewcounter = require("../engine/viewcounter");
 
 router.get('/addchapter', utils.canTouchNovel, (req, res, next) => {
   co(function*() {
-    res.render('pages/addchapter', {req, novel: req.novel, message: ""});  
+    res.render('pages/addchapter', {req, novel: req.novel, message: "", action:"add"});  
   }).catch((err) => next(err));
 });
 
@@ -58,7 +58,7 @@ router.post('/addchapter', utils.canTouchNovel, (req, res, next) => {
       res.redirect(novel.getLink() + "/" + (prologue ? 0 : novel.numChapters + 1));
     } catch (err) {
       res.status(err.statusCode || 500);
-      res.render('pages/addchapter', {req, novel: novel || {}, message: err.message});
+      res.render('pages/addchapter', {req, novel: novel || {}, message: err.message, action: "add"});
     }
   }).catch(next).then(() => free(), () => free());
 });
@@ -90,7 +90,7 @@ router.get('/:chapter(\\d+)/', (req, res, next) => {
 
 router.get('/:chapter(\\d+)/edit',utils.canTouchNovel, (req, res, next) => {
   co(function*() {
-    res.render('pages/editchapter', {req, novel: req.novel, chapter: req.chapter, val, message: ""});  
+    res.render('pages/addchapter', {req, novel: req.novel, chapter: req.chapter, val, message: "", action:"edit"});  
   }).catch((err) => next(err));
 });
 
@@ -112,7 +112,7 @@ router.post('/:chapter(\\d+)/edit', utils.canTouchNovel, (req, res, next) => {
       res.redirect(novel.getLink() + "/" + req.params.chapter);
     } catch (err) {
       res.status(err.statusCode || 500);
-      res.render('pages/editchapter', {req, novel: novel || {}, chapter: req.chapter, val, message: err.message});
+      res.render('pages/addchapter', {req, novel: novel || {}, chapter: req.chapter, val, message: err.message, action: "edit"});
     }
   }).catch((err) => next(err));
 });

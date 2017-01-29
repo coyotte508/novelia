@@ -1,4 +1,14 @@
-<% title = "Add a chapter for " + novel.title; %>
+<% 
+if (action == "add") {
+  title = "Add a chapter for " + novel.title; 
+  btnText = "Add chapter";
+  val = val || {dbToText: ()=>{}};
+  chapter = chapter || {};
+} else {
+  title = "Edit chapter " + req.params.chapter + " for " + novel.title;
+  btnText = "Edit chapter";
+}
+%>
 
 <%- contentFor('body') %>
 
@@ -13,7 +23,7 @@
 <form method="post">
   <div class="form-group">
     <label for="chapterTitle">Chapter title</label>
-    <input type="text" class="form-control" id="chapterTitle" name="chapterTitle" placeholder="Title for the new chapter" maxlength="80" value="<%= req.body.chapterTitle %>">
+    <input type="text" class="form-control" id="chapterTitle" name="chapterTitle" placeholder="Title for the new chapter" maxlength="<%- req.cs.titleMaxLength %>" value="<%= req.body.chapterTitle || chapter.title %>">
   </div>
   <div class="form-group">
     <label for="chapterContent">Content</label>
@@ -26,9 +36,9 @@ You can try **bold** text, *italics*, [link description](url), or:
 - This is a 
 - two-item list 
 
-and all the other things possible with Markdown, including tables!" minlength="100" maxlength="50000" required><%- req.body.chapterContent%></textarea>
+and all the other things possible with Markdown, including tables!" minlength="100" maxlength="50000" required><%- req.body.chapterContent || val.dbToText(chapter.content) %></textarea>
   </div>
-  <% if (!novel.prologue) { %>
+  <% if (action == "add" && !novel.prologue) { %>
   <div class="form-check">
     <label class="form-check-label">
       <input class="form-check-input" type="checkbox" name="options" value="prologue"<%= (req.body.options||"").includes("prologue")? " checked" : ""%>>
@@ -38,9 +48,9 @@ and all the other things possible with Markdown, including tables!" minlength="1
   <% } %>
   <div class="form-group">
     <label for="authorNote">Author's note</label>
-    <textarea class="form-control" name="authorNote" id="authorNote" rows="4" placeholder="Optional, if you have something more to say" maxlength="2000"><%- req.body.authorNote%></textarea>
+    <textarea class="form-control" name="authorNote" id="authorNote" rows="4" placeholder="Optional, if you have something more to say" maxlength="<%- req.cs.descriptionMaxLength %>"><%- req.body.authorNote || val.dbToText(chapter.authorNote) %></textarea>
   </div>
-  <button type="submit" class="btn btn-primary">Add chapter</button>
+  <button type="submit" class="btn btn-primary"><%- btnText %></button>
 </form>
 
 <!-- <link rel="stylesheet" href="/assets/stylesheets/squire-ui.css"><script type="text/javascript" src="/app/assets/javascript/squire.js"></script>-->
