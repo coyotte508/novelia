@@ -26,9 +26,10 @@ require('./config/limits');
 
 var app = express();
 const port = process.env.port || 8010;
+const dburl = process.env.local ? configDB.localdb : configDB.dburl;
 
 /* Configuration */
-mongoose.connect(configDB.dburl, {server: {reconnectTries: Number.MAX_VALUE, reconnectInterval: 1000}});
+mongoose.connect(dburl, {server: {reconnectTries: Number.MAX_VALUE, reconnectInterval: 1000}});
 mongoose.Promise = global.Promise; //native promises
 
 mongoose.connection.on("error", (err) => {
