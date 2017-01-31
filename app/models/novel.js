@@ -36,6 +36,10 @@ var novelSchema = new Schema({
     type: Number,
     default: 0
   },
+  totalLikes: {
+    type: Number,
+    default: 0
+  },
   public: {
     type: Boolean,
     default: true
@@ -53,10 +57,10 @@ var novelSchema = new Schema({
     type: Number,
     default: 0
   },
-  likes: {
-    type: Number,
-    default: 0
-  }
+  // likes: {
+  //   type: Number,
+  //   default: 0
+  // }
 });
 
 //novelSchema.index({"title": "text"});

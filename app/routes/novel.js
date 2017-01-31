@@ -147,7 +147,7 @@ router.all('/:novel/hide', utils.canTouchNovel, (req, res, next) => {
   }).catch(err => next(err));
 });
 
-router.all('/:novel/like', utils.isLoggedIn, (req, res, next) => {
+/* router.all('/:novel/like', utils.isLoggedIn, (req, res, next) => {
   var free = () => {};
   co(function*() {
     var novel = req.novel;
@@ -189,7 +189,7 @@ router.all('/:novel/unlike', utils.isLoggedIn, (req, res, next) => {
 
     res.redirect(req.get('Referrer') || novel.getLink());
   }).catch(next).then(() => free(), () => free());
-});
+}); */
 
 router.all('/:novel/follow', utils.isLoggedIn, (req, res, next) => {
   var free = () => {};

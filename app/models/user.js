@@ -38,8 +38,9 @@ var userSchema = new Schema({
     },
     authority: String,
     novels           : [{title: String, ref: Schema.Types.ObjectId}],
-    likedNovels      : [{title: String, ref: Schema.Types.ObjectId}],
-    followedNovels   : [{title: String, ref: Schema.Types.ObjectId}]
+    //likedNovels      : [{title: String, ref: Schema.Types.ObjectId}],
+    followedNovels   : [{title: String, ref: Schema.Types.ObjectId}],
+    likedChapters    : [{title: String, ref: Schema.Types.ObjectId, novel: {title: String, ref: Schema.Types.ObjectId}}]
 });
 
 userSchema.index({"local.username": "text"}, {unique: true, sparse: true});

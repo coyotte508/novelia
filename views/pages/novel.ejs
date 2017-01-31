@@ -23,7 +23,7 @@ description = req.makeDescription(novel.description);
   <h2 class="text-md-center"><%= title %> <small>by <a href="<%= author.getLink() %>"><%= authorName %></a></small></h2>
   <hr/>
   <div>
-    <a href="<%= novel.getLink() + (liked ? "/unlike": "/like") %>" class="btn btn-sm btn-secondary<%- liked ? " active" : "" %>"  aria-pressed="<%- liked ? "true" : "false" %>"><span class="fa fa-thumbs-o-up"></span> Like <span class="tag tag-default"><%- novel.likes %></span></a>
+    <!--<a href="<%= novel.getLink() + (liked ? "/unlike": "/like") %>" class="btn btn-sm btn-secondary<%- liked ? " active" : "" %>"  aria-pressed="<%- liked ? "true" : "false" %>"><span class="fa fa-thumbs-o-up"></span> Like <span class="tag tag-default"><%- novel.likes %></span></a>-->
     <a href="<%= novel.getLink() + (followed ? "/unfollow" : "/follow") %>" class="btn btn-sm btn-secondary<%- followed ? " active" : "" %>" aria-pressed="<%- followed ? "true" : "false" %>"><span class="fa fa-plus"></span> Follow <span class="tag tag-default"><%- novel.follows %></span></a>
     <a class="btn btn-sm btn-secondary"><span class="fa fa-eye"><span class="sr-only">Views: </span></span> <span class="tag tag-default"><%= novel.totalViews %></span></a>
   </div>
