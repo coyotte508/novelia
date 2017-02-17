@@ -9,7 +9,7 @@ html,body {
 
 
 body {
-  padding-top: 54px;
+  padding-top: 56px;
   background-size: cover;
   background: url('https://i.ytimg.com/vi/7avGPDl1wog/maxresdefault.jpg') fixed;
   background-color: rgba(0,0,0,0.88);
@@ -22,6 +22,10 @@ body {
 
 .varying-container {
   @include make-container();
+
+  &.navbar.fixed-top {
+    position: fixed;
+  }
   
   /* Fluid */
   @include media-breakpoint-only(md) {
@@ -110,4 +114,16 @@ blockquote {
     max-height: 300px;
     max-width: 600px;
   }
+}
+
+.list-group-item > * {
+  margin-right: 5px;
+}
+
+.list-group-item > *:last-child {
+  margin-right: 0px;
+}
+
+.list-group-item .list-group-item-action {
+  width: initial;
 }

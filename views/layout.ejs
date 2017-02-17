@@ -13,31 +13,33 @@
   <link rel="stylesheet" href="/assets/stylesheets/frontend.css?v=<%= req.version %>">
 </head>
 <body>
-  <nav class="navbar varying-container navbar-dark bg-inverse navbar-fixed-top">
+  <nav class="navbar navbar-inverse bg-inverse  navbar-toggleable-sm varying-container fixed-top">
     <!--<div class="varying-container">-->
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <a class="navbar-brand" href="/">LitNovel</a>
-      <button class="navbar-toggler hidden-md-up" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
-  
-      <div id="navbarResponsive" class="collapse navbar-toggleable-sm">
-        <ul class="nav navbar-nav">
+      
+      <div id="navbarResponsive" class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
           <li class="nav-item<% if (title=="Home"){%> active <% } %>"><a class="nav-link" href="/">Home</a></li>
           <li class="nav-item<% if (title=="Contact us"){%> active <% } %>"><a href="/contact" class="nav-link">Contact</a></li>
         </ul>
 
-        <ul class="nav navbar-nav navbar-md-right">
+        <ul class="navbar-nav navbar-md-right ">
           <% if (req.user) { %>
-            <li class="nav-item"><span class="navbar-text text-muted"><% if (req.user.isAdmin()) {%>
-              <a href="/admin">Admin</a>
-            <% } else { %>
+            <li class="nav-item"><% if (req.user.isAdmin()) {%>
+              <a href="/admin" class="nav-link navbar-text">Admin</a>
+            <% } else { %><span class="navbar-text text-muted">
               Welcome, <%= req.user.displayName() %>!
-            <% } %></span></li>  
-            <li class="nav-item"><span class="navbar-text text-muted"><a href="/profile">Profile</a></span></li>
+            </span><% } %></li>  
+            <li class="nav-item"><a class="nav-link navbar-text" href="/profile">Profile</a><</li>
           <% } else { %>
           <li class="nav-item"><span class="navbar-text text-muted">Already have an account?</span></li>
           <li class="nav-item dropdown">
-            <a href="/login" class="nav-link dropdown-toggle" data-toggle="dropdown" id="loginDropDown">Login</a>
-            <ul id="login-dp" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-menu">
-              <li>
+            <a href="/login" class="nav-link navbar-text dropdown-toggle" data-toggle="dropdown" id="loginDropDown">Login</a>
+            <div id="login-dp" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-menu">
+              <div class="dropdown-item">
                <div class="row">
                 <div class="col-md-12">
                   Login via
@@ -68,8 +70,8 @@
                </div>
                <div class="bottom text-center">
                 New here ? <a href="/signup?referrer=<%= req.url %>"><b>Join Us</b></a>
-            </ul>
-          </li>
+            </div>
+          </div>
           <% } %>
         </ul>
       </div><!--/.nav-collapse -->
@@ -84,6 +86,7 @@
 </div><!-- /.container -->
 
 <script src="/assets/javascript/jquery.min.js"></script>
+
 <script src="/assets/javascript/frontend.js"></script>
 </body>
 </html>

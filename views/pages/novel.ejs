@@ -4,7 +4,6 @@ title = novel.title;
 isGod = req.user && (req.user.isAdmin() || req.user.id == author.id);
 nLink = novel.getLink();
 authorName = author.displayName();
-liked = req.user && req.user.isLikeNovel(novel.id);
 followed = req.user && req.user.isFollowNovel(novel.id);
 description = req.makeDescription(novel.description);
 
@@ -23,20 +22,20 @@ description = req.makeDescription(novel.description);
   <h2 class="text-md-center"><%= title %> <small>by <a href="<%= author.getLink() %>"><%= authorName %></a></small></h2>
   <hr/>
   <div>
-    <!--<a href="<%= novel.getLink() + (liked ? "/unlike": "/like") %>" class="btn btn-sm btn-secondary<%- liked ? " active" : "" %>"  aria-pressed="<%- liked ? "true" : "false" %>"><span class="fa fa-thumbs-o-up"></span> Like <span class="tag tag-default"><%- novel.likes %></span></a>-->
-    <a href="<%= novel.getLink() + (followed ? "/unfollow" : "/follow") %>" class="btn btn-sm btn-secondary<%- followed ? " active" : "" %>" aria-pressed="<%- followed ? "true" : "false" %>"><span class="fa fa-plus"></span> Follow <span class="tag tag-default"><%- novel.follows %></span></a>
-    <a class="btn btn-sm btn-secondary"><span class="fa fa-eye"><span class="sr-only">Views: </span></span> <span class="tag tag-default"><%= novel.totalViews %></span></a>
+    <!--<a href="<%= novel.getLink() + (liked ? "/unlike": "/like") %>" class="btn btn-sm btn-secondary<%- liked ? " active" : "" %>"  aria-pressed="<%- liked ? "true" : "false" %>"><span class="fa fa-thumbs-o-up"></span> Like <span class="badge badge-default"><%- novel.likes %></span></a>-->
+    <a href="<%= novel.getLink() + (followed ? "/unfollow" : "/follow") %>" class="btn btn-sm btn-secondary<%- followed ? " active" : "" %>" aria-pressed="<%- followed ? "true" : "false" %>"><span class="fa fa-plus"></span> Follow <span class="badge badge-default"><%- novel.follows %></span></a>
+    <a class="btn btn-sm btn-secondary"><span class="fa fa-eye"><span class="sr-only">Views: </span></span> <span class="badge badge-default"><%= novel.totalViews %></span></a>
   </div>
   <p><br/><br/></p>
   <hr/>
   <div>
     <p>
       <% if (novel.categories[0]) { %>
-        <a href="/category/<%= novel.categories[0] %>"><span class="tag tag-primary"><%= req.categoryName(novel.categories[0]) %></span></a>
+        <a href="/category/<%= novel.categories[0] %>"><span class="badge badge-primary"><%= req.categoryName(novel.categories[0]) %></span></a>
       <% }
       if (novel.categories[1]) {
       %>
-        <a href="/category/<%= novel.categories[1] %>"><span class="tag tag-default"><%= req.categoryName(novel.categories[1]) %></span></a>
+        <a href="/category/<%= novel.categories[1] %>"><span class="badge badge-default"><%= req.categoryName(novel.categories[1]) %></span></a>
       <% }%>
     </p>
     <h4>Synopsis</h4>
@@ -50,22 +49,42 @@ description = req.makeDescription(novel.description);
     <p><ul class="list-group">
     <% if (!isGod) {
        novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>
-      <a class="list-group-item list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %>
-      <time class="float-xs-right text-muted" format="ago" unixtime="<%= req.unixTime(item.id) %>"><%= req.timeSince(item.id) %> ago</time>
-      <span class="float-xs-right text-muted" >
-         <%= item.views %> <span class="fa fa-eye"><span class="sr-only">Views</span></span>&nbsp;&nbsp;&nbsp;&nbsp;
-      </span></a>
+      <a class="list-group-item list-group-item-action" href="<%= nLink + "/" + index %>">
+        <span class="chapter-title mr-auto">
+          <%= index %> - <%= item.title %>
+        </span>
+        <span class="text-muted" >
+         <%= item.views %> 
+          <span class="fa fa-eye">
+            <span class="sr-only">Views</span>
+          </span>&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>
+        <time class="text-muted" format="ago" unixtime="<%= req.unixTime(item.id) %>"><%= req.timeSince(item.id) %> ago</time>
+      </a>
     <% } });
      } else { %>
     <% novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>
       <li class="list-group-item">
-        <a class="list-group-item-action" href="<%= nLink + "/" + index %>"><%= index %> - <%= item.title %></a> <span class="float-xs-right"> <a href="<%= nLink + "/" + index  + "/edit" %>"><span class="sr-only">Edit chapter</span><span class="fa fa-pencil-square-o" aria-hidden="true"></span></a> 
-        <a href="<%= nLink + "/" + index  + "/delete" %>" <% if (index != novel.numChapters) {%>class="invisible"<%}%>> <span class="sr-only">Delete chapter</span><span class="fa fa-trash" aria-hidden="true"></span></a></span> 
-
-        <time class="float-xs-right text-muted" format="ago" unixtime="<%= req.unixTime(item.id) %>"><%= req.timeSince(item.id) %> ago&nbsp;&nbsp;&nbsp;&nbsp;</time>
-        <span class="float-xs-right text-muted" >
-           <%= item.views %> <span class="fa fa-eye"><span class="sr-only">Views</span></span>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="mr-auto list-group-item-action" href="<%= nLink + "/" + index %>">
+          <span class="chapter-title">
+            <%= index %> - <%= item.title %>
+          </span>
+        </a> 
+      </span>
+        <span class="text-muted" >
+         <%= item.views %> 
+          <span class="fa fa-eye">
+            <span class="sr-only">Views</span>
+          </span>&nbsp;&nbsp;&nbsp;&nbsp;
         </span>
+        <time class="text-muted" format="ago" unixtime="<%= req.unixTime(item.id) %>"><%= req.timeSince(item.id) %> ago</time>&nbsp;&nbsp;&nbsp;
+        
+        <a href="<%= nLink + "/" + index  + "/edit" %>">
+          <span class="sr-only">Edit chapter</span><span class="fa fa-pencil-square-o" aria-hidden="true"></span>
+        </a> 
+        <a href="<%= nLink + "/" + index  + "/delete" %>" <% if (index != novel.numChapters) {%>class="invisible"<%}%>> 
+          <span class="sr-only">Delete chapter</span><span class="fa fa-trash" aria-hidden="true"></span>
+        </a>
       </li>
     <% } });
     } %>

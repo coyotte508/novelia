@@ -1,1 +1,6 @@
 @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+
+/* Temporary fix, until bootstrap fixes itself */
+.open {
+  @extend .show;
+}

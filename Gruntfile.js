@@ -6,19 +6,8 @@ module.exports = function(grunt) {
 
   var js_frontend = [
     'node_modules/tether/dist/js/tether.min.js',
-    'node_modules/bootstrap/dist/js/bootstrap.min.js',
-/*    './bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js',
-    './bower_components/bootstrap-contextmenu/bootstrap-contextmenu.js',
-    './bower_components/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js',
-    './bower_components/typeahead.js/dist/typeahead.jquery.min.js', 
-    './app/assets/javascript/libs/vex.combined.min.js',*/
+    'node_modules/bootstrap/dist/js/bootstrap.js',
     './app/assets/javascript/frontend.js'
-  ];
-
-  var squire = [
-    'node_modules/dompurify/src/purify.js',
-    'node_modules/squire-rte/build/squire-raw.js',
-    'app/assets/javascript/squire-ui.js'
   ];
 
   //Initializing the configuration object
@@ -47,10 +36,6 @@ module.exports = function(grunt) {
       js_backend: {
         src: js_backend,
         dest: './public/assets/javascript/backend.js',
-      },
-      squire: {
-        src: squire,
-        dest: './public/assets/javascript/squire.js'
       }
     },
     copy: {
@@ -58,9 +43,7 @@ module.exports = function(grunt) {
         files: [
           {expand: true, src: ['app/assets/html/*'], dest: './public/assets/html/', filter: 'isFile', flatten: true},
           {expand: true, src: ['node_modules/font-awesome/fonts/*'], dest: './public/assets/fonts/', filter: 'isFile', flatten: true},
-          {expand: true, src: ['node_modules/jquery/dist/jquery.min.js'], dest: './public/assets/javascript/', filter: 'isFile', flatten: true},
-          {expand: true, src: ['node_modules/bootstrap/dist/css/bootstrap.min.css', 
-            'app/assets/stylesheets/squire-ui.css'], dest: './public/assets/stylesheets/', filter: 'isFile', flatten: true}
+          {expand: true, src: ['node_modules/jquery/dist/jquery.min.js'], dest: './public/assets/javascript/', filter: 'isFile', flatten: true}
         ]
       }
     },
@@ -77,18 +60,7 @@ module.exports = function(grunt) {
         files: {
           './public/assets/javascript/backend.js': './public/assets/javascript/backend.js',
         }
-      },
-      squire: {
-        files: {
-          './public/assets/javascript/squire.js': './public/assets/javascript/squire.js',
-        }
       }
-    },
-    phpunit: {
-        classes: {
-        },
-        options: {
-        }
     },
     watch: {
         js_frontend: {

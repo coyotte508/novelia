@@ -12,15 +12,15 @@ description = req.makeDescription(chapter.content);
 <meta name="author" content="<%= novel.author.name %>" />
 
 <div class="offset-lg-1 col-lg-10 offset-xl-2 col-xl-8">
-  <h2 class="text-xs-center"><a href="<%= novel.getLink() %>"><%= novel.title %></a> - <%= num %> <% if (isGod) {%><small><a href="<%= novelLink + "/" + num  + "/edit" %>"><small><span class="fa fa-pencil-square-o smaller"></span></small></a></small><% } %></h2>
+  <h2 class="text-center"><a href="<%= novel.getLink() %>"><%= novel.title %></a> - <%= num %> <% if (isGod) {%><small><a href="<%= novelLink + "/" + num  + "/edit" %>"><small><span class="fa fa-pencil-square-o smaller"></span></small></a></small><% } %></h2>
   <div class="pos-r">
-    <h6 class="text-xs-center text-muted">
+    <h6 class="text-center text-muted">
       by <a href="<%= novel.author.link || ("/u/"+novel.author.name) %>"><%= novel.author.name %></a>
     </h6>
-    <small><time class="float-xs-right text-muted pos-a" format="ago" unixtime="<%= req.unixTime(chapter.id) %>" style="right: 0; bottom: -10%"><%= req.timeSince(chapter.id) %> ago</time></small>
+    <small><time class="float-right text-muted pos-a" format="ago" unixtime="<%= req.unixTime(chapter.id) %>" style="right: 0; bottom: -10%"><%= req.timeSince(chapter.id) %> ago</time></small>
   </div>
   <hr/>
-  <h3 class="text-xs-center"><%= chapter.title %></h3>
+  <h3 class="text-center"><%= chapter.title %></h3>
   <div class="chapter-content">
     <%- chapter.content %>
   </div>
@@ -38,7 +38,7 @@ description = req.makeDescription(chapter.content);
   <% } %>
   <hr/>
 
-  <div class="text-xs-center">
+  <div class="text-center">
     <div class="btn-group" role="group" aria-label="Navigation">
       <a href="<%= novel.getLink() + "/" + (num-1) %>" class="btn btn-primary<%= num == (novel.prologue? 0 : 1) ? " disabled" : ""%>"><span class="fa fa-lg fa-long-arrow-left"></span> <span class="hidden-sm-down">Previous Chapter</span></a>
       <a href="<%= novel.getLink()%>" class="btn btn-primary"><span class="fa fa-lg fa-th-list"></span> <span class="hidden-sm-down">Table of Contents</span></button>

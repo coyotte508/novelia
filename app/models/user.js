@@ -92,10 +92,6 @@ userSchema.methods.getLink = function() {
     return "/u/" + (this.local.username || "g-"+ this.google.id);
 };
 
-userSchema.methods.isLikeNovel = function(novelid) {
-    return this.likedNovels.some(item => item.ref == novelid);
-}
-
 userSchema.methods.likeNovel = function(item) {
     assert(!this.isLikeNovel(item.ref));
 
