@@ -82,7 +82,7 @@ router.get('/:novel', (req, res, next) => {
 
 router.get('/:novel/edit', utils.canTouchNovel, (req, res, next) => {
   co(function*() {
-    res.render('pages/addnovel', {req, novel: req.novel, categories, val, message: "", action:'add'});
+    res.render('pages/addnovel', {req, novel: req.novel, categories, val, message: "", action:'edit'});
   }).catch((err) => next(err));
 });
 
