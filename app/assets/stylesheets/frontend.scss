@@ -107,6 +107,14 @@ blockquote {
   @extend .blockquote;
 }
 
+section {
+  margin-bottom: 15px; 
+}
+
+section:last-child {
+  margin-bottom: 0px;
+}
+
 .synopsis, .chapter-content, .author-note {
   @extend .text-justify;
 
