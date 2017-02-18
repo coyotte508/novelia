@@ -31,11 +31,6 @@ var categories = {
     icon: "", 
     description: ""
   },
-  game: {
-    name: "Game (VR)",
-    icon: "", 
-    description: ""
-  },
   sport: {
     name: "Sport",
     icon: "", 
@@ -47,7 +42,7 @@ var categories = {
     description: ""
   },
   horror: {
-    name: "Mystery / Horror",
+    name: "Mystery & Horror",
     icon: "", 
     description: ""
   },
@@ -65,12 +60,12 @@ var categories = {
     name: "Drama",
     icon: "",
     description: ""
-  }/*,
+  },
   litrpg: {
     name: "LitRPG",
     icon: "",
     description: ""
-  }*/
+  }
 };
 
 var categoryList = (function(){
