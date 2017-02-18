@@ -1,3 +1,4 @@
 #!/bin/sh
 
-screen -S novelia -m nodemon server.js
+screen -S novelia -d -m nodemon server.js
+screen -S grunt -d -m grunt watch
