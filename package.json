@@ -20,7 +20,7 @@
     "assert": "^1.4.1",
     "bcrypt": "latest",
     "body-parser": "^1.15.2",
-    "bootstrap": "^4.0.0-alpha.5",
+    "bootstrap": "^4.0.0-alpha.6",
     "co": "^4.6.0",
     "compression": "^1.6.2",
     "connect-flash": "^0.1.1",
