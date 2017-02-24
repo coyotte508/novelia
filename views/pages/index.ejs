@@ -23,9 +23,20 @@
   <h1 class="display-3"><span class="fa fa-lock"></span> Latest updates</h1>
 
   <p>Work in progress </p>
-  <ul class="list-group text-md-left">
+  <ul class="list-group text-md-left latest-updates">
     <% latest.forEach((item) => {%>
-    <a class="list-group-item list-group-item-action" href="/<%- slug(item.novel.title) + "/" + item.number %>"><span class="novel-title"><%= item.novel.title %> - </span><strong> <%= item.number %></strong> <small class="text-muted"><i><%= item.title %></i></small></a>
+    <li class="list-group-item">
+      <a class="list-group-item-action novel-title-link" href="/<%- slug(item.novel.title) %>">
+        <span class="novel-title"><%= item.novel.title %> - 
+        </span>
+      </a>
+      <a class="list-group-item-action chapter-stuff" href="/<%- slug(item.novel.title) + "/" + item.number %>">
+        <strong> <%= item.number %></strong> 
+        <small class="text-muted">
+          <i><%= item.title %></i>
+        </small>
+      </a>
+    </li>
     <% });%>
   </ul>
 </div>

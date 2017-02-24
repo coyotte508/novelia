@@ -1,0 +1,18 @@
+@import 'mixins';
+
+ul.latest-updates {
+  .chapter-stuff {
+    @include taller(12px);
+    flex-grow: 1;
+
+    margin-right: -$list-group-item-padding-x;
+    padding-right: $list-group-item-padding-x;
+  }
+
+  .novel-title-link {
+    @include taller(12px);
+
+    margin-left: -$list-group-item-padding-x;
+    padding-left: $list-group-item-padding-x;
+  }
+}

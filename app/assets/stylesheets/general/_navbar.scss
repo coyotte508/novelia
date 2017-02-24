@@ -1,3 +1,25 @@
+.navbar.fixed-top {
+  position: fixed;
+}
+
+.navbar-md-right {
+  @extend .float-md-right;
+
+  /* remove margin to the right */
+  @include media-breakpoint-up(md) {
+    margin-right: -($grid-gutter-width-base/2);
+    .nav-item:last-child {
+      padding-right: $grid-gutter-width-base/2;
+    }
+  }
+}
+
+.navbar .nav-item .dropdown-menu {
+  margin-top: 0.5rem;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
 #login-dp{
   min-width: 250px;
   padding: 14px 14px 0;

@@ -1,0 +1,53 @@
+html,body {
+  min-height:100%;
+  height: 100%;
+}
+
+
+body {
+  padding-top: 54px;
+  background-size: cover;
+  background: url('https://i.ytimg.com/vi/7avGPDl1wog/maxresdefault.jpg') fixed;
+  background-color: rgba(0,0,0,0.88);
+}
+
+table {
+  @extend .table;
+  @extend .table-bordered;
+  margin-left: auto;
+  margin-right: auto;
+  /*width: inherit;*/
+  max-width: 95%;
+}
+
+blockquote {
+  @extend .blockquote;
+}
+
+/* Multiple section layout, for example in user profile */
+
+section {
+  margin-bottom: 15px; 
+}
+
+section:last-child {
+  margin-bottom: 0px;
+}
+
+/* For author link below chapter title */
+.text-muted a {
+  color: $text-muted;
+}
+
+/* Make sure there's spacing betweens items of a list, due to flexbox */
+.list-group-item > * {
+  margin-right: 5px;
+}
+
+.list-group-item > *:last-child {
+  margin-right: 0px;
+}
+
+.list-group-item .list-group-item-action {
+  width: initial;
+}

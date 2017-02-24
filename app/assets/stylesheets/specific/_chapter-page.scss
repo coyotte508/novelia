@@ -1,0 +1,8 @@
+.synopsis, .chapter-content, .author-note {
+  @extend .text-justify;
+
+  img {
+    max-height: 300px;
+    max-width: 600px;
+  }
+}
