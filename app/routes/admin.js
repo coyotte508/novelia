@@ -28,7 +28,7 @@ router.get("/admin", utils.isAdmin, (req, res) => {
     };
 
     res.render("pages/admin", {actions, req, stats});
-  })
+  });
 });
 
 module.exports = router;

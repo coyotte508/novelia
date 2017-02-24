@@ -9,8 +9,6 @@ const limiter = require("mongo-limiter");
 const locks = require("mongo-locks");
 const categories = require("../models/category").list();
 
-const mongoose = require("mongoose");
-
 router.get('/addnovel', utils.isLoggedIn, (req, res) => {
   res.render('pages/addnovel', {req, message: "", categories, action:'add'});
 });
@@ -81,9 +79,11 @@ router.get('/:novel', (req, res, next) => {
 });
 
 router.get('/:novel/edit', utils.canTouchNovel, (req, res, next) => {
-  co(function*() {
+  try {
     res.render('pages/addnovel', {req, novel: req.novel, categories, val, message: "", action:'edit'});
-  }).catch((err) => next(err));
+  } catch(err) {
+    next(err);
+  }
 });
 
 router.post('/:novel/edit', utils.canTouchNovel, (req, res) => {

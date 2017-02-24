@@ -7,11 +7,11 @@ function HttpError(message, code) {
   this.name = this.constructor.name;
   this.message = message;
   this.statusCode = code;
-};
+}
 
 require('util').inherits(HttpError, Error);
 
-const assert404 = (condition, message) => {
+function assert404(condition, message) {
   try {
     assert(condition, message);
   } catch (err) {
@@ -20,7 +20,7 @@ const assert404 = (condition, message) => {
   }
 }
 
-const assert403 = (condition, message) => {
+function assert403(condition, message) {
   try {
     assert(condition, message);
   } catch (err) {

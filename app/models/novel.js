@@ -90,7 +90,7 @@ novelSchema.methods.getViews = function() {
       self.chapters[chapter.number].views = chapter.views;
     });
   });
-}
+};
 
 //expose novel model to the app
 module.exports = mongoose.model('Novel', novelSchema);

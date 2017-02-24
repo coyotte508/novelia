@@ -5,7 +5,7 @@ const slug = require("slug");
 
 var router = express.Router();
 
-router.get("/", (req, res, err) => {
+router.get("/", (req, res, next) => {
   co(function* () {
     /* Todo: proper map reduce/distinct */
     const latest = yield Chapter.latestUpdates();
@@ -23,10 +23,10 @@ router.get("/contact", (req, res) => {
 router.use(function errorHandler (err, req, res, next) {
   console.log(err);
   if (res.headersSent) {
-    return next(err)
+    return next(err);
   }
   res.status(err.statusCode || 500);
-  res.render('pages/'+res.statusCode, { req, err })
+  res.render('pages/'+res.statusCode, { req, err });
 });
 
 module.exports = router;

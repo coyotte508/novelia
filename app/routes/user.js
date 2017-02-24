@@ -1,5 +1,5 @@
 const co = require("co");
-const User = require("../models/user")
+const User = require("../models/user");
 const passport = require("passport");
 const utils = require("./utils");
 const router = require("express").Router();
@@ -29,7 +29,7 @@ router.get("/goldfish", utils.isNotLoggedIn, (req, res) => {
   res.render('pages/forget', {message: req.flash('forgetMessage'), req});
 });
 
-router.post('/goldfish', (req, res, next) => {
+router.post('/goldfish', (req, res) => {
   return co(function*() {
     var email = val.validateEmail(req.body.email);
 
@@ -180,11 +180,13 @@ router.param('user', function(req, res, next, user) {
 });
 
 router.get('/u/:user', function(req, res, next) {
-  co(function*() {
+  try {
     var user = req.viewedUser;
     
     res.render('pages/user', {req, user, slug});
-  }).catch((err) => next(err));
+  } catch(err) {
+    next(err);
+  }
 });
 
 router.get('/logout', (req, res) => {

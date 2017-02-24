@@ -1,11 +1,9 @@
-const validator = require('validator');
 const mongoose = require('mongoose');
 const bcrypt   = require('bcrypt');
 const sha1     = require('sha1');
 const sendmail = require('sendmail')();
 const config = require('../../config/general');
 const assert = require('assert');
-const locks = require('mongo-locks');
 const co = require("co");
 
 const Schema = mongoose.Schema;
@@ -63,7 +61,7 @@ userSchema.methods.resetPassword = function(password) {
             "security.reset"  : null
         });
     });
-}
+};
 
 userSchema.methods.displayName = function() {
     return this.local.username || this.google.name;
@@ -86,7 +84,7 @@ userSchema.methods.changeEmail = function(email) {
 
         yield self.update({"local.email" : email, "security.confirmed": false, "security.confirmKey": self.security.confirmKey});
     });
-}
+};
 
 userSchema.methods.getLink = function() {
     return "/u/" + (this.local.username || "g-"+ this.google.id);
@@ -96,29 +94,29 @@ userSchema.methods.likeNovel = function(item) {
     assert(!this.isLikeNovel(item.ref));
 
     return this.update({$push: {likedNovels: item}});
-}
+};
 
 userSchema.methods.unlikeNovel = function(ref) {
     assert(this.isLikeNovel(ref));
 
     return this.update({$pull: {likedNovels: {ref}}});
-}
+};
 
 userSchema.methods.isFollowNovel = function(novelid) {
     return this.followedNovels.some(item => item.ref == novelid);
-}
+};
 
 userSchema.methods.followNovel = function(item) {
     assert(!this.isFollowNovel(item.ref));
 
     return this.update({$push: {followedNovels: item}});
-}
+};
 
 userSchema.methods.unfollowNovel = function(ref) {
     assert(this.isFollowNovel(ref));
 
     return this.update({$pull: {followedNovels: {ref}}});
-}
+};
 
 userSchema.methods.generateResetLink = function() {
     this.security.reset = {
@@ -127,11 +125,11 @@ userSchema.methods.generateResetLink = function() {
     };
 
     return this.update({"security.reset": this.security.reset});
-}
+};
 
 userSchema.methods.resetKey = function() {
     return this.security.reset.key;
-}
+};
 
 userSchema.methods.validateResetKey = function(key) {
     if (!this.security.reset || !this.security.reset.key) {
@@ -144,17 +142,17 @@ userSchema.methods.validateResetKey = function(key) {
     if (Date.now() - resetIssued.getTime() > 24*3600*1000) {
         throw new Error("The reset link is more than a day old, you need a new link to reset your password.");
     }
-}
+};
 
 userSchema.methods.generateConfirmKey = function() {
     this.security.confirmKey = sha1(this.displayName() + '/confirm/' + mongoose.Types.ObjectId());
 
     return this.update({"security.confirmKey": this.security.confirmKey}).exec();
-}
+};
 
 userSchema.methods.confirmKey = function() {
     return this.security.confirmKey;
-}
+};
 
 userSchema.methods.confirm = function(key) {
     assert(!this.confirmed(), "User is already confirmed.");
@@ -166,11 +164,11 @@ userSchema.methods.confirm = function(key) {
         "security.confirmed": true,
         "security.confirmKey": null,
     }).exec();
-}
+};
 
 userSchema.methods.confirmed = function() {
     return this.security.confirmed;
-}
+};
 
 userSchema.methods.sendConfirmationEmail = function() {
     return sendmail({
@@ -181,7 +179,7 @@ userSchema.methods.sendConfirmationEmail = function() {
 
 <p>If you didn't create an account with us, then just ignore this email.</p>`,
     });
-}
+};
 
 userSchema.methods.fillInSecurity = function(ip) {
     this.security = {
@@ -198,11 +196,11 @@ userSchema.methods.fillInSecurity = function(ip) {
     } else {
         this.security.confirmKey = sha1(this.displayName() + '/confirm/' + mongoose.Types.ObjectId());
     }
-}
+};
 
 userSchema.methods.isSocialAccount = function() {
     return this.google.id ? true : false;
-}
+};
 
 userSchema.methods.notifyLogin = function(ip) {
     return this.update({
@@ -210,18 +208,18 @@ userSchema.methods.notifyLogin = function(ip) {
         "security.lastLogin.ip"   : ip,
         "security.lastIp"         : ip
     });
-}
+};
 
 userSchema.methods.notifyLastIp = function(ip) {
     if (this.security.lastIp != ip) {
         this.security.lastIp = ip;
         this.update({"security.lastIp": ip}).exec();
     }
-}
+};
 
 userSchema.methods.isAdmin = function() {
     return this.authority == "admin";
-}
+};
 
 var User = mongoose.model('User', userSchema);
 
@@ -231,19 +229,19 @@ User.findByUrl = function(id) {
     } else {
         return User.findOne({"local.username": id});
     }
-}
+};
 
 User.findByEmail = function(email) {
     return User.findOne().or([
         {'local.email': email},
         {'google.email': email}
     ]);
-}
+};
 
 /* Basic projection */
 User.basics = function() {
     return "local.username google.name google.id";
-}
+};
 
 // create the model for users and expose it to our app
 module.exports = User;

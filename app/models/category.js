@@ -86,10 +86,10 @@ Category.find = function(cat) {
     return Promise.resolve(categories[cat]);
   }
   return Promise.reject(`Category "${cat}" not found`);
-}
+};
 
 Category.list = function() {
   return categoryList;
-}
+};
 
 module.exports = Category;

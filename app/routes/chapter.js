@@ -2,7 +2,6 @@ const val = require("validator");
 const co = require("co");
 const assert = require("assert");
 const Novel = require("../models/novel");
-const User = require("../models/user");
 const Chapter = require("../models/chapter");
 const utils = require("./utils");
 const router = require("express").Router();
@@ -11,9 +10,11 @@ const locks = require("mongo-locks");
 const viewcounter = require("../engine/viewcounter");
 
 router.get('/addchapter', utils.canTouchNovel, (req, res, next) => {
-  co(function*() {
+  try {
     res.render('pages/addchapter', {req, novel: req.novel, message: "", action:"add"});  
-  }).catch((err) => next(err));
+  } catch(err) {
+    next(err);
+  }
 });
 
 router.post('/addchapter', utils.canTouchNovel, (req, res, next) => {
@@ -82,16 +83,20 @@ router.param('chapter', function(req, res, next, chapterNum) {
 });
 
 router.get('/:chapter(\\d+)/', (req, res, next) => {
-  co(function*() {
+  try {
     viewcounter.addView(req);
     res.render('pages/chapter', {req, novel: req.novel, chapter: req.chapter});
-  }).catch((err) => next(err));
+  } catch(err) {
+    next(err);
+  }
 });
 
 router.get('/:chapter(\\d+)/edit',utils.canTouchNovel, (req, res, next) => {
-  co(function*() {
+  try {
     res.render('pages/addchapter', {req, novel: req.novel, chapter: req.chapter, val, message: "", action:"edit"});  
-  }).catch((err) => next(err));
+  } catch(err) {
+    next(err);
+  }
 });
 
 
@@ -133,7 +138,7 @@ router.all('/:chapter(\\d+)/delete', utils.canTouchNovel, (req, res, next) => {
       yield novel.update({$inc: {"numChapters": -1, "totalViews": -chapter.views}, $pull: {"chapters": {ref: chapter.id}}});
     }
 
-    limiter.action(req.user.id, "delchapter", {num, title, novel: novel.title});
+    limiter.action(req.user.id, "delchapter", {num, chapter: chapter.title, novel: novel.title});
 
     chapter.remove();
 

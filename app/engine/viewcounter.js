@@ -1,6 +1,4 @@
 const NodeCache = require("node-cache");
-const Novel = require("../models/novel");
-const Chapter = require("../models/chapter");
 
 const cache = new NodeCache({
   stdTTL: 3600*6
