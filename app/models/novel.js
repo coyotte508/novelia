@@ -1,6 +1,5 @@
 //const randomInt = require("random-int");
-const co = require("co");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const slug = require('slug');
 const Schema = mongoose.Schema;
 const Chapter = require("./chapter");
@@ -79,16 +78,13 @@ novelSchema.methods.getLink = function() {
     return /*"/nv/" +*/ "/" + this.classySlug();
 };
 
-novelSchema.methods.getViews = function() {
-  var self = this;
-  return co(function*() {
-    var views = yield Chapter.find({"novel.ref": self.id}, "views number");
-    views.forEach((chapter) => {
-      if (chapter.number > self.chapters.length) {
-        return;
-      }
-      self.chapters[chapter.number].views = chapter.views;
-    });
+novelSchema.methods.getViews = async function() {
+  var views = await Chapter.find({"novel.ref": this.id}, "views number");
+  views.forEach((chapter) => {
+    if (chapter.number > this.chapters.length) {
+      return;
+    }
+    this.chapters[chapter.number].views = chapter.views;
   });
 };
 

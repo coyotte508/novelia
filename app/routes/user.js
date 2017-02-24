@@ -1,4 +1,3 @@
-const co = require("co");
 const User = require("../models/user");
 const passport = require("passport");
 const utils = require("./utils");
@@ -29,19 +28,19 @@ router.get("/goldfish", utils.isNotLoggedIn, (req, res) => {
   res.render('pages/forget', {message: req.flash('forgetMessage'), req});
 });
 
-router.post('/goldfish', (req, res) => {
-  return co(function*() {
+router.post('/goldfish', async (req, res) => {
+  try {
     var email = val.validateEmail(req.body.email);
 
-    if (!(yield limiter.attempt(req.ip, 'forgetip', email))) {
+    if (!(await limiter.attempt(req.ip, 'forgetip', email))) {
       throw new Error(`Max number of attempts reached for your IP (${req.ip}), try again in 24 hours.`);
     }
 
-    if (!(yield limiter.attempt(email, 'forget', email))) {
+    if (!(await limiter.attempt(email, 'forget', email))) {
       throw new Error(`Max number of attempts for ${email} reached, try again in 24 hours.`);
     }
 
-    var user = yield User.findOne().or([
+    var user = await User.findOne().or([
       {'local.email': email},
       {'google.email': email}
     ]);
@@ -55,7 +54,7 @@ router.post('/goldfish', (req, res) => {
       throw new Error("No such user found");
     }
 
-    yield user.generateResetLink();
+    await user.generateResetLink();
 
     sendmail({
       from: config.noreply,
@@ -67,9 +66,9 @@ router.post('/goldfish', (req, res) => {
     });
 
     res.render('pages/forget', {message: `A mail has been sent to ${email}, with a link to reset the password.` , req});
-  }).catch(err => {
+  } catch(err) {
     res.render('pages/forget', {message: err.message, req});
-  });
+  }
 });
 
 router.get('/reset', utils.isNotLoggedIn, (req, res) => {
@@ -84,20 +83,21 @@ router.post('/reset', utils.isNotLoggedIn, (req, res, next) => {
   })(req, res, next);
 });
 
-router.all('/confirm', utils.isLoggedIn, (req, res) => {
-  var user = req.user;
+router.all('/confirm', utils.isLoggedIn, async (req, res) => {
+  try {
+    var user = req.user;
 
-  if (user.confirmed()) {
-    return res.redirect('/profile');
-  }
-  return co(function*() {
+    if (user.confirmed()) {
+      return res.redirect('/profile');
+    }
+
     if (req.query && req.query.key) {
-      yield user.confirm(req.query.key);
+      await user.confirm(req.query.key);
       req.flash('profileMessage', 'You were successfully confirmed!');
       return res.redirect('/profile');
     }
 
-    if (!(yield limiter.attempt(user.id, "confirm"))) {
+    if (!(await limiter.attempt(user.id, "confirm"))) {
       throw new Error("Max number of confirmation emails sent, try again tomorrow.");
     }
 
@@ -109,10 +109,10 @@ router.all('/confirm', utils.isLoggedIn, (req, res) => {
 
     req.flash("profileMessage", `Confirmation email sent to ${user.email()}.`);
     res.redirect('/profile');
-  }).catch(err => {
+  } catch(err) {
     req.flash("profileMessage", err.message);
     res.redirect('/profile');
-  });
+  }
 });
 
 router.get("/signup", utils.isNotLoggedIn, (req, res) => {
@@ -135,23 +135,22 @@ router.get('/security', utils.isLoggedInAndNotSocial, function(req, res) {
   res.render("pages/security", {user: req.user, req, message: req.flash('securityMessage')});
 });
 
-router.post('/security', utils.isLoggedInAndNotSocial, function(req, res) {
-  var user = req.user;
-
-  co(function*() {
+router.post('/security', utils.isLoggedInAndNotSocial, async function(req, res) {
+  try {
+    var user = req.user;
     var newPw = req.body.newPassword ? val.validatePassword(req.body.newPassword) : "";
     var email = val.validateEmail(req.body.email);
 
-    assert(yield limiter.attempt(req.user.id, "security"), "Too many security changes or attempts, wait 24 hours.");
+    assert(await limiter.attempt(req.user.id, "security"), "Too many security changes or attempts, wait 24 hours.");
 
-    assert(yield user.validPassword(req.body.password), "Wrong current password.");
+    assert(await user.validPassword(req.body.password), "Wrong current password.");
 
     if (newPw) {
-      yield user.resetPassword(newPw);
+      await user.resetPassword(newPw);
     }
 
     if (email != user.email()) {
-      yield user.changeEmail(email);
+      await user.changeEmail(email);
       user.sendConfirmationEmail();
 
       req.flash("profileMessage", "Details changed! A confirmation email was sent to your new email address.");
@@ -160,14 +159,14 @@ router.post('/security', utils.isLoggedInAndNotSocial, function(req, res) {
     }
 
     res.redirect("/profile");
-  }).catch((err) => {
+  } catch(err) {
     res.render("pages/security", {user: req.user, req, message: err.message});
-  });
+  }
 });
 
-router.param('user', function(req, res, next, user) {
-  co(function*() {
-    user = yield User.findByUrl(user);
+router.param('user', async function(req, res, next, user) {
+  try {
+    user = await User.findByUrl(user);
 
     if (!user) {
       res.status(404);
@@ -176,7 +175,9 @@ router.param('user', function(req, res, next, user) {
 
     req.viewedUser = user;
     next();
-  }).catch(err => next(err));
+  } catch(err) {
+    next(err);
+  }
 });
 
 router.get('/u/:user', function(req, res, next) {

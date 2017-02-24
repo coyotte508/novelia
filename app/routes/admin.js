@@ -1,17 +1,16 @@
 const router = require("express").Router();
 const utils = require("./utils");
-const co = require("co");
 const Novel = require("../models/novel");
 const Chapter = require("../models/chapter");
 const User = require("../models/user");
 const limiter = require("mongo-limiter");
 
-router.get("/admin", utils.isAdmin, (req, res) => {
-  co(function *(){
-    var [nbNovels, nbChapters, nbUsers, actions] = yield Promise.all([Novel.count(),Chapter.count(), User.count(), limiter.logs()]);
+router.get("/admin", utils.isAdmin, async (req, res, next) => {
+  try {
+    var [nbNovels, nbChapters, nbUsers, actions] = await Promise.all([Novel.count(),Chapter.count(), User.count(), limiter.logs()]);
 
     var userIds = actions.map(x => x.user).filter(x => !x.includes(".") && !x.includes(":"));
-    var users = yield User.find({_id: {$in: userIds}});
+    var users = await User.find({_id: {$in: userIds}});
     var userD = {};
     users.forEach(x => userD[x.id] = x);
 
@@ -28,7 +27,9 @@ router.get("/admin", utils.isAdmin, (req, res) => {
     };
 
     res.render("pages/admin", {actions, req, stats});
-  });
+  } catch(err) {
+    next(err);
+  }
 });
 
 module.exports = router;

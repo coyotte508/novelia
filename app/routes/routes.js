@@ -1,16 +1,16 @@
 const express = require("express");
 const Chapter = require("../models/chapter");
-const co = require("co");
 const slug = require("slug");
 
 var router = express.Router();
 
-router.get("/", (req, res, next) => {
-  co(function* () {
-    /* Todo: proper map reduce/distinct */
-    const latest = yield Chapter.latestUpdates();
+router.get("/", async (req, res, next) => {
+  try {
+    const latest = await Chapter.latestUpdates();
     res.render("pages/index", {error:null, latest, req, slug});
-  }).catch(err => next(err));
+  } catch(err) {
+    next(err);
+  }
 });
 
 router.get("/contact", (req, res) => {

@@ -4,7 +4,6 @@ const sha1     = require('sha1');
 const sendmail = require('sendmail')();
 const config = require('../../config/general');
 const assert = require('assert');
-const co = require("co");
 
 const Schema = mongoose.Schema;
 
@@ -71,19 +70,18 @@ userSchema.methods.email = function () {
     return this.local.email || this.google.email;
 };
 
-userSchema.methods.changeEmail = function(email) {
+userSchema.methods.changeEmail = async function(email) {
     var self = this;
-    return co(function*() {
-        assert(!self.isSocialAccount(), "You can't change the email of a social account.");
 
-        assert(!(yield User.findByEmail(email)), "A user already exists with that email.");
+    assert(!self.isSocialAccount(), "You can't change the email of a social account.");
 
-        self.local.email = email;
-        self.security.confirmed = false;
-        self.security.confirmKey = sha1(self.displayName() + '/confirm/' + mongoose.Types.ObjectId());
+    assert(!(await User.findByEmail(email)), "A user already exists with that email.");
 
-        yield self.update({"local.email" : email, "security.confirmed": false, "security.confirmKey": self.security.confirmKey});
-    });
+    self.local.email = email;
+    self.security.confirmed = false;
+    self.security.confirmKey = sha1(self.displayName() + '/confirm/' + mongoose.Types.ObjectId());
+
+    await self.update({"local.email" : email, "security.confirmed": false, "security.confirmKey": self.security.confirmKey});
 };
 
 userSchema.methods.getLink = function() {

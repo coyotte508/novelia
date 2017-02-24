@@ -39,5 +39,5 @@ webpack
 ## Run
 
 ```bash
-node --harmony server.js
+./scripts/start.sh
 ```

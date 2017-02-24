@@ -77,7 +77,6 @@ var categoryList = (function(){
 })();
 
 var Category = (function(){
-
   return this;
 })();
 
