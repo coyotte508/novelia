@@ -179,6 +179,17 @@ userSchema.methods.sendConfirmationEmail = function() {
     });
 };
 
+userSchema.methods.sendResetEmail = function() {
+    return sendmail({
+      from: config.noreply,
+      to: this.email(),
+      subject: 'Forgotten password',
+      html: `<p>A password reset was requested for your account ${this.local.username}, click <a href='http://www.${config.domain}/reset?key=${this.resetKey()}'>this link</a> to proceed with it.</p>
+
+<p>If you didn't request a password reset, then just ignore this email.</p>`,
+    });
+};
+
 userSchema.methods.fillInSecurity = function(ip) {
     this.security = {
         lastLogin: {

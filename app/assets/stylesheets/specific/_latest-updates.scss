@@ -14,5 +14,9 @@ ul.latest-updates {
 
     margin-left: -$list-group-item-padding-x;
     padding-left: $list-group-item-padding-x;
+
+    &::after {
+      content: " - ";
+    }
   }
 }

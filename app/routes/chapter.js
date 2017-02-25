@@ -10,7 +10,7 @@ const viewcounter = require("../engine/viewcounter");
 
 router.get('/addchapter', utils.canTouchNovel, (req, res, next) => {
   try {
-    res.render('pages/addchapter', {req, novel: req.novel, message: "", action:"add"});  
+    res.render('pages/novel/addchapter', {req, novel: req.novel, message: "", action:"add"});  
   } catch(err) {
     next(err);
   }
@@ -47,18 +47,14 @@ router.post('/addchapter', utils.canTouchNovel, async (req, res) => {
 
     await chapter.save();
 
-    if (prologue) {
-      await novel.update({prologue: true, "chapters.0": {title, ref: chapter.id}});
-    } else {
-      await novel.update({$inc: {"numChapters": 1}, $push: {"chapters": {title, ref: chapter.id}}});
-    }
+    await novel.addChapter(chapter);
 
     limiter.action(req.user.id, "addchapter", {title, novel: novel.title});
 
     res.redirect(novel.getLink() + "/" + (prologue ? 0 : novel.numChapters + 1));
   } catch (err) {
     res.status(err.statusCode || 500);
-    res.render('pages/addchapter', {req, novel: novel || {}, message: err.message, action: "add"});
+    res.render('pages/novel/addchapter', {req, novel: novel || {}, message: err.message, action: "add"});
   }
 
   free();
@@ -87,7 +83,7 @@ router.param('chapter', async function(req, res, next, chapterNum) {
 router.get('/:chapter(\\d+)/', (req, res, next) => {
   try {
     viewcounter.addView(req);
-    res.render('pages/chapter', {req, novel: req.novel, chapter: req.chapter});
+    res.render('pages/novel/chapter', {req, novel: req.novel, chapter: req.chapter});
   } catch(err) {
     next(err);
   }
@@ -95,7 +91,7 @@ router.get('/:chapter(\\d+)/', (req, res, next) => {
 
 router.get('/:chapter(\\d+)/edit',utils.canTouchNovel, (req, res, next) => {
   try {
-    res.render('pages/addchapter', {req, novel: req.novel, chapter: req.chapter, val, message: "", action:"edit"});  
+    res.render('pages/novel/addchapter', {req, novel: req.novel, chapter: req.chapter, val, message: "", action:"edit"});  
   } catch(err) {
     next(err);
   }
@@ -118,7 +114,7 @@ router.post('/:chapter(\\d+)/edit', utils.canTouchNovel, async (req, res) => {
     res.redirect(novel.getLink() + "/" + req.params.chapter);
   } catch (err) {
     res.status(err.statusCode || 500);
-    res.render('pages/addchapter', {req, novel: novel || {}, chapter: req.chapter, val, message: err.message, action: "edit"});
+    res.render('pages/novel/addchapter', {req, novel: novel || {}, chapter: req.chapter, val, message: err.message, action: "edit"});
   }
 });
 
@@ -130,13 +126,8 @@ router.all('/:chapter(\\d+)/delete', utils.canTouchNovel, async (req, res, next)
 
     var num = req.params.chapter;
     var chapter = req.chapter;
-    utils.assert403(novel.numChapters >= num, "You can only delete the last chapter");
 
-    if (num == 0) {
-      await novel.update({$inc: {"totalViews": -chapter.views}, prologue: false, "chapters.0": null});
-    } else {
-      await novel.update({$inc: {"numChapters": -1, "totalViews": -chapter.views}, $pull: {"chapters": {ref: chapter.id}}});
-    }
+    await novel.deleteChapter(chapter);
 
     limiter.action(req.user.id, "delchapter", {num, chapter: chapter.title, novel: novel.title});
 

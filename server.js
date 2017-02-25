@@ -1,4 +1,3 @@
-const co = require('co');
 const fs = require('fs-extra');
 const passport = require('passport');
 const mongoose = require('mongoose');
@@ -16,11 +15,11 @@ const morgan = require('morgan');
 const flash = require('connect-flash');
 
 /* Local stuff */
-const pjson = require('./package.json');
 const configAuth = require('./config/auth');
 const configDB = require('./config/general');
-const cs = require('./config/constants');
 const router = require('./app/routes/routes');
+
+const migrations = require("./app/models/migrations");
 require('./config/validator');
 require('./config/limits');
 
@@ -35,6 +34,9 @@ mongoose.Promise = global.Promise; //native promises
 mongoose.connection.on("error", (err) => {
   console.log(err);
 });
+mongoose.connection.on("open", () => {
+  //migrations["0.1.2"].up();
+})
 
 locks.init(mongoose.connection);
 
@@ -65,48 +67,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(flash());
 
-app.use(function(req, res, next){
-  /* For css cache busting */
-  req.version = pjson.version;
-  req.cs = cs;
-
-  req.makeDescription = descr => {
-    descr = descr.replace(/(<([^>]+)>)/g, "") ||"";
-    var index = descr.indexOf(" ", 150);
-    return descr.substr(0, index == -1 ? undefined : index);
-  }
-
-  req.unixTime = function(date) {
-    return parseInt(date.substring(0, 8), 16);
-  }
-
-  req.timeSince = function(date) {
-    var seconds = Math.floor((Date.now()/ 1000 - this.unixTime(date)));
-    var interval = Math.floor(seconds / 31536000);
-
-    if (interval > 1) {
-      return interval + " years";
-    }
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) {
-      return interval + " months";
-    }
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) {
-      return interval + " days";
-    }
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) {
-      return interval + " hours";
-    }
-    interval = Math.floor(seconds / 60);
-    if (interval > 1) {
-      return interval + " minutes";
-    }
-    return Math.floor(seconds) + " seconds";
-  }
-  next();
-});
+for (let middleware of require("./app/engine/middlewares")) {
+  app.use(middleware);
+}
 
 /* Required for passport */
 app.use(session(
@@ -124,12 +87,19 @@ app.use(passport.session());
 //app.use("/", express.static(__dirname + '/public')); /* NGINX should take care of that below */
 app.use("/", router);
 
-co(function *() {
-  yield new Promise((resolve, reject) => {
-    app.listen(port, 'localhost', () => {resolve();});
-  });
 
-  console.log("app started on port", port);
-}).catch((err) => {
-  console.log(err);
-});
+async function listen() {
+  try {
+    let promise = new Promise((resolve, reject) => {
+      app.listen(port, 'localhost', () => {resolve();});
+    });
+
+    await promise; 
+
+    console.log("app started on port", port);
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+listen();

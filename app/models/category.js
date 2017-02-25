@@ -1,5 +1,3 @@
-const _ = require("lodash");
-
 var categories = {
   martial: {
     name: "Martial Art",
@@ -71,7 +69,8 @@ var categories = {
 var categoryList = (function(){
   var ret = [];
   for (var key in categories) {
-    ret.push(_.extend({shorthand: key}, categories[key]));
+    categories[key].shorthand = key;
+    ret.push(Object.assign({}, categories[key]));
   }
   return ret.sort((a,b) => a.name.localeCompare(b.name));
 })();

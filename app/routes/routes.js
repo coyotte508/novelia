@@ -1,24 +1,26 @@
 const express = require("express");
 const Chapter = require("../models/chapter");
-const slug = require("slug");
 
 var router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
     const latest = await Chapter.latestUpdates();
-    res.render("pages/index", {error:null, latest, req, slug});
+    console.log(latest);
+    res.render("pages/index", {error:null, latest, req});
   } catch(err) {
     next(err);
   }
 });
 
 router.get("/contact", (req, res) => {
-  res.render("pages/contact", {error:null, req});
+  res.render("pages/static/contact", {error:null, req});
 });
 
 /* Aggregate routers */
-[require("./admin.js"), require("./auth.js"), require("./user.js"), require("./novel.js")].forEach((mod) => router.use("/", mod));
+for (let mod of [require("./admin.js"), require("./auth.js"), require("./user.js"), require("./category.js"), require("./novel.js")]) {
+  router.use("/", mod);
+}
 
 router.use(function errorHandler (err, req, res, next) {
   console.log(err);
@@ -26,7 +28,7 @@ router.use(function errorHandler (err, req, res, next) {
     return next(err);
   }
   res.status(err.statusCode || 500);
-  res.render('pages/'+res.statusCode, { req, err });
+  res.render('pages/technical/'+res.statusCode, { req, err });
 });
 
 module.exports = router;

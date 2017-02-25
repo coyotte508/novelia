@@ -1,0 +1,14 @@
+<% 
+  title = req.category.name + ' novels'; 
+%>
+
+<%- contentFor('body') %>
+
+<!-- body -->
+
+<div class="starter-template">
+  <h1><%= req.category.name %></h1>
+  <p class="lead"><%= req.category.description %></p>
+</div>
+
+<%- include("snippets/latest-updates") %>

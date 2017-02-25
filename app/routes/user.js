@@ -5,15 +5,13 @@ const router = require("express").Router();
 const slug = require("slug");
 const val = require("validator");
 const limiter = require("mongo-limiter");
-const config = require('../../config/general');
-const sendmail = require("sendmail")();
 const assert = require("assert");
 
 router.get("/login", (req, res) => {
   if (req.isAuthenticated()) {
     return res.redirect('/profile');
   }
-  res.render('pages/login', {message: req.flash('loginMessage'), req});
+  res.render('pages/user/login', {message: req.flash('loginMessage'), req});
 });
 
 router.post('/login', (req, res, next) => {
@@ -25,7 +23,7 @@ router.post('/login', (req, res, next) => {
 });
 
 router.get("/goldfish", utils.isNotLoggedIn, (req, res) => {
-  res.render('pages/forget', {message: req.flash('forgetMessage'), req});
+  res.render('pages/user/forget', {message: req.flash('forgetMessage'), req});
 });
 
 router.post('/goldfish', async (req, res) => {
@@ -55,19 +53,11 @@ router.post('/goldfish', async (req, res) => {
     }
 
     await user.generateResetLink();
+    await user.sendResetEmail();
 
-    sendmail({
-      from: config.noreply,
-      to: email,
-      subject: 'Forgotten password',
-      html: `<p>A password reset was requested for your account ${user.local.username}, click <a href='http://www.${config.domain}/reset?key=${user.resetKey()}'>this link</a> to proceed with it.</p>
-
-<p>If you didn't request a password reset, then just ignore this email.</p>`,
-    });
-
-    res.render('pages/forget', {message: `A mail has been sent to ${email}, with a link to reset the password.` , req});
+    res.render('pages/user/forget', {message: `A mail has been sent to ${email}, with a link to reset the password.` , req});
   } catch(err) {
-    res.render('pages/forget', {message: err.message, req});
+    res.render('pages/user/forget', {message: err.message, req});
   }
 });
 
@@ -116,7 +106,7 @@ router.all('/confirm', utils.isLoggedIn, async (req, res) => {
 });
 
 router.get("/signup", utils.isNotLoggedIn, (req, res) => {
-  res.render('pages/signup', {message: req.flash('signupMessage'), req});
+  res.render('pages/user/signup', {message: req.flash('signupMessage'), req});
 });
 
 router.post('/signup', utils.isNotLoggedIn, (req, res, next) => {
@@ -128,11 +118,11 @@ router.post('/signup', utils.isNotLoggedIn, (req, res, next) => {
 });
 
 router.get('/profile', utils.isLoggedIn, function(req, res) {
-  res.render('pages/profile', {user: req.user, req, slug, message: req.flash('profileMessage')});
+  res.render('pages/user/profile', {user: req.user, req, slug, message: req.flash('profileMessage')});
 });
 
 router.get('/security', utils.isLoggedInAndNotSocial, function(req, res) {
-  res.render("pages/security", {user: req.user, req, message: req.flash('securityMessage')});
+  res.render("pages/user/security", {user: req.user, req, message: req.flash('securityMessage')});
 });
 
 router.post('/security', utils.isLoggedInAndNotSocial, async function(req, res) {
@@ -160,7 +150,7 @@ router.post('/security', utils.isLoggedInAndNotSocial, async function(req, res) 
 
     res.redirect("/profile");
   } catch(err) {
-    res.render("pages/security", {user: req.user, req, message: err.message});
+    res.render("pages/user/security", {user: req.user, req, message: err.message});
   }
 });
 
@@ -184,7 +174,7 @@ router.get('/u/:user', function(req, res, next) {
   try {
     var user = req.viewedUser;
     
-    res.render('pages/user', {req, user, slug});
+    res.render('pages/user/user', {req, user, slug});
   } catch(err) {
     next(err);
   }
