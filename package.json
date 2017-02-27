@@ -4,7 +4,7 @@
   "description": "A website for original novels",
   "main": "server.js",
   "scripts": {
-    "lint": "eslint app",
+    "lint": "eslint app server.js",
     "build": "webpack --config webpack.config.js",
     "test": "npm run lint"
   },
@@ -56,7 +56,7 @@
   "devDependencies": {
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.1",
-    "extract-text-webpack-plugin": "beta",
+    "extract-text-webpack-plugin": "^2.0.0",
     "node-sass": "^4.5.0",
     "resolve-url-loader": "^2.0.0",
     "sass-loader": "^6.0.2",
