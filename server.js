@@ -1,4 +1,3 @@
-const fs = require('fs-extra');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const locks = require('mongo-locks');
@@ -19,7 +18,6 @@ const configAuth = require('./config/auth');
 const configDB = require('./config/general');
 const router = require('./app/routes/routes');
 
-const migrations = require("./app/models/migrations");
 require('./config/validator');
 require('./config/limits');
 
@@ -34,20 +32,13 @@ mongoose.Promise = global.Promise; //native promises
 mongoose.connection.on("error", (err) => {
   console.log(err);
 });
+
 mongoose.connection.on("open", () => {
+  //const migrations = require("./app/models/migrations");
   //migrations["0.1.2"].up();
-})
+});
 
 locks.init(mongoose.connection);
-
-// mongoose.connection.once("open", () => {
-//   const Chapter = require("./app/models/chapter");
-//   const Novel = require("./app/models/novel");
-//   const User = require("./app/models/user");
-//   Chapter.collection.dropAllIndexes();
-//   Novel.collection.dropAllIndexes();
-//   User.collection.dropAllIndexes();
-// });
 
 /* Configure passport */
 require('./config/passport')(passport);
@@ -87,10 +78,9 @@ app.use(passport.session());
 //app.use("/", express.static(__dirname + '/public')); /* NGINX should take care of that below */
 app.use("/", router);
 
-
 async function listen() {
   try {
-    let promise = new Promise((resolve, reject) => {
+    let promise = new Promise(resolve => {
       app.listen(port, 'localhost', () => {resolve();});
     });
 
