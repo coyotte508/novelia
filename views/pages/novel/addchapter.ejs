@@ -23,7 +23,7 @@ if (action == "add") {
 <form method="post">
   <div class="form-group">
     <label for="chapterTitle">Chapter title</label>
-    <input type="text" class="form-control" id="chapterTitle" name="chapterTitle" placeholder="Title for the new chapter" maxlength="<%- req.cs.titleMaxLength %>" value="<%= req.body.chapterTitle || chapter.title %>">
+    <input type="text" class="form-control" id="chapterTitle" name="chapterTitle" placeholder="Title for the new chapter" maxlength="<%- constants.titleMaxLength %>" value="<%= req.body.chapterTitle || chapter.title %>">
   </div>
   <div class="form-group">
     <label for="chapterContent">Content</label>
@@ -48,7 +48,7 @@ and all the other things possible with Markdown, including tables!" minlength="1
   <% } %>
   <div class="form-group">
     <label for="authorNote">Author's note</label>
-    <textarea class="form-control" name="authorNote" id="authorNote" rows="4" placeholder="Optional, if you have something more to say" maxlength="<%- req.cs.descriptionMaxLength %>"><%- req.body.authorNote || val.dbToText(chapter.authorNote) %></textarea>
+    <textarea class="form-control" name="authorNote" id="authorNote" rows="4" placeholder="Optional, if you have something more to say" maxlength="<%- constants.descriptionMaxLength %>"><%- req.body.authorNote || val.dbToText(chapter.authorNote) %></textarea>
   </div>
   <button type="submit" class="btn btn-primary"><%- btnText %></button>
 </form>

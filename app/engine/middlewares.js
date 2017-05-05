@@ -1,22 +1,20 @@
 const pjson = require('../../package.json');
-const cs = require('../../config/constants');
+const constants = require('../../config/constants');
+const validator = require('validator');
 
-function reqStuff(req, res, next) {
-  /* For css cache busting */
-  req.version = pjson.version;
-  req.cs = cs;
-
-  req.makeDescription = descr => {
+function sysStuff(req, res, next) {
+  var sys = {};
+  sys.makeDescription = descr => {
     descr = descr.replace(/(<([^>]+)>)/g, "") ||"";
     var index = descr.indexOf(" ", 150);
     return descr.substr(0, index == -1 ? undefined : index);
   };
 
-  req.unixTime = function(date) {
+  sys.unixTime = function(date) {
     return parseInt(date.substring(0, 8), 16);
   };
 
-  req.timeSince = function(date) {
+  sys.timeSince = function(date) {
     var seconds = Math.floor((Date.now()/ 1000 - this.unixTime(date)));
     var interval = Math.floor(seconds / 31536000);
 
@@ -42,7 +40,32 @@ function reqStuff(req, res, next) {
     return Math.floor(seconds) + " seconds";
   };
 
+  res.locals.sys = sys;
+
   next();
 }
 
-module.exports = [reqStuff];
+function defaultLocals (req, res, next) {
+  try {
+    // res.locals.error = req.flash('error');
+    // res.locals.success = req.flash('success');
+
+    res.locals.user = req.user || null;
+    /* For css cache busting */
+    res.locals.version = pjson.version;
+    /* Constants */
+    res.locals.constants = constants;
+    /* Db to text, etc. */
+    res.locals.validator = validator; 
+
+    //undefined varialbles errors go away
+    res.locals.novel = null;
+    res.locals.message = "";
+
+    next();
+  } catch(err) {
+    next(err);
+  }
+}
+
+module.exports = [sysStuff, defaultLocals];

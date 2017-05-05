@@ -2,27 +2,27 @@ var categories = {
   martial: {
     name: "Martial Art",
     icon: "", 
-    description: ""
+    description: "Martial art stories may take place in any kind of world or background but has the martial art as a key-element of the story."
   },
   fantasy: {
     name: "Fantasy",
     icon: "", 
-    description: ""
+    description: `Fantasy stories take place in imaginary worlds, often without relations to any locations, events, or people from the real world. The notion of magic or supernatural elements are most of the time present, as well as magical creatures. A fantasy story is predominantly of the medievalist form and commonly subcategorized as "high fantasy".`
   },
   modernFantasy: {
     name: "Modern Fantasy",
     icon: "", 
-    description: ""
+    description: `Often subcategorized as "low fantasy", modern fantasy stories take place in real or parallel world in modern era with a presence of supernatural elements such as magic, magical creatures or phenomena.`
   },
   military: {
     name: "War & Military",
     icon: "", 
-    description: ""
+    description: "War or military stories revolve around fictional or non-fictional war stories and retrace the story of protagonists in a war (or several wars)."
   },
   historical: {
     name: "Historical",
     icon: "", 
-    description: ""
+    description: "Historical fictions retrace periods or events in the past, the History, as how they were or rewrite them."
   },
   scifi: {
     name: "Sci-fi",
@@ -42,17 +42,17 @@ var categories = {
   horror: {
     name: "Mystery & Horror",
     icon: "", 
-    description: ""
+    description: "Horror are intended to inspire to frighten, scare, or startle the readers. They often focus on elements of death, afterlife, and evil. They are often supernatural, but do not have to be."
   },
   detective: {
     name: "Detective",
     icon: "", 
-    description: ""
+    description: "Detective stories involve a mysterious crime or case to be solved."
   },
   fanfic: {
     name: "Fanfic",
     icon: "", 
-    description: ""
+    description: "A fanfiction involving characters or elements from a popular work."
   },
   drama: {
     name: "Drama",
@@ -62,7 +62,12 @@ var categories = {
   litrpg: {
     name: "LitRPG",
     icon: "",
-    description: ""
+    description: "LitRPG encompasses the modern tropes coming from Asia such as reincarnation in another world with a status cheat."
+  },
+  game: {
+    name: "Game",
+    icon: "",
+    description: "Game stories are stories taking place in a virtual world (ex. VRMMO) with or without video game elements."
   }
 };
 

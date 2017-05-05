@@ -1,11 +1,11 @@
 <% 
 
 title = novel.title; 
-isGod = req.user && (req.user.isAdmin() || req.user.id == author.id);
+isGod = user && (user.isAdmin() || user.id == author.id);
 nLink = novel.getLink();
 authorName = author.displayName();
-followed = req.user && req.user.isFollowNovel(novel.id);
-description = req.makeDescription(novel.description);
+followed = user && user.isFollowNovel(novel.id);
+description = sys.makeDescription(novel.description);
 
 %>
 
@@ -58,7 +58,7 @@ description = req.makeDescription(novel.description);
             <span class="sr-only">Views</span>
           </span>&nbsp;&nbsp;&nbsp;&nbsp;
         </span>
-        <time class="text-muted" format="ago" unixtime="<%= req.unixTime(item.id) %>"><%= req.timeSince(item.id) %> ago</time>
+        <time class="text-muted" format="ago" unixtime="<%= sys.unixTime(item.id) %>"><%= sys.timeSince(item.id) %> ago</time>
       </a>
     <% } });
      } else { %>
@@ -76,7 +76,7 @@ description = req.makeDescription(novel.description);
             <span class="sr-only">Views</span>
           </span>&nbsp;&nbsp;&nbsp;&nbsp;
         </span>
-        <time class="text-muted" format="ago" unixtime="<%= req.unixTime(item.id) %>"><%= req.timeSince(item.id) %> ago</time>&nbsp;&nbsp;&nbsp;
+        <time class="text-muted" format="ago" unixtime="<%= sys.unixTime(item.id) %>"><%= sys.timeSince(item.id) %> ago</time>&nbsp;&nbsp;&nbsp;
         
         <a href="<%= nLink + "/" + index  + "/edit" %>">
           <span class="sr-only">Edit chapter</span><span class="fa fa-pencil-square-o" aria-hidden="true"></span>

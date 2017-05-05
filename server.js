@@ -58,10 +58,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(flash());
 
-for (let middleware of require("./app/engine/middlewares")) {
-  app.use(middleware);
-}
-
 /* Required for passport */
 app.use(session(
   {
@@ -74,6 +70,10 @@ app.use(session(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+for (let middleware of require("./app/engine/middlewares")) {
+  app.use(middleware);
+}
 
 //app.use("/", express.static(__dirname + '/public')); /* NGINX should take care of that below */
 app.use("/", router);

@@ -9,7 +9,7 @@ const locks = require("mongo-locks");
 const categories = require("../models/category").list();
 
 router.get('/addnovel', utils.isLoggedIn, (req, res) => {
-  res.render('pages/novel/addnovel', {req, message: "", categories, action:'add'});
+  res.render('pages/novel/addnovel', {req,categories, action:'add'});
 });
 
 router.post('/addnovel', utils.isLoggedIn, async (req, res) => {

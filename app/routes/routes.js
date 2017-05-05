@@ -6,7 +6,7 @@ var router = express.Router();
 router.get("/", async (req, res, next) => {
   try {
     const latest = await Chapter.latestUpdates();
-    console.log(latest);
+    //console.log(latest);
     res.render("pages/index", {error:null, latest, req});
   } catch(err) {
     next(err);

@@ -1,9 +1,9 @@
 <% 
 title = chapter.title; 
-isGod = req.user && (req.user.isAdmin() || req.user.id == novel.author.ref);
+isGod = user && (user.isAdmin() || user.id == novel.author.ref);
 novelLink = novel.getLink();
 num = +req.params.chapter;
-description = req.makeDescription(chapter.content);
+description = sys.makeDescription(chapter.content);
 
 %>
 
@@ -17,7 +17,7 @@ description = req.makeDescription(chapter.content);
     <h6 class="text-center text-muted">
       by <a href="<%= novel.author.link || ("/u/"+novel.author.name) %>"><%= novel.author.name %></a>
     </h6>
-    <small><time class="float-right text-muted pos-a" format="ago" unixtime="<%= req.unixTime(chapter.id) %>" style="right: 0; bottom: -10%"><%= req.timeSince(chapter.id) %> ago</time></small>
+    <small><time class="float-right text-muted pos-a" format="ago" unixtime="<%= sys.unixTime(chapter.id) %>" style="right: 0; bottom: -10%"><%= sys.timeSince(chapter.id) %> ago</time></small>
   </div>
   <hr/>
   <h3 class="chapter-title"><%= chapter.title %></h3>
