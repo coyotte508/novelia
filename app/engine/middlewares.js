@@ -50,7 +50,7 @@ function defaultLocals (req, res, next) {
     // res.locals.error = req.flash('error');
     // res.locals.success = req.flash('success');
 
-    res.locals.user = req.user || null;
+    res.locals.user = req.user || null;
     /* For css cache busting */
     res.locals.version = pjson.version;
     /* Constants */
