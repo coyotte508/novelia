@@ -20,7 +20,7 @@ description = req.makeDescription(chapter.content);
     <small><time class="float-right text-muted pos-a" format="ago" unixtime="<%= req.unixTime(chapter.id) %>" style="right: 0; bottom: -10%"><%= req.timeSince(chapter.id) %> ago</time></small>
   </div>
   <hr/>
-  <h3 class="text-center"><%= chapter.title %></h3>
+  <h3 class="chapter-title"><%= chapter.title %></h3>
   <div class="chapter-content">
     <%- chapter.content %>
   </div>

@@ -16,6 +16,7 @@ In the project's directory:
 ```bash
 npm install unicode
 ```
+
 ## Nginx configuration
 
 In the project's directory:
@@ -41,3 +42,5 @@ webpack
 ```bash
 ./scripts/start.sh
 ```
+
+It will listen in port 8010 if not specified in `env.PORT`.

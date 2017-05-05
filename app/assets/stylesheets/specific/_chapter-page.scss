@@ -6,3 +6,9 @@
     max-width: 600px;
   }
 }
+
+h3.chapter-title {
+  @extend .text-center;
+
+  margin-bottom: 15px;
+}

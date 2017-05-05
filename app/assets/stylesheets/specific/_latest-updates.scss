@@ -2,21 +2,24 @@
 
 ul.latest-updates {
   .chapter-stuff {
+    @extend .list-group-item-action;
+
     @include taller(12px);
-    flex-grow: 1;
+    flex-grow: 1.5;
+    flex-basis: 0;
 
     margin-right: -$list-group-item-padding-x;
     padding-right: $list-group-item-padding-x;
   }
 
   .novel-title-link {
+    @extend .list-group-item-action;
+
     @include taller(12px);
+    flex-grow: 1;
+    flex-basis: 0;
 
     margin-left: -$list-group-item-padding-x;
     padding-left: $list-group-item-padding-x;
-
-    &::after {
-      content: " - ";
-    }
   }
 }

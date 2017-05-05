@@ -1,11 +1,11 @@
 <ul class="list-group text-md-left latest-updates">
   <% latest.forEach((item) => {%>
   <li class="list-group-item">
-    <a class="list-group-item-action novel-title-link" href="<%- item.getNovelLink() %>">
+    <a class="novel-title-link" href="<%- item.getNovelLink() %>">
       <span class="novel-title"><%= item.novel.title %>  
       </span>
     </a>
-    <a class="list-group-item-action chapter-stuff" href="<%- item.getLink() %>">
+    <a class="chapter-stuff" href="<%- item.getLink() %>">
       <strong> <%= item.number %></strong> 
       <small class="text-muted">
         <i><%= item.title %></i>

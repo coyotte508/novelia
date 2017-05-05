@@ -38,16 +38,3 @@ section:last-child {
 .text-muted a {
   color: $text-muted;
 }
-
-/* Make sure there's spacing betweens items of a list, due to flexbox */
-.list-group-item > * {
-  margin-right: 5px;
-}
-
-.list-group-item > *:last-child {
-  margin-right: 0px;
-}
-
-.list-group-item .list-group-item-action {
-  width: initial;
-}
