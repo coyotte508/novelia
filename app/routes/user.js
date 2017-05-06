@@ -2,7 +2,6 @@ const User = require("../models/user");
 const passport = require("passport");
 const utils = require("./utils");
 const router = require("express").Router();
-const slug = require("slug");
 const val = require("validator");
 const limiter = require("mongo-limiter");
 const assert = require("assert");
