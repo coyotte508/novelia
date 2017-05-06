@@ -43,12 +43,13 @@ router.post('/addnovel', utils.isLoggedIn, async (req, res) => {
   }
 });
 
-router.param('novel', async function(req, res, next, novel) {
+router.param('novel', async function(req, res, next, lnovel) {
   try {
-    novel = await Novel.findOne({slug: novel.toLowerCase()});
+    let novel = await Novel.findOne({slug: lnovel.toLowerCase()});
 
     if (!novel) {
-      throw new utils.HttpError("Novel not found", 404);
+      let message = lnovel[0] == lnovel[0].toLowerCase() ? "Page not found" : "Novel not found";
+      throw new utils.HttpError(message, 404);
     }
 
     req.novel = novel;

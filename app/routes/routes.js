@@ -17,8 +17,19 @@ router.get("/contact", (req, res) => {
   res.render("pages/static/contact", {error:null, req});
 });
 
+let modules = [
+  require("./admin.js"), 
+  require("./auth.js"), 
+  require("./user.js"), 
+  require("./category.js"), 
+  require("./users.js"),
+  require("./novels.js"),
+  /* Last because of catch-all */
+  require("./novel.js")
+];
+
 /* Aggregate routers */
-for (let mod of [require("./admin.js"), require("./auth.js"), require("./user.js"), require("./category.js"), require("./novel.js")]) {
+for (let mod of modules) {
   router.use("/", mod);
 }
 
