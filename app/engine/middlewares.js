@@ -1,6 +1,7 @@
 const pjson = require('../../package.json');
 const constants = require('../../config/constants');
 const validator = require('validator');
+const slug = require("slug");
 
 function sysStuff(req, res, next) {
   var sys = {};
@@ -50,6 +51,7 @@ function defaultLocals (req, res, next) {
     // res.locals.error = req.flash('error');
     // res.locals.success = req.flash('success');
 
+    res.locals.req = req;
     res.locals.user = req.user || null;
     /* For css cache busting */
     res.locals.version = pjson.version;
@@ -57,6 +59,8 @@ function defaultLocals (req, res, next) {
     res.locals.constants = constants;
     /* Db to text, etc. */
     res.locals.validator = validator; 
+    /* Make links */
+    res.locals.slug = slug;
 
     //undefined varialbles errors go away
     res.locals.novel = null;

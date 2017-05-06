@@ -39,7 +39,7 @@ router.post('/addnovel', utils.isLoggedIn, async (req, res) => {
     res.redirect(novel.getLink());
   } catch (err) {
     res.status(err.statusCode || 500);
-    res.render('pages/novel/addnovel', {req, message: err.message, categories, action:'add'});
+    res.render('pages/novel/addnovel', {message: err.message, categories, action:'add'});
   }
 });
 
@@ -82,7 +82,7 @@ router.get('/:novel', async (req, res, next) => {
 
 router.get('/:novel/edit', utils.canTouchNovel, (req, res, next) => {
   try {
-    res.render('pages/novel/addnovel', {req, novel: req.novel, categories, val, message: "", action:'edit'});
+    res.render('pages/novel/addnovel', {novel: req.novel, categories, message: "", action:'edit'});
   } catch(err) {
     next(err);
   }
@@ -98,7 +98,7 @@ router.post('/:novel/edit', utils.canTouchNovel, async (req, res) => {
     res.redirect(req.novel.getLink());
   } catch (err) {
     res.status(err.statusCode || 500);
-    res.render('pages/novel/addnovel', {req, novel: req.novel, categories, val, message: err.message, action:'edit'});
+    res.render('pages/novel/addnovel', {novel: req.novel, categories, message: err.message, action:'edit'});
   }
 });
 

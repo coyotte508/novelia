@@ -11,7 +11,7 @@ router.get("/login", (req, res) => {
   if (req.isAuthenticated()) {
     return res.redirect('/profile');
   }
-  res.render('pages/user/login', {message: req.flash('loginMessage'), req});
+  res.render('pages/user/login', {message: req.flash('loginMessage')});
 });
 
 router.post('/login', (req, res, next) => {
@@ -57,7 +57,7 @@ router.post('/goldfish', async (req, res) => {
 
     res.render('pages/user/forget', {message: `A mail has been sent to ${email}, with a link to reset the password.` , req});
   } catch(err) {
-    res.render('pages/user/forget', {message: err.message, req});
+    res.render('pages/user/forget', {message: err.message});
   }
 });
 
@@ -106,7 +106,7 @@ router.all('/confirm', utils.isLoggedIn, async (req, res) => {
 });
 
 router.get("/signup", utils.isNotLoggedIn, (req, res) => {
-  res.render('pages/user/signup', {message: req.flash('signupMessage'), req});
+  res.render('pages/user/signup', {message: req.flash('signupMessage')});
 });
 
 router.post('/signup', utils.isNotLoggedIn, (req, res, next) => {
@@ -118,11 +118,11 @@ router.post('/signup', utils.isNotLoggedIn, (req, res, next) => {
 });
 
 router.get('/profile', utils.isLoggedIn, function(req, res) {
-  res.render('pages/user/profile', {user: req.user, req, slug, message: req.flash('profileMessage')});
+  res.render('pages/user/profile', {message: req.flash('profileMessage')});
 });
 
 router.get('/security', utils.isLoggedInAndNotSocial, function(req, res) {
-  res.render("pages/user/security", {user: req.user, req, message: req.flash('securityMessage')});
+  res.render("pages/user/security", {req, message: req.flash('securityMessage')});
 });
 
 router.post('/security', utils.isLoggedInAndNotSocial, async function(req, res) {
@@ -150,7 +150,7 @@ router.post('/security', utils.isLoggedInAndNotSocial, async function(req, res) 
 
     res.redirect("/profile");
   } catch(err) {
-    res.render("pages/user/security", {user: req.user, req, message: err.message});
+    res.render("pages/user/security", {req, message: err.message});
   }
 });
 
@@ -174,7 +174,7 @@ router.get('/u/:user', function(req, res, next) {
   try {
     var user = req.viewedUser;
     
-    res.render('pages/user/user', {req, user, slug});
+    res.render('pages/user/user', {u:user});
   } catch(err) {
     next(err);
   }

@@ -6,9 +6,7 @@ router.get('/novels', async (req, res, next) => {
     let admin = req.user && req.user.isAdmin();
     let filter = admin ? {} : {public: true};
 
-    let novels = await Novel.find(filter, "title latestChapter author numChapters").sort({id: -1}).limit(50);
-
-    console.log(novels);
+    let novels = await Novel.find(filter, "title latestChapter author numChapters").sort({_id: -1}).limit(50);
 
     res.render('pages/novel/novels', {novels});
   } catch (err) {

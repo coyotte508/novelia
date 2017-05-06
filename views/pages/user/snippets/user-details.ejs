@@ -1,5 +1,7 @@
 <%
-  var isDisplayedUser = user && user.id == user.id;
+  var isDisplayedUser = user && user.id == u.id;
+
+  var isGod = user && (user.isAdmin() || isDisplayedUser);
 %>
 
 
@@ -7,17 +9,19 @@
   <h2>Bio</h2>
   <div class="card">
     <div class="card-block">
-      <%- user.bio || "<i>This user does not yet have a bio.</i>" %>
+      <%- u.bio || "<i>This user does not yet have a bio.</i>" %>
     </div>
   </div>
 </section>
-<% if (user.novels.length > 0 || isDisplayedUser) { %>
+<% if (u.novels.length > 0 || isDisplayedUser) { %>
 <section>
   <h2>Novels</h2>
-  <%if (user.novels.length > 0) { %>
+  <%if (u.novels.length > 0) { %>
   <p><ul class="list-group">
-    <% user.novels.forEach( (novel) => { %>
+    <% u.novels.forEach( (novel) => { %>
+      <% if (isGod || novel.public) { %>
       <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
+      <% } %>
     <% }); %>
   </ul></p>
   <% }
@@ -27,11 +31,11 @@
 </section>
 <% } %>
 
-<% if (user.followedNovels.length > 0) { %>
+<% if (u.followedNovels.length > 0) { %>
 <section>
   <h2>Followed novels</h2>
   <ul class="list-group">
-    <% user.followedNovels.forEach( (novel) => { 
+    <% u.followedNovels.forEach( (novel) => { 
       var nLink = slug(novel.title); %>
 
       <% if (isDisplayedUser) { %>

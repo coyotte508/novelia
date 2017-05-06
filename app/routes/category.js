@@ -18,7 +18,7 @@ router.get("/category/:category", async (req, res, next) => {
       categories: req.category.shorthand
     });
 
-    res.render("pages/category", {req, latest});
+    res.render("pages/category", {latest});
   } catch (err) {
     next(err);
   }

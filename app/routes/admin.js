@@ -26,7 +26,7 @@ router.get("/admin", utils.isAdmin, async (req, res, next) => {
       nbUsers, nbChapters, nbNovels
     };
 
-    res.render("pages/admin", {actions, req, stats});
+    res.render("pages/admin", {actions, stats});
   } catch(err) {
     next(err);
   }
