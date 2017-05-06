@@ -1,0 +1,51 @@
+@import 'mixins';
+
+ul.novelia-list {
+  & > li > *:last-child {
+    margin-right: -$list-group-item-padding-x;
+    padding-right: $list-group-item-padding-x;
+  }
+
+  & > li > *:first-child {
+    margin-left: -$list-group-item-padding-x;
+    padding-left: $list-group-item-padding-x;
+  }
+
+  & > li > * {
+    @extend .list-group-item-action;
+    @include taller(12px);
+  }
+}
+
+ul.latest-updates {
+  @extend .novelia-list;
+
+  .chapter-stuff {
+    flex-grow: 1.5;
+    flex-basis: 0;
+  }
+
+  .novel-title-link {
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+}
+
+ul.novel-list {
+  @extend .novelia-list;
+
+  .novel-title-link {
+    flex-grow: 3;
+    flex-basis: 0;
+  }
+
+  .chapters {
+    text-align: center;
+    width: 50px !important;
+  }
+
+  .novel-author {
+    flex-grow: 2;
+    flex-basis: 0;
+  }
+}

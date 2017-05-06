@@ -5,18 +5,12 @@
   
   /* Fluid */
   @include media-breakpoint-only(md) {
-    margin-left: 40px;
-    margin-right: 40px;
-
     .navbar & {
       margin-left: 24px;
       margin-right: 24px;
     }
   }
   @include media-breakpoint-down(sm) {
-    margin-left: 20px;
-    margin-right: 20px;
-
     .navbar & {
       margin-left: 4px;
       margin-right: 4px;
@@ -27,6 +21,13 @@
   }
   @media (min-width: 1600px) {
     width: 72%;
+  }
+  @media (max-width: 1200px) and (min-width: 881px ) {
+    width: 92%;
+  }
+  @media (max-width: 880px) {
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 

@@ -1,0 +1,30 @@
+<% 
+
+title = "List of Novels"; 
+
+%>
+
+<%- contentFor('body') %>
+
+<meta property="og:title" content="<%= title %>" />
+<meta property="og:url" content="http://" + reg.get("host") + "/novels" />
+<!--<meta property="og:image" content="http://ia.media-imdb.com/images/rock.jpg" />-->
+
+<div>
+  <h2 class="text-md-center"><%= title %></h2>
+  <hr/>
+  <ul class="list-group text-md-left novel-list">
+    <% novels.forEach(novel => {%>
+    <li class="list-group-item">
+      <a class="novel-title-link" href="<%- novel.getLink() %>">
+        <span class="novel-title"><%= novel.title %>  
+        </span>
+      </a>
+      <span class="chapters"><%= novel.numChapters %>
+      </span>
+      <a class="novel-author" href="<%- novel.author.link %>"><%= novel.author.name %>
+      </a>
+    <% });%>
+  </ul>
+  
+</div>
