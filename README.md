@@ -3,18 +3,12 @@
 ## Requirements
 
 ```bash
-sudo apt install nodejs npm ruby -y
+sudo apt install nodejs npm ruby screen -y
 sudo npm install -g n webpack nodemon
 
 sudo gem install sass
 
 sudo n latest
-```
-
-In the project's directory:
-
-```bash
-npm install unicode
 ```
 
 ## Nginx configuration
