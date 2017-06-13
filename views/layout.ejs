@@ -1,15 +1,16 @@
-<% 
+<%
   if (typeof description == "undefined" || !description) {
     description = "Plenty of original novels updated daily to read, with genres including fantasy, litrpg and martial arts.";
   }
-%><!DOCTYPE html>  
-<html lang="en">  
+%><!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title><%= title %> - LitNovel</title>
   <meta property="og:title" content="<%= title %>" />
   <meta name="description" content="<%= description %>" />
   <%- meta %>
+  <link rel="icon" href="/favicon.ico" />
   <link rel="stylesheet" href="/stylesheets/styles.css?v=<%= version %>">
 </head>
 <body>
@@ -19,7 +20,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <a class="navbar-brand" href="/">LitNovel</a>
-      
+
       <div id="navbarResponsive" class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item<% if (title=="Home"){%> active <% } %>"><a class="nav-link" href="/">Home</a></li>
@@ -32,7 +33,7 @@
               <a href="/admin" class="nav-link navbar-text">Admin</a>
             <% } else { %><span class="navbar-text text-muted">
               Welcome, <%= user.displayName() %>!
-            </span><% } %></li>  
+            </span><% } %></li>
             <li class="nav-item"><a class="nav-link navbar-text" href="/profile">Profile</a><</li>
           <% } else { %>
           <li class="nav-item"><span class="navbar-text text-muted">Already have an account?</span></li>

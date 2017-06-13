@@ -2,7 +2,7 @@
 
 .varying-container {
   @include make-container();
-  
+
   /* Fluid */
   @include media-breakpoint-only(md) {
     .navbar & {

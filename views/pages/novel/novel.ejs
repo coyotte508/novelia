@@ -1,6 +1,6 @@
-<% 
+<%
 
-title = novel.title; 
+title = novel.title;
 isGod = user && (user.isAdmin() || user.id == author.id);
 nLink = novel.getLink();
 authorName = author.displayName();
@@ -19,29 +19,30 @@ description = sys.makeDescription(novel.description);
 <meta name="author" content="<%= authorName %>" />
 
 <div>
-  <h2 class="text-md-center"><%= title %> <small>by <a href="<%= author.getLink() %>"><%= authorName %></a></small></h2>
-  <hr/>
-  <div>
-    <a href="<%= novel.getLink() + (followed ? "/unfollow" : "/follow") %>" class="btn btn-sm btn-secondary<%- followed ? " active" : "" %>" aria-pressed="<%- followed ? "true" : "false" %>"><span class="fa fa-plus"></span> Follow <span class="badge badge-default"><%- novel.follows %></span></a>
-    <a class="btn btn-sm btn-secondary"><span class="fa fa-eye"><span class="sr-only">Views: </span></span> <span class="badge badge-default"><%= novel.totalViews %></span></a>
-  </div>
-  <p><br/><br/></p>
-  <hr/>
-  <div>
-    <p>
-      <% if (novel.categories[0]) { %>
-        <a href="/category/<%= novel.categories[0] %>"><span class="badge badge-primary"><%= req.categoryName(novel.categories[0]) %></span></a>
-      <% }
-      if (novel.categories[1]) {
-      %>
-        <a href="/category/<%= novel.categories[1] %>"><span class="badge badge-default"><%= req.categoryName(novel.categories[1]) %></span></a>
-      <% }%>
-    </p>
-    <h4>Synopsis</h4>
-    <div class="synopsis">
-      <%- novel.description %>
+  <div class="novel-header clearfix">
+    <div class="novel-cover"></div>
+    <h2 class="text-md-center"><%= title %> <small>by <a href="<%= author.getLink() %>"><%= authorName %></a></small></h2>
+
+    <div>
+      <p>
+        <% if (novel.categories[0]) { %>
+          <a href="/category/<%= novel.categories[0] %>"><span class="badge badge-primary"><%= req.categoryName(novel.categories[0]) %></span></a>
+        <% }
+        if (novel.categories[1]) {
+        %>
+          <a href="/category/<%= novel.categories[1] %>"><span class="badge badge-default"><%= req.categoryName(novel.categories[1]) %></span></a>
+        <% }%>
+        <small class="pull-right">
+          <a href="<%= novel.getLink() + (followed ? "/unfollow" : "/follow") %>" class="btn btn-sm btn-secondary<%- followed ? " active" : "" %>" aria-pressed="<%- followed ? "true" : "false" %>"><span class="fa fa-plus"></span> Follow <span class="badge badge-default"><%- novel.follows %></span></a>
+          <a class="btn btn-sm btn-secondary"><span class="fa fa-eye"><span class="sr-only">Views: </span></span> <span class="badge badge-default"><%= novel.totalViews %></span></a>
+        </small>
+      </p>
+      <h4>Synopsis</h4>
+      <div class="synopsis">
+        <%- novel.description %>
+      </div>
+      <% if (isGod) {%><p><a href="<%= nLink %>/edit"><span class="fa fa-pencil-square-o"></span> Edit description</a></p><% } %>
     </div>
-    <% if (isGod) {%><p><a href="<%= nLink %>/edit"><span class="fa fa-pencil-square-o"></span> Edit description</a></p><% } %>  
   </div>
   <div>
     <h4>Chapters</h4>
@@ -53,7 +54,7 @@ description = sys.makeDescription(novel.description);
           <%= index %> - <%= item.title %>
         </span>
         <span class="text-muted" >
-         <%= item.views %> 
+         <%= item.views %>
           <span class="fa fa-eye">
             <span class="sr-only">Views</span>
           </span>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -68,20 +69,20 @@ description = sys.makeDescription(novel.description);
           <span class="chapter-title">
             <%= index %> - <%= item.title %>
           </span>
-        </a> 
+        </a>
       </span>
         <span class="text-muted" >
-         <%= item.views %> 
+         <%= item.views %>
           <span class="fa fa-eye">
             <span class="sr-only">Views</span>
           </span>&nbsp;&nbsp;&nbsp;&nbsp;
         </span>
         <time class="text-muted" format="ago" unixtime="<%= sys.unixTime(item.id) %>"><%= sys.timeSince(item.id) %> ago</time>&nbsp;&nbsp;&nbsp;
-        
+
         <a href="<%= nLink + "/" + index  + "/edit" %>">
           <span class="sr-only">Edit chapter</span><span class="fa fa-pencil-square-o" aria-hidden="true"></span>
-        </a> 
-        <a href="<%= nLink + "/" + index  + "/delete" %>" <% if (index != novel.numChapters) {%>class="invisible"<%}%>> 
+        </a>
+        <a href="<%= nLink + "/" + index  + "/delete" %>" <% if (index != novel.numChapters) {%>class="invisible"<%}%>>
           <span class="sr-only">Delete chapter</span><span class="fa fa-trash" aria-hidden="true"></span>
         </a>
       </li>
@@ -90,7 +91,7 @@ description = sys.makeDescription(novel.description);
     </ul></p>
     <% if (isGod) {%><p><a href="<%= nLink %>/addchapter"><span class="fa fa-plus"></span> Add a chapter</a></p><% } %>
   </div>
-  <% if (isGod) {%> 
+  <% if (isGod) {%>
   <div>
     <p>
       <% if (novel.public) {%>
