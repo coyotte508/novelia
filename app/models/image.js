@@ -18,12 +18,12 @@ var imageSchema = new Schema({
 //chapterSchema.index({"novel.ref" : 1, number: -1}, {unique: true});
 
 imageSchema.methods.delete = async function() {
-  if (await fs.exists(this.location)) {
+  if (await fs.exists(this.location)) {
     await fs.rm(this.location);
   }
 
   for (let item of this.formats) {
-    if (await fs.exists(item.location)) {
+    if (await fs.exists(item.location)) {
       await fs.rm(item.location);
     }
   }
