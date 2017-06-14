@@ -18,9 +18,14 @@ var imageSchema = new Schema({
 //chapterSchema.index({"novel.ref" : 1, number: -1}, {unique: true});
 
 imageSchema.methods.delete = async function() {
-  await fs.rm(this.location);
+  if (await fs.exists(this.location)) {
+    await fs.rm(this.location);
+  }
+
   for (let item of this.formats) {
-    await fs.rm(item.location);
+    if (await fs.exists(item.location)) {
+      await fs.rm(item.location);
+    }
   }
 
   return this.remove();
@@ -67,7 +72,7 @@ Image.createOrUpdate = async function(params, old) {
       let image = await Image.findById(old);
       await image.delete();
     } catch (err) {
-      console.Error(err);
+      console.error(err);
     }
   }
 
