@@ -1,8 +1,6 @@
 const router = require("express").Router();
-const utils = require("./utils");
-const Novel = require("../models/novel");
-const Chapter = require("../models/chapter");
-const User = require("../models/user");
+const utils = require("../utils");
+const {Novel, Chapter, User} = require("../../models");
 const limiter = require("mongo-limiter");
 
 router.get("/admin", utils.isAdmin, async (req, res, next) => {
@@ -31,5 +29,8 @@ router.get("/admin", utils.isAdmin, async (req, res, next) => {
     next(err);
   }
 });
+
+router.use("/", require("./novels"));
+router.use("/", require("./users"));
 
 module.exports = router;

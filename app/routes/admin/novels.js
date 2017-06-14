@@ -1,4 +1,4 @@
-const Novel = require("../models/novel");
+const {Novel} = require("../../models");
 const router = require("express").Router();
 
 router.get('/novels', async (req, res, next) => {

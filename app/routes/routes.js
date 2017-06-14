@@ -18,12 +18,10 @@ router.get("/contact", (req, res) => {
 });
 
 let modules = [
-  require("./admin.js"),
+  require("./admin/admin.js"),
   require("./auth.js"),
   require("./user.js"),
   require("./category.js"),
-  require("./users.js"),
-  require("./novels.js"),
   /* Last because of catch-all */
   require("./novel/novel.js")
 ];
