@@ -14,9 +14,6 @@ var imageSchema = new Schema({
   formats: [{format: String, location: String}]
 });
 
-//chapterSchema.index({"title": "text"});
-//chapterSchema.index({"novel.ref" : 1, number: -1}, {unique: true});
-
 imageSchema.methods.delete = async function() {
   if (await fs.exists(this.location)) {
     await fs.rm(this.location);

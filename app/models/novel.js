@@ -43,10 +43,6 @@ var novelSchema = new Schema({
     type: Number,
     default: 0
   },
-  totalLikes: {
-    type: Number,
-    default: 0
-  },
   public: {
     type: Boolean,
     default: true

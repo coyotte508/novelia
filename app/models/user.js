@@ -29,15 +29,13 @@ var userSchema = new Schema({
         confirmed    : Boolean,
         confirmKey   : String,
         reset: {
-            key      : String, 
+            key      : String,
             issued   : Date
         }
     },
     authority: String,
     novels           : [{title: String, ref: Schema.Types.ObjectId}],
-    //likedNovels      : [{title: String, ref: Schema.Types.ObjectId}],
-    followedNovels   : [{title: String, ref: Schema.Types.ObjectId}],
-    likedChapters    : [{title: String, ref: Schema.Types.ObjectId, novel: {title: String, ref: Schema.Types.ObjectId}}]
+    followedNovels   : [{title: String, ref: Schema.Types.ObjectId}]
 });
 
 userSchema.index({"local.username": "text"}, {unique: true, sparse: true});
@@ -86,18 +84,6 @@ userSchema.methods.changeEmail = async function(email) {
 
 userSchema.methods.getLink = function() {
     return "/u/" + (this.local.username || "g-"+ this.google.id);
-};
-
-userSchema.methods.likeNovel = function(item) {
-    assert(!this.isLikeNovel(item.ref));
-
-    return this.update({$push: {likedNovels: item}});
-};
-
-userSchema.methods.unlikeNovel = function(ref) {
-    assert(this.isLikeNovel(ref));
-
-    return this.update({$pull: {likedNovels: {ref}}});
 };
 
 userSchema.methods.isFollowNovel = function(novelid) {
