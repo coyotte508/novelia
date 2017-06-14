@@ -1,7 +1,7 @@
 const utils = require("../utils");
 const router = require("express").Router();
 const limiter = require("mongo-limiter");
-const {Chapter, User} = require("../../models");
+const {Chapter, User, Image} = require("../../models");
 
 router.all('/delete', utils.canTouchNovel, async (req, res, next) => {
   try {
@@ -10,6 +10,14 @@ router.all('/delete', utils.canTouchNovel, async (req, res, next) => {
 
     limiter.action(req.user.id, "delnovel", novel.title);
 
+    if (novel.image.ref) {
+      try {
+        let image = await Image.findById(novel.image.ref);
+        await image.delete();
+      } catch (err) {
+        console.error(err);
+      }
+    }
     //not using req.user since admin may in the future be able to delete others' novels
     await User.where({_id: novel.author.ref}).update({$pull: {"novels": {ref: novel.id}}}).exec();
 

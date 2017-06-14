@@ -1,3 +1,4 @@
+const limiter = require("mongo-limiter");
 const multer = require("multer");
 const assert = require("assert");
 const path = require("path");
@@ -21,6 +22,10 @@ router.post('/edit-image', utils.canTouchNovel, upload.single('cover'), async (r
     assert(req.file.mimetype.startsWith("image/"), "The file uploaded must be an image.");
 
     let novel = req.novel;
+
+    if (!(await limiter.attempt(req.user.id, 'uploadimage', novel.title))) {
+      throw new utils.HttpError(`You can only upload ${limiter.limits().uploadimage.limit} images per day`, 403);
+    }
 
     let fullImage = await Image.createOrUpdate({
       type: "novel",

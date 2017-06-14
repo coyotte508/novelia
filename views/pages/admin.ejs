@@ -4,7 +4,7 @@
 
 <div class="text-md-center">
   <h1><%= title %></h1>
-  
+
   <br/>
   <div class="card">
     <div class="card-block bg-secondary">
@@ -41,7 +41,7 @@
       <% } else {%><%= action.user %><% }%></td>
       <td><%= action.action %></td>
       <td><%= action.data %></td>
-      <td><time format="ago" unixtime="<%= req.unixTime(action.id) %>"><%= req.timeSince(action.id) %> ago</time></td>
+      <td><time format="ago" unixtime="<%= sys.unixTime(action.id) %>"><%= sys.timeSince(action.id) %> ago</time></td>
     </tr>
     <% }); %>
   </table>

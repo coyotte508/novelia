@@ -6,6 +6,7 @@ limiter.init(mongoose);
 limiter.setLimits({
   comment: {limit: 10, duration: 3600},
   addchapter: {limit: 10, duration: 3600*24},
+  uploadimage: {limit: 10, duration: 3600*24},
   edit: {limit: 100, duration: 3600},
   addnovel: {limit: 3, duration: 3600*24},
   like: {limit: 50, duration: 3600},
