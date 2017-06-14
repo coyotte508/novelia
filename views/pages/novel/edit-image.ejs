@@ -1,0 +1,18 @@
+<%
+
+title = `Change ${novel.title}'s cover`;
+
+%>
+
+<%- contentFor('body') %>
+
+<h1 class="text-md-center"><%= novel.title %> - Change cover</h1>
+
+<div class="text-md-center">
+  <img src="<%- novel.getImageLink() %>" />
+
+  <form method="post" enctype='multipart/form-data'>
+    <input type="file" name="cover" required>
+    <button type="submit" class="btn btn-primary">Upload</button>
+  </form>
+</div>

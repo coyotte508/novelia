@@ -1,12 +1,9 @@
 const val = require("validator");
-const Novel = require("../models/novel");
-const Chapter = require("../models/chapter");
-const User = require("../models/user");
-const utils = require("./utils");
+const utils = require("../utils");
 const router = require("express").Router();
 const limiter = require("mongo-limiter");
 const locks = require("mongo-locks");
-const categories = require("../models/category").list();
+const {Novel, Chapter, User, categories} = require("../../models");
 
 router.get('/addnovel', utils.isLoggedIn, (req, res) => {
   res.render('pages/novel/addnovel', {req,categories, action:'add'});
@@ -72,11 +69,11 @@ router.get('/:novel', async (req, res, next) => {
       User.findById(novel.author.ref, User.basics())
     ]).then((values) => {
       author = values[1];
-    }); 
+    });
 
     res.render('pages/novel/novel', {req, novel, author});
-  } catch(err) { 
-    next(err); 
+  } catch(err) {
+    next(err);
   }
 });
 
@@ -99,27 +96,6 @@ router.post('/:novel/edit', utils.canTouchNovel, async (req, res) => {
   } catch (err) {
     res.status(err.statusCode || 500);
     res.render('pages/novel/addnovel', {novel: req.novel, categories, message: err.message, action:'edit'});
-  }
-});
-
-router.all('/:novel/delete', utils.canTouchNovel, async (req, res, next) => {
-  try {
-    var novel = req.novel;
-    utils.assert403(novel.numChapters == 0, "You can only delete empty novels");
-
-    limiter.action(req.user.id, "delnovel", novel.title);
-
-    //not using req.user since admin may in the future be able to delete others' novels
-    await User.where({_id: novel.author.ref}).update({$pull: {"novels": {ref: novel.id}}}).exec();
-
-    if (novel.prologue) {
-      Chapter.findOneAndRemove(novel.chapters[0].ref).exec();
-    }
-    novel.remove();
-
-    res.redirect("/profile");
-  } catch(err) { 
-    next(err); 
   }
 });
 
@@ -207,7 +183,8 @@ router.all('/:novel/unfollow', utils.isLoggedIn, async (req, res, next) => {
   free();
 });
 
-
+router.use("/:novel/", require("./edit-image"));
+router.use("/:novel/", require("./delete"));
 router.use("/:novel/", require("./chapter"));
 
 module.exports = router;

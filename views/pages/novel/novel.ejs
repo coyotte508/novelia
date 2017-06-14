@@ -20,7 +20,9 @@ description = sys.makeDescription(novel.description);
 
 <div>
   <div class="novel-header clearfix">
-    <div class="novel-cover"></div>
+    <div class="novel-cover" style="background: url('<%= novel.getImageLink("200x300") %>')">
+      <div class="center" style="width:100%"><a href="<%= nLink %>/edit-image"><i class="fa fa-pencil-square-o"></i></a></div>
+    </div>
     <h2 class="text-md-center"><%= title %> <small>by <a href="<%= author.getLink() %>"><%= authorName %></a></small></h2>
 
     <div>

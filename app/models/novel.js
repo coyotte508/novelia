@@ -7,8 +7,8 @@ const assert = require("assert");
 // define the schema for our user model
 var novelSchema = new Schema({
   title: {
-    type: String, 
-    required: true, 
+    type: String,
+    required: true,
   },
   author: {
     type: {
@@ -18,6 +18,10 @@ var novelSchema = new Schema({
     },
     required: true
   },
+  image: {
+    ref: Schema.Types.ObjectId,
+    link: String
+  },
   //updatedAt: Date,
   categories: {
     type: [String],
@@ -25,7 +29,7 @@ var novelSchema = new Schema({
   },
   chapters: {
     type: [{
-      title: String, 
+      title: String,
       ref: Schema.Types.ObjectId
     }],
     default: [{title: "", id: null}]
@@ -100,13 +104,13 @@ novelSchema.methods.getViews = async function() {
 novelSchema.methods.addChapter = async function(chapter) {
   if (chapter.number === 0) {
     await this.update({
-      prologue: true, 
+      prologue: true,
       "chapters.0": {title: chapter.title, ref: chapter.id},
       latestChapter: chapter.id
     });
   } else {
     await this.update({
-      $inc: {"numChapters": 1}, 
+      $inc: {"numChapters": 1},
       $push: {"chapters": {title: chapter.title, ref: chapter.id}},
       latestChapter: chapter.id
     });
@@ -124,19 +128,27 @@ novelSchema.methods.deleteChapter = async function(chapter) {
   if (num == 0) {
     await this.update(
       {
-        $inc: {"totalViews": -chapter.views}, 
-        prologue: false, 
+        $inc: {"totalViews": -chapter.views},
+        prologue: false,
         "chapters.0": null,
         latestChapter: null
       });
   } else {
     await this.update(
       {
-        $inc: {"numChapters": -1, "totalViews": -chapter.views}, 
+        $inc: {"numChapters": -1, "totalViews": -chapter.views},
         $pull: {"chapters": {ref: chapter.id}},
         latestChapter: this.chapters[num-1].ref
       });
   }
+};
+
+novelSchema.methods.getImageLink = function(format) {
+  if (format && this.image.link) {
+    return this.image.link.substr(0, this.image.link.lastIndexOf(".")) + "-" + format + this.image.link.substr(this.image.link.lastIndexOf("."));
+  }
+
+  return this.image.link;
 };
 
 const Novel = mongoose.model('Novel', novelSchema);

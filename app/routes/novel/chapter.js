@@ -1,16 +1,15 @@
 const val = require("validator");
 const assert = require("assert");
-const Novel = require("../models/novel");
-const Chapter = require("../models/chapter");
-const utils = require("./utils");
+const {Novel, Chapter} = require("../../models");
+const utils = require("../utils");
 const router = require("express").Router();
 const limiter = require("mongo-limiter");
 const locks = require("mongo-locks");
-const viewcounter = require("../engine/viewcounter");
+const viewcounter = require("../../engine/viewcounter");
 
 router.get('/addchapter', utils.canTouchNovel, (req, res, next) => {
   try {
-    res.render('pages/novel/addchapter', {novel: req.novel, message: "", action:"add"});  
+    res.render('pages/novel/addchapter', {novel: req.novel, message: "", action:"add"});
   } catch(err) {
     next(err);
   }
@@ -33,7 +32,7 @@ router.post('/addchapter', utils.canTouchNovel, async (req, res) => {
     var authorNote = val.validateDescription(req.body.authorNote);
 
     free = await locks.lock("major-novel-change", novel.id);
-    
+
     novel = await Novel.findById(novel.id); //force refresh
     utils.assert403(!(novel.prologue && prologue), "There is already a prologue, you can't add another one.");
 
@@ -91,7 +90,7 @@ router.get('/:chapter(\\d+)/', (req, res, next) => {
 
 router.get('/:chapter(\\d+)/edit',utils.canTouchNovel, (req, res, next) => {
   try {
-    res.render('pages/novel/addchapter', {novel: req.novel, chapter: req.chapter, val, message: "", action:"edit"});  
+    res.render('pages/novel/addchapter', {novel: req.novel, chapter: req.chapter, val, message: "", action:"edit"});
   } catch(err) {
     next(err);
   }
