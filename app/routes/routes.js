@@ -20,7 +20,7 @@ router.get("/contact", (req, res) => {
 let modules = [
   require("./admin/admin.js"),
   require("./auth.js"),
-  require("./user.js"),
+  require("./user/user.js"),
   require("./category.js"),
   /* Last because of catch-all */
   require("./novel/novel.js")
