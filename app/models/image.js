@@ -49,16 +49,23 @@ Image.create = async function(params) {
 
   let fullname = params.name + ext;
 
-  let jimage = await jimp.read(params.buffer);
 
   let localPath = path.join(root, fullname);
-  await jimage.write(localPath);
+
   image.location = localPath;
+  let str = await fs.createWriteStream(localPath);
+  await str.write(params.buffer);
+
+  let jimage = await jimp.read(params.buffer);
 
   if (params.type == "novel") {
     let smallName = `${params.name}-200x300${ext}`;
     let smallPath = path.join(root, smallName);
-    await jimage.cover(200, 300).write(smallPath);
+    await jimage.cover(200, 300);
+    if (ext.includes("jp")) {
+      await jimage.quality(85);
+    }
+    await jimage.write(smallPath);
     image.formats.push({format: "200x300", location: smallPath});
   }
 
