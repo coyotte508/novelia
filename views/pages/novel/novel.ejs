@@ -57,13 +57,15 @@ description = sys.makeDescription(novel.description);
         <span class="chapter-title mr-auto">
           <%= index %> - <%= item.title %>
         </span>
-        <span class="text-muted" >
-         <%= item.views %>
-          <span class="fa fa-eye">
-            <span class="sr-only">Views</span>
-          </span>&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="text-muted hidden-sm-down">
+          <span class="views">
+           <%= item.views %>
+            <span class="fa fa-eye">
+              <span class="sr-only">Views</span>
+            </span>&nbsp;&nbsp;&nbsp;&nbsp;
+          </span>
+          <time format="ago" unixtime="<%= sys.unixTime(item.id) %>" class="when"><%= sys.timeSince(item.id) %> ago</time>
         </span>
-        <time class="text-muted" format="ago" unixtime="<%= sys.unixTime(item.id) %>"><%= sys.timeSince(item.id) %> ago</time>
       </a>
     <% } });
      } else { %>

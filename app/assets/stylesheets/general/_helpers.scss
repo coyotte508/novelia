@@ -8,6 +8,13 @@
   text-align: center;
 }
 
+.sm-no-padding {
+  @include media-breakpoint-down(sm) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 .well {
   background-color: #eee;
   border-color: #eee;

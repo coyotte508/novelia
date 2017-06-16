@@ -1,5 +1,5 @@
-<% 
-title = chapter.title; 
+<%
+title = chapter.title;
 isGod = user && (user.isAdmin() || user.id == novel.author.ref);
 novelLink = novel.getLink();
 num = +req.params.chapter;
@@ -11,7 +11,7 @@ description = sys.makeDescription(chapter.content);
 
 <meta name="author" content="<%= novel.author.name %>" />
 
-<div class="offset-lg-1 col-lg-10 offset-xl-2 col-xl-8">
+<div class="offset-lg-1 col-lg-10 offset-xl-2 col-xl-8 sm-no-padding">
   <h2 class="text-center"><a href="<%= novel.getLink() %>"><%= novel.title %></a> - <%= num %> <% if (isGod) {%><small><a href="<%= novelLink + "/" + num  + "/edit" %>"><small><span class="fa fa-pencil-square-o smaller"></span></small></a></small><% } %></h2>
   <div class="pos-r">
     <h6 class="text-center text-muted">

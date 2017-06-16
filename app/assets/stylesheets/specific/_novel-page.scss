@@ -3,11 +3,16 @@
   height:300px; width: 200px; border: 1px solid grey; margin-right: 20px; margin-bottom: 10px;
   border-radius: 10px;
   text-align: center;
+  background-size: cover;
   display: flex;
   /* flex-direction: column;*/
   align-items: center;
 
   a {
     font-size: 2em;
+  }
+
+  @include media-breakpoint-down(sm) {
+    height:240px; width: 160px; margin-right: 10px;
   }
 }
