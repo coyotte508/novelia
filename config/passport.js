@@ -44,7 +44,7 @@ module.exports = function(passport) {
       passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done) {
-      var process_signup = () => co(function*() { 
+      var process_signup = () => co(function*() {
         var free = () => {};
         try {
           // find a user whose email is the same as the forms email
@@ -115,7 +115,7 @@ module.exports = function(passport) {
       passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done) {
-      var process_reset = () => co(function*() { 
+      var process_reset = () => co(function*() {
         try {
           // find a user whose email is the same as the forms email
           // we are checking to see if the user trying to login already exists
@@ -202,9 +202,9 @@ module.exports = function(passport) {
 
           if (user) {
             // if a user is found, log them in
-            return user.notifyLogin(req.ip).then(() => done(null, user), done);
+            return done(null, user);// return user.notifyLogin(req.ip).then(() => done(null, user), done);
           }
-          
+
           // if the user isnt in our database, create a new user
           var newUser          = new User();
 
@@ -213,7 +213,7 @@ module.exports = function(passport) {
           newUser.google.token = token;
           newUser.google.name  = profile.displayName;
           newUser.google.email = email; // pull the first email
-          newUser.fillInSecurity(req.ip);
+          newUser.new = true; //newUser.fillInSecurity(req.ip);
 
           // save the user
           newUser.save(function(err) {
