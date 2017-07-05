@@ -7,7 +7,7 @@ router.all('/show', utils.canTouchNovel, async (req, res, next) => {
   try {
     var novel = req.novel;
 
-    utils.assert403(novel.publicChaptersNum() > 0, "The novel needs at least one chapter to be made public");
+    //utils.assert403(novel.publicChaptersNum() > 0, "The novel needs at least one chapter to be made public");
 
     if (!(await limiter.attempt(req.user.id, 'shownovel', novel.title))) {
       throw new utils.HttpError(`You can only change your novels' viewable settings ${limiter.limits().shownovel.limit} times per hour`, 403);
