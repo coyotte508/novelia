@@ -27,7 +27,7 @@ validator.textToDb = (text) => {
 
 validator.dbToText = (html) => {
   //below replace is for align in tables to be properly conveyed
-  return toMarkdown(html.replace(/style="text-align:([^"]*)"/g, 'align="$1"'), {gfm: true});
+  return toMarkdown((html||"").replace(/style="text-align:([^"]*)"/g, 'align="$1"'), {gfm: true});
 };
 
 validator.validateUser = (username) => {
