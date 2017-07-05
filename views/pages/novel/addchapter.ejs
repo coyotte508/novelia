@@ -4,7 +4,7 @@ if (action == "add") {
   btnText = "Add chapter";
   chapter = chapter || {};
 } else {
-  title = "Edit chapter " + req.params.chapter + " for " + novel.title;
+  title = "Edit chapter " + req.chapter.number + " of " + novel.title;
   btnText = "Edit chapter";
 }
 %>
