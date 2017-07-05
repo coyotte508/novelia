@@ -15,7 +15,7 @@ description = sys.makeDescription(chapter.content);
   <h2 class="text-center"><a href="<%= novel.getLink() %>"><%= novel.title %></a> - <%= num %> <% if (isGod) {%><small><a href="<%= novelLink + "/" + num  + "/edit" %>"><small><span class="fa fa-pencil-square-o smaller"></span></small></a></small><% } %></h2>
   <div class="pos-r">
     <h6 class="text-center text-muted">
-      by <a href="<%= novel.author.link || ("/u/"+novel.author.name) %>"><%= novel.author.name %></a>
+      by <a href="<%= novel.author.link || ("/u/"+novel.author.name) %>" class="authorLink"><%= novel.author.name %></a>
     </h6>
     <small><time class="float-right text-muted pos-a" format="ago" unixtime="<%= sys.unixTime(chapter.id) %>" style="right: 0; bottom: -10%"><%= sys.timeSince(chapter.id) %> ago</time></small>
   </div>

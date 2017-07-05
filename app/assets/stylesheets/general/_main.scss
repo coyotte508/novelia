@@ -27,7 +27,7 @@ blockquote {
 /* Multiple section layout, for example in user profile */
 
 section {
-  margin-bottom: 15px; 
+  margin-bottom: 15px;
 }
 
 section:last-child {
@@ -35,6 +35,6 @@ section:last-child {
 }
 
 /* For author link below chapter title */
-.text-muted a {
+.text-muted a.authorLink {
   color: $text-muted;
 }

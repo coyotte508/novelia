@@ -19,7 +19,7 @@ const cs = require('constants');
 //   return DOMPurify.sanitize(dirty);
 // }
 
-marked.setOptions({sanitize: true});
+marked.setOptions({sanitize: true, breaks: true});
 
 validator.textToDb = (text) => {
   return marked(text.trim());
