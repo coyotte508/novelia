@@ -58,13 +58,16 @@ function defaultLocals (req, res, next) {
     /* Constants */
     res.locals.constants = constants;
     /* Db to text, etc. */
-    res.locals.validator = validator; 
+    res.locals.validator = validator;
     /* Make links */
     res.locals.slug = slug;
 
     //undefined varialbles errors go away
     res.locals.novel = null;
     res.locals.message = "";
+    //addchapter.ejs
+    res.locals.val = null;
+    res.locals.chapter = null;
 
     next();
   } catch(err) {
