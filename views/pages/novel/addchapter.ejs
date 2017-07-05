@@ -2,7 +2,6 @@
 if (action == "add") {
   title = "Add a chapter for " + novel.title;
   btnText = "Add chapter";
-  val = validator || {dbToText: ()=>{}};
   chapter = chapter || {};
 } else {
   title = "Edit chapter " + req.params.chapter + " for " + novel.title;
@@ -36,7 +35,7 @@ You can try **bold** text, *italics*, [link description](url), or:
 - This is a
 - two-item list
 
-and all the other things possible with Markdown, including tables!" minlength="100" maxlength="50000" required><%- req.body.chapterContent || val.dbToText(chapter.content) %></textarea>
+and all the other things possible with Markdown, including tables!" minlength="100" maxlength="50000" required><%- req.body.chapterContent || validator.dbToText(chapter.content) %></textarea>
   </div>
   <% if (action == "add" && !novel.prologue) { %>
   <div class="form-check">
@@ -48,7 +47,7 @@ and all the other things possible with Markdown, including tables!" minlength="1
   <% } %>
   <div class="form-group">
     <label for="authorNote">Author's note</label>
-    <textarea class="form-control" name="authorNote" id="authorNote" rows="4" placeholder="Optional, if you have something more to say" maxlength="<%- constants.descriptionMaxLength %>"><%- req.body.authorNote || val.dbToText(chapter.authorNote) %></textarea>
+    <textarea class="form-control" name="authorNote" id="authorNote" rows="4" placeholder="Optional, if you have something more to say" maxlength="<%- constants.descriptionMaxLength %>"><%- req.body.authorNote || validator.dbToText(chapter.authorNote) %></textarea>
   </div>
   <button type="submit" class="btn btn-primary"><%- btnText %></button>
 </form>

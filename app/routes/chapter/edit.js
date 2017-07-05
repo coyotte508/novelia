@@ -2,7 +2,7 @@ const val = require("validator");
 const utils = require("../utils");
 const router = require("express").Router();
 
-router.get('/:chapter(\\d+)/edit',utils.canTouchNovel, (req, res, next) => {
+router.get('/edit',utils.canTouchNovel, (req, res, next) => {
   try {
     res.render('pages/novel/addchapter', {novel: req.novel, chapter: req.chapter,  action:"edit"});
   } catch(err) {
@@ -11,7 +11,7 @@ router.get('/:chapter(\\d+)/edit',utils.canTouchNovel, (req, res, next) => {
 });
 
 
-router.post('/:chapter(\\d+)/edit', utils.canTouchNovel, async (req, res) => {
+router.post('/edit', utils.canTouchNovel, async (req, res) => {
   try {
     var novel = req.novel;
     var title = val.validateTitle(req.body.chapterTitle);
