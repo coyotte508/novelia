@@ -2,6 +2,8 @@ const utils = require("../utils");
 const router = require("express").Router();
 const {Novel, User, categories} = require("../../models");
 
+router.use("/", require("./add"));
+
 router.param('novel', async function(req, res, next, lnovel) {
   try {
     let novel = await Novel.findOne({slug: lnovel.toLowerCase()});
@@ -39,7 +41,6 @@ router.get('/:novel', async (req, res, next) => {
   }
 });
 
-router.use("/", require("./add"));
 router.use("/:novel/", require("./edit"));
 router.use("/:novel/", require("./edit-image"));
 router.use("/:novel/", require("./delete"));
