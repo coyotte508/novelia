@@ -11,8 +11,11 @@ if (action == "add") {
 
 <%- contentFor('body') %>
 
+<%if (action == "add") {%>
 <h1 class="text-md-center">Write a new chapter</h1>
-
+<% } else {%>
+<h1 class="text-md-center">Edit chapter</h1>
+<%}%>
 <% if (message.length > 0) { %>
   <div class="alert alert-danger"><%= message %></div>
 <% } %>
