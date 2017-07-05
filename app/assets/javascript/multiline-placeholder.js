@@ -15,7 +15,7 @@ $(function() {
         $(this).val(text);
         $(this).addClass('active');
       }
-    }
+    };
 
     $('textarea[placeholder]').each(function(/*index*/) {
       var text  = $(this).attr('placeholder');
