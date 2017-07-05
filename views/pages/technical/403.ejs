@@ -1,0 +1,8 @@
+<% title = "403 error"; %>
+
+<%- contentFor('body') %>
+
+<div class="text-md-center"><h1>Unauthorized <span class="fa fa-sitemap"></span></h1></div>
+
+<br/>
+<div class="alert alert-danger">You are not allowed to do this <% if (locals.err) { %>: <%= err.message%><% } %>.</div>
