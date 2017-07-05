@@ -66,7 +66,6 @@ function defaultLocals (req, res, next) {
     res.locals.novel = null;
     res.locals.message = "";
     //addchapter.ejs
-    res.locals.val = null;
     res.locals.chapter = null;
 
     next();

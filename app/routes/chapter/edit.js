@@ -4,7 +4,7 @@ const router = require("express").Router();
 
 router.get('/:chapter(\\d+)/edit',utils.canTouchNovel, (req, res, next) => {
   try {
-    res.render('pages/novel/addchapter', {novel: req.novel, chapter: req.chapter, val, message: "", action:"edit"});
+    res.render('pages/novel/addchapter', {novel: req.novel, chapter: req.chapter,  action:"edit"});
   } catch(err) {
     next(err);
   }

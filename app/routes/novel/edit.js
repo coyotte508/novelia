@@ -4,15 +4,15 @@ const router = require("express").Router();
 const val = require("validator");
 const {categories} = require("../../models");
 
-router.get('/:novel/edit', utils.canTouchNovel, (req, res, next) => {
+router.get('/edit', utils.canTouchNovel, (req, res, next) => {
   try {
-    res.render('pages/novel/addnovel', {novel: req.novel, categories, message: "", action:'edit'});
+    res.render('pages/novel/addnovel', {novel: req.novel, categories, action:'edit'});
   } catch(err) {
     next(err);
   }
 });
 
-router.post('/:novel/edit', utils.canTouchNovel, async (req, res) => {
+router.post('/edit', utils.canTouchNovel, async (req, res) => {
   try {
     var description = val.validateDescription(req.body.novelDescription);
     var cats = val.validateCategories([req.body.novelCategory, req.body.novelCategory2], categories).map(x => x.shorthand);

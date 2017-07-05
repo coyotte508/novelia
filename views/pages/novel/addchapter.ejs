@@ -1,8 +1,8 @@
-<% 
+<%
 if (action == "add") {
-  title = "Add a chapter for " + novel.title; 
+  title = "Add a chapter for " + novel.title;
   btnText = "Add chapter";
-  val = val || {dbToText: ()=>{}};
+  val = validator || {dbToText: ()=>{}};
   chapter = chapter || {};
 } else {
   title = "Edit chapter " + req.params.chapter + " for " + novel.title;
@@ -33,8 +33,8 @@ You can try **bold** text, *italics*, [link description](url), or:
 
 > This is a quote
 
-- This is a 
-- two-item list 
+- This is a
+- two-item list
 
 and all the other things possible with Markdown, including tables!" minlength="100" maxlength="50000" required><%- req.body.chapterContent || val.dbToText(chapter.content) %></textarea>
   </div>
