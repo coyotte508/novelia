@@ -22,6 +22,8 @@ sudo ln -s /etc/nginx/sites-available/novelia /etc/nginx/sites-enabled/novelia
 
 Edit the `root` directive of `/etc/nginx/sites-available/novelia` to reflect the project's public subfolder.
 
+You may have a 403 forbidden error regarding js and css files if the folder is under your home folder, then you need to either give more permissions to your home folder or move the project elsewhere.
+
 ## Update
 
 In the project's directory

@@ -8,7 +8,7 @@ server {
   listen 80 default_server;
   listen [::]:80 default_server;
 
-  root /home/ubuntu/code/novelia/public;
+  root /home/coyotte508/code/novelia/public;
 
   server_name _;
 
