@@ -36,5 +36,6 @@ router.get('/:chapter(\\d+)/', (req, res, next) => {
 router.use("/", require("./add"));
 router.use("/:chapter(\\d+)/", require("./edit"));
 router.use("/:chapter(\\d+)/", require("./delete"));
+router.use("/:chapter(\\d+)/comment", require("./comment"));
 
 module.exports = router;

@@ -35,7 +35,7 @@ function isLoggedIn(req, res, next) {
     return next();
   }
 
-  res.redirect('/login?referrer='+req.url);
+  res.redirect('/login?referrer='+req.originalUrl);
 }
 
 function isNotLoggedIn(req, res, next) {
@@ -46,11 +46,11 @@ function isNotLoggedIn(req, res, next) {
   res.redirect('/profile');
 }
 
-function canTouchNovel(req, res, next) { 
+function canTouchNovel(req, res, next) {
   isLoggedIn(req, res, () => {
     try {
       assert403(req.user.isAdmin() || req.novel.author.ref == req.user.id, "You are not authorized to manage this novel.");
-      next();  
+      next();
     } catch (err) {
       next(err);
     }
@@ -61,7 +61,7 @@ function isAdmin(req, res, next) {
   isLoggedIn(req, res, () => {
     try {
       assert403(req.user.isAdmin(), "You are not authorized to access this page.");
-      next();  
+      next();
     } catch (err) {
       next(err);
     }
@@ -83,8 +83,8 @@ module.exports = {
   isNotLoggedIn,
   canTouchNovel,
   isAdmin,
-  HttpError, 
-  assert403, 
+  HttpError,
+  assert403,
   assert404,
   isLoggedInAndNotSocial
 };

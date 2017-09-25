@@ -1,6 +1,7 @@
 <%
 title = chapter.title;
 isGod = user && (user.isAdmin() || user.id == novel.author.ref);
+canComment = !!user;
 novelLink = novel.getLink();
 num = +req.params.chapter;
 description = sys.makeDescription(chapter.content);
@@ -51,9 +52,14 @@ chapterLink = novel.getLink() + "/" + num;
   <div class="chapter-comments">
     <h3 class="text-center"><i class="fa fa-comments"></i> Comments</h3>
 
-    
-    <br/>
-    <div class="text-center"><a href="<%= chapterLink %>/comment">Leave a comment</a></div>
-  </div>
 
+    <br/>
+    <% if (canComment) {%>
+      <h4 id="comment">Leave a comment</h4>
+      <textarea placeholder="Enter your comment here..." class="form-control"></textarea>
+    <% } else { %>
+      <div class="text-center"><a href="<%= chapterLink %>/comment">Leave a comment</a></div>
+    <% } %>
+  </div>
+  <br/>
 </div>
