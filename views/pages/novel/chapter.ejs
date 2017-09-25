@@ -4,6 +4,7 @@ isGod = user && (user.isAdmin() || user.id == novel.author.ref);
 novelLink = novel.getLink();
 num = +req.params.chapter;
 description = sys.makeDescription(chapter.content);
+chapterLink = novel.getLink() + "/" + num;
 
 %>
 
@@ -36,13 +37,23 @@ description = sys.makeDescription(chapter.content);
     </div>
   </div>
   <% } %>
-  <hr/>
 
-  <div class="text-center">
+  <div class="text-center chapter-navigation-bottom">
     <div class="btn-group" role="group" aria-label="Navigation">
       <a href="<%= novel.getLink() + "/" + (num-1) %>" class="btn btn-primary<%= num == (novel.prologue? 0 : 1) ? " disabled" : ""%>"><span class="fa fa-lg fa-long-arrow-left"></span> <span class="hidden-sm-down">Previous Chapter</span></a>
       <a href="<%= novel.getLink()%>" class="btn btn-primary"><span class="fa fa-lg fa-th-list"></span> <span class="hidden-sm-down">Table of Contents</span></button>
       <a href="<%= novel.getLink() + "/" + (num+1) %>" class="btn btn-primary<%= num == novel.numChapters ? " disabled" : ""%>"><span class="hidden-sm-down">Next Chapter</span> <span class="fa fa-lg fa-long-arrow-right"></span></a>
     </div>
   </div>
+
+  <hr/>
+
+  <div class="chapter-comments">
+    <h3 class="text-center"><i class="fa fa-comments"></i> Comments</h3>
+
+    
+    <br/>
+    <div class="text-center"><a href="<%= chapterLink %>/comment">Leave a comment</a></div>
+  </div>
+
 </div>
