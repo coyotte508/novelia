@@ -4,7 +4,7 @@ const limiter = require("mongo-limiter");
 limiter.init(mongoose);
 
 limiter.setLimits({
-  comment: {limit: 10, duration: 3600},
+  comment: {limit: 20, duration: 3600},
   addchapter: {limit: 10, duration: 3600*24},
   uploadimage: {limit: 10, duration: 3600*24},
   edit: {limit: 100, duration: 3600},

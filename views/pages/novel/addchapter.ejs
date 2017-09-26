@@ -38,7 +38,7 @@ You can try **bold** text, *italics*, [link description](url), or:
 - This is a
 - two-item list
 
-and all the other things possible with Markdown, including tables!" minlength="100" maxlength="50000" aria-describedby="formattingHelp" required><%- req.body.chapterContent || validator.dbToText(chapter.content) %></textarea>
+and all the other things possible with Markdown, including tables!" minlength="100" maxlength="<%- constants.chapterMaxLength %>" aria-describedby="formattingHelp" required><%- req.body.chapterContent || validator.dbToText(chapter.content) %></textarea>
   <small id="formattingHelp" class="form-text text-muted"><a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="blank">Formatting help</a> (<a href="https://www.reddit.com/wiki/commenting" target="blank">2</a>). We use markdown formatting.</small>
   </div>
   <% if (action == "add" && !novel.prologue) { %>

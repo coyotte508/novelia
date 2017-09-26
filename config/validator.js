@@ -25,6 +25,10 @@ validator.textToDb = (text) => {
   return marked(text.trim());
 };
 
+validator.easyTextToDb = (text) => {
+  return validator.escape(text.trim());
+};
+
 validator.dbToText = (html) => {
   //below replace is for align in tables to be properly conveyed
   return toMarkdown((html||"").replace(/style="text-align:([^"]*)"/g, 'align="$1"'), {gfm: true});
@@ -88,10 +92,13 @@ validator.validateDescription = (text) => {
 }
 
 validator.validateChapter = (text) => {
-  if (!validator.isLength(text, {min: 100, max: 50000})) {
-    throw new Error("The content of the chapter must be less than 50000 characters.");
-  }
+  validator.validateLength("chapter", {min: 1, max: cs.chapterMaxLength});
   return validator.textToDb(text);
+}
+
+validator.validateComment = (text) => {
+  validator.validateLength("comment", {min: 1, max: cs.commentMaxLength});
+  return validator.easyTextToDb(text);
 }
 
 validator.validateCategories = (cats, list) => {

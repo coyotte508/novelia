@@ -8,6 +8,7 @@ var commentSchema = new Schema({
     type: Schema.Types.ObjectId,
     index: true
   },
+  sourceType: String,
   author: {
     type: {
       ref: {
