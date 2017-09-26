@@ -56,7 +56,11 @@ chapterLink = novel.getLink() + "/" + num;
     <br/>
     <% if (canComment) {%>
       <h4 id="comment">Leave a comment</h4>
-      <textarea placeholder="Enter your comment here..." class="form-control"></textarea>
+      <form action="<%= chapterLink %>/comment" method="post" accept-charset="utf-8">
+        <textarea placeholder="Enter your comment here..." class="form-control" id="commentBody"></textarea>
+        <button type="submit" class="btn btn-secondary btn pull-right" style="margin-top: 5px">Comment</button>
+        <br class"clear-fix">
+      </form>
     <% } else { %>
       <div class="text-center"><a href="<%= chapterLink %>/comment">Leave a comment</a></div>
     <% } %>
