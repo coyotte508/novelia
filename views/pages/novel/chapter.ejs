@@ -57,7 +57,7 @@ chapterLink = novel.getLink() + "/" + num;
       <div class="card">
         <!--<img class="card-img-top" src="..." alt="Card image cap">-->
         <div class="card-block">
-          <h4 class="card-title"><%= comment.author.name %><%if (canComment && (isAdmin || user.id == comment.author.ref)) {%><a href="<%- chapterLink%>/comment/<%- comment.id %>/delete"><i class="fa fa-trash pull-right"></i></a><%}%></h4>
+          <h4 class="card-title"><%= comment.author.name %><%if (canComment && (isAdmin || user.id == comment.author.ref)) {%><a href="/comment/<%- comment.id %>/delete"><i class="fa fa-trash pull-right"></i></a><%}%></h4>
           <p class="card-text"><%- comment.text %></p>
           <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
         </div>

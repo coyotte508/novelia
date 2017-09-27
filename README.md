@@ -36,7 +36,7 @@ webpack
 ## Run
 
 ```bash
-./scripts/start.sh
+./scripts/start.sh #webpack and nodemon server.js
 ```
 
 It will listen in port 8010 if not specified in `env.PORT`.

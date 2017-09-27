@@ -22,6 +22,7 @@ let modules = [
   require("./auth.js"),
   require("./user/user.js"),
   require("./category.js"),
+  require("./comment/comment.js"),
   /* Last because of catch-all */
   require("./novel/novel.js")
 ];

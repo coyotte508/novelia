@@ -29,31 +29,8 @@ router.post('/', utils.isLoggedIn, async (req, res, next) => {
 
     await comment.save();
 
-    res.redirect(req.body.back || 'back');
+    res.redirect(req.body.back || 'back');
   } catch (err) {
-    next(err);
-  }
-});
-
-router.param('comment', async (req, res, next, commentId) => {
-  try {
-    req.comment = await Comment.findById(commentId);
-
-    if (!req.comment) {
-      throw new utils.HttpError('Comment not found', 404);
-    }
-
-    next();
-  } catch(err) {
-    next(err);
-  }
-});
-
-router.get('/:comment/delete', utils.canTouchComment, async (req, res, next) => {
-  try {
-    req.comment.remove();
-    res.redirect('back');
-  } catch(err) {
     next(err);
   }
 });
