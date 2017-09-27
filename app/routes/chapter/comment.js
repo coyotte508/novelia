@@ -24,13 +24,36 @@ router.post('/', utils.isLoggedIn, async (req, res, next) => {
     var comment = new Comment();
     comment.source = req.chapter.id;
     comment.sourceType = "chapter";
-    comment.author = req.user.id;
+    comment.author = {ref: req.user.id, name: req.user.displayName(), link: req.user.getLink()};
     comment.text = content;
 
     await comment.save();
 
     res.redirect("back");
   } catch (err) {
+    next(err);
+  }
+});
+
+router.param('comment', async (req, res, next, commentId) => {
+  try {
+    req.comment = await Comment.findById(commentId);
+
+    if (!req.comment) {
+      throw new utils.HttpError('Comment not found', 404);
+    }
+
+    next();
+  } catch(err) {
+    next(err);
+  }
+});
+
+router.get('/:comment/delete', utils.canTouchComment, async (req, res, next) => {
+  try {
+    req.comment.remove();
+    res.redirect('back');
+  } catch(err) {
     next(err);
   }
 });

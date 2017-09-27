@@ -92,12 +92,13 @@ validator.validateDescription = (text) => {
 }
 
 validator.validateChapter = (text) => {
-  validator.validateLength("chapter", {min: 1, max: cs.chapterMaxLength});
+  validator.validateLength(text, "chapter", {min: 1, max: cs.chapterMaxLength});
   return validator.textToDb(text);
 }
 
 validator.validateComment = (text) => {
-  validator.validateLength("comment", {min: 1, max: cs.commentMaxLength});
+  console.log(text);
+  validator.validateLength(text, "comment", {min: 1, max: cs.commentMaxLength});
   return validator.easyTextToDb(text);
 }
 

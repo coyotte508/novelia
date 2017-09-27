@@ -1,6 +1,7 @@
 <%
 title = chapter.title;
 isGod = user && (user.isAdmin() || user.id == novel.author.ref);
+isAdmin = user && user.isAdmin();
 canComment = !!user;
 novelLink = novel.getLink();
 num = +req.params.chapter;
@@ -52,12 +53,21 @@ chapterLink = novel.getLink() + "/" + num;
   <div class="chapter-comments">
     <h3 class="text-center"><i class="fa fa-comments"></i> Comments</h3>
 
-
+    <% comments.forEach(function(comment) { %>
+      <div class="card">
+        <!--<img class="card-img-top" src="..." alt="Card image cap">-->
+        <div class="card-block">
+          <h4 class="card-title"><%= comment.author.name %><%if (canComment && (isAdmin || user.id == comment.author.ref)) {%><a href="<%- chapterLink%>/comment/<%- comment.id %>/delete"><i class="fa fa-trash pull-right"></i></a><%}%></h4>
+          <p class="card-text"><%- comment.text %></p>
+          <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+        </div>
+      </div>
+    <% }); %>
     <br/>
     <% if (canComment) {%>
       <h4 id="comment">Leave a comment</h4>
       <form action="<%= chapterLink %>/comment" method="post" accept-charset="utf-8">
-        <textarea placeholder="Enter your comment here..." class="form-control" id="commentBody" maxlength="<%- constants.commentMaxLength %>"></textarea>
+        <textarea placeholder="Enter your comment here..." class="form-control" name="commentBody" maxlength="<%- constants.commentMaxLength %>"></textarea>
         <button type="submit" class="btn btn-secondary btn pull-right" style="margin-top: 5px">Comment</button>
         <br class"clear-fix">
       </form>

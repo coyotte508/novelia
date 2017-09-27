@@ -1,0 +1,29 @@
+<%
+
+title = "List of Comments";
+isAdmin = user && user.isAdmin();
+
+%>
+
+<%- contentFor('body') %>
+
+<meta property="og:title" content="<%= title %>" />
+<meta property="og:url" content="http://" + reg.get("host") + "/comments" />
+<!--<meta property="og:image" content="http://ia.media-imdb.com/images/rock.jpg" />-->
+
+<div>
+  <h2 class="text-md-center"><%= title %></h2>
+  <hr/>
+  <% comments.forEach(function(comment) { %>
+    <div class="card">
+      <!--<img class="card-img-top" src="..." alt="Card image cap">-->
+      <div class="card-block">
+        <h4 class="card-title"><a href='<%- comment.author.link %>'><%= comment.author.name %></a><%if (isAdmin) {%><a href="/comment/<%- comment.id %>/delete"><i class="fa fa-trash pull-right"></i></a><%}%></h4>
+        <p class="card-text"><%- comment.text %></p>
+        <small><%= comment.id %></small>
+        <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+      </div>
+    </div>
+  <% }); %>
+
+</div>

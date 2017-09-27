@@ -32,4 +32,8 @@ var commentSchema = new Schema({
 
 let Comment = mongoose.model('Comment', commentSchema);
 
+Comment.commentsFor = async function(source) {
+  return Comment.find({source}).sort({_id: 1});
+};
+
 module.exports = Comment;

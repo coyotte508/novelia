@@ -57,6 +57,17 @@ function canTouchNovel(req, res, next) {
   });
 }
 
+function canTouchComment(req, res, next) {
+  isLoggedIn(req, res, () => {
+    try {
+      assert403(req.user.isAdmin() || req.comment.author.ref == req.user.id, "You are not authorized to manage this comment.");
+      next();
+    } catch (err) {
+      next(err);
+    }
+  });
+}
+
 function isAdmin(req, res, next) {
   isLoggedIn(req, res, () => {
     try {
@@ -82,6 +93,7 @@ module.exports = {
   isLoggedIn,
   isNotLoggedIn,
   canTouchNovel,
+  canTouchComment,
   isAdmin,
   HttpError,
   assert403,
