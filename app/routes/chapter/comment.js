@@ -29,7 +29,7 @@ router.post('/', utils.isLoggedIn, async (req, res, next) => {
 
     await comment.save();
 
-    res.redirect("back");
+    res.redirect(req.body.back || 'back');
   } catch (err) {
     next(err);
   }
