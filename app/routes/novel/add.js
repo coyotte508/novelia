@@ -29,7 +29,7 @@ router.post('/addnovel', utils.isLoggedIn, async (req, res) => {
     novel.categories = cats;
 
     await novel.save();
-    await req.user.update({$push: {"novels": {title, ref: novel.id, slug: novel.classySlug()}}});
+    await req.user.update({$push: {"novels": {title, ref: novel.id, slug: novel.classySlug(), public: novel.public}}});
 
     // req.flash('addnovelMessage', "New novel added (sort of)");
     res.redirect(novel.getLink());

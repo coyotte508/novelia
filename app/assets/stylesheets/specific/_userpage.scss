@@ -11,6 +11,9 @@
 
   .bio {
     @extend .text-muted;
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 24px;
   }
 }
 

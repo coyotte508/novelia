@@ -35,7 +35,15 @@ var userSchema = new Schema({
         }
     },
     authority: String,
-    novels           : [{title: String, ref: Schema.Types.ObjectId}],
+    novels           : [{
+      title: String,
+      ref: Schema.Types.ObjectId,
+      public: {
+        type: Boolean,
+        default: true
+      },
+      slug: String
+    }],
     followedNovels   : [{title: String, ref: Schema.Types.ObjectId}]
 });
 
