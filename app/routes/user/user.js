@@ -2,8 +2,12 @@ const {User} = require("../../models");
 const utils = require("../utils");
 const router = require("express").Router();
 
-router.get('/profile', utils.isLoggedIn, function(req, res) {
-  res.render('pages/user/profile', {message: req.flash('profileMessage')});
+router.get('/profile', utils.isLoggedIn, function(req, res, next) {
+  try {
+    res.redirect(req.user.getLink());
+  } catch(err) {
+    next(err);
+  }
 });
 
 router.param('user', async function(req, res, next, user) {
@@ -26,7 +30,7 @@ router.get('/u/:user', function(req, res, next) {
   try {
     var user = req.viewedUser;
 
-    res.render('pages/user/user', {u:user});
+    res.render('pages/user/user', {u:user, message: req.flash('profileMessage')});
   } catch(err) {
     next(err);
   }

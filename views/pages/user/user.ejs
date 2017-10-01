@@ -1,15 +1,79 @@
-<% 
-title = u.displayName(); 
+<%
+title = u.displayName();
+var isDisplayedUser = user && user.id == u.id;
+
+var isGod = user && (user.isAdmin() || isDisplayedUser);
 %>
 
 <%- contentFor('body') %>
 
-<div class="text-md-center">
-  <h1><%= title %></h1>
-</div>
+<% if (message.length > 0) { %>
+<div class="alert alert-info"><%= message %></div>
+<% } %>
+<div class="row">
+  <div class="user sidebar">
+    <section class="vcard">
+      <img src="<%=u.avatar()%>?s=230&d=mm"  class="avatar rounded-2"/>
+      <h4>
+        <span class="username"><%= u.displayName() %></span>
+        <% if (isDisplayedUser) {%>
+          <a href="/logout" class="btn btn-secondary btn-sm pull-right">Logout</a>
+          <%}%>
+      </h4>
+      <br/>
+      <span class="bio">
+          <%- u.bio || "<i>No bio yet.</i>" %>
+      </span>
+    </section>
+  </div>
+  <div class="user main">
+    <% if (u.novels.length > 0 || isDisplayedUser) { %>
+    <section>
+      <h2>Novels</h2>
+      <%if (u.novels.length > 0) { %>
+      <p><ul class="list-group">
+        <% u.novels.forEach( (novel) => { %>
+          <% if (isGod || novel.public) { %>
+          <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
+          <% } %>
+        <% }); %>
+      </ul></p>
+      <% }
+      if (isDisplayedUser) { %>
+      <p><a href="/addnovel"><span class="fa fa-plus"></span> New novel</a></p>
+      <% } %>
+    </section>
+    <% } %>
 
-<div>
-  <%- include("snippets/user-details") %>
+    <section>
+      <% if (u.followedNovels.length > 0) { %>
+      <h2>Library</h2>
+      <ul class="list-group">
+        <% u.followedNovels.forEach( (novel) => {
+          var nLink = slug(novel.title); %>
+
+          <% if (isDisplayedUser) { %>
+          <li class="list-group-item">
+            <a class="list-group-item-action mr-auto" href="<%= nLink %>"><%= novel.title %></a>
+            <a href="<%= nLink + "/unfollow" %>">
+              <span class="sr-only">Unlike</span>
+              <span class="fa fa-times" aria-hidden="true"></span>
+            </a>
+          </li>
+          <% } else { %>
+          <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
+          <% } %>
+        <% }); %>
+      </ul>
+      <% } else { %>
+      <div class="card">
+        <div class="card-block">
+          <i>This user doesn't have any favorite novels.</i>
+        </div>
+      </div>
+      <% } %>
+    </section>
+  </div>
 </div>
 
 </div>

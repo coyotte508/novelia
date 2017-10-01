@@ -23,3 +23,19 @@
 .center {
   text-align: center;
 }
+
+.width-full {
+    width: 100% !important;
+}
+
+.rounded-2 {
+  border-radius: 6px !important;
+}
+
+.avatar {
+    display: inline-block;
+    overflow: hidden;
+    line-height: 1;
+    vertical-align: middle;
+    border-radius: 3px;
+}

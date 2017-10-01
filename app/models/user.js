@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt   = require('bcrypt');
 const sha1     = require('sha1');
+const md5     = require('md5');
 const sendmail = require('sendmail')();
 const config = require('../../config/general');
 const assert = require('assert');
@@ -58,6 +59,10 @@ userSchema.methods.resetPassword = function(password) {
             "security.reset"  : null
         });
     });
+};
+
+userSchema.methods.avatar = function() {
+  return `https://www.gravatar.com/avatar/${md5(this.email().toLowerCase())}`;
 };
 
 userSchema.methods.displayName = function() {

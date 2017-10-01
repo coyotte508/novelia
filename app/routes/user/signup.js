@@ -4,9 +4,8 @@ const passport = require("passport");
 const limiter = require("mongo-limiter");
 
 router.all('/confirm', utils.isLoggedIn, async (req, res) => {
+  var user = req.user;
   try {
-    var user = req.user;
-
     if (user.confirmed()) {
       return res.redirect('/profile');
     }
@@ -28,10 +27,10 @@ router.all('/confirm', utils.isLoggedIn, async (req, res) => {
     user.sendConfirmationEmail();
 
     req.flash("profileMessage", `Confirmation email sent to ${user.email()}.`);
-    res.redirect('/profile');
+    res.redirect(user.getLink());
   } catch(err) {
     req.flash("profileMessage", err.message);
-    res.redirect('/profile');
+    res.redirect(user.getLink());
   }
 });
 

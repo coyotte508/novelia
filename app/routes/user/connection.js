@@ -3,7 +3,7 @@ const router = require("express").Router();
 
 router.get("/login", (req, res) => {
   if (req.isAuthenticated()) {
-    return res.redirect('/profile');
+    return res.redirect(req.user.getLink());
   }
   res.render('pages/user/login', {message: req.flash('loginMessage')});
 });
