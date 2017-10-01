@@ -35,15 +35,6 @@ var userSchema = new Schema({
         }
     },
     authority: String,
-    novels           : [{
-      title: String,
-      ref: Schema.Types.ObjectId,
-      public: {
-        type: Boolean,
-        default: true
-      },
-      slug: String
-    }],
     followedNovels   : [{title: String, ref: Schema.Types.ObjectId}]
 });
 
@@ -71,6 +62,10 @@ userSchema.methods.resetPassword = function(password) {
 
 userSchema.methods.avatar = function() {
   return `https://www.gravatar.com/avatar/${md5(this.email().toLowerCase())}`;
+};
+
+userSchema.methods.loadAuthoredNovels = async function() {
+  return this.novels = await Novel.find({"author.ref": this.id});
 };
 
 userSchema.methods.displayName = function() {
@@ -253,3 +248,4 @@ User.basics = function() {
 
 // create the model for users and expose it to our app
 module.exports = User;
+var Novel = require('./novel');

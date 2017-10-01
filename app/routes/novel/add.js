@@ -18,7 +18,7 @@ router.post('/addnovel', utils.isLoggedIn, async (req, res) => {
       throw new utils.HttpError(`You can only add ${limiter.limits().addnovel.limit} novels per day`, 403);
     }
 
-    if ((await Novel.count({author: req.user.id}).limit(10)) >= 10) {
+    if ((await Novel.count({"author.ref": req.user.id}).limit(10)) >= 10) {
       throw new utils.HttpError("You can only have 10 novels at most.", 403);
     }
 
@@ -29,7 +29,6 @@ router.post('/addnovel', utils.isLoggedIn, async (req, res) => {
     novel.categories = cats;
 
     await novel.save();
-    await req.user.update({$push: {"novels": {title, ref: novel.id, slug: novel.classySlug(), public: novel.public}}});
 
     // req.flash('addnovelMessage', "New novel added (sort of)");
     res.redirect(novel.getLink());

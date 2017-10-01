@@ -26,9 +26,11 @@ router.param('user', async function(req, res, next, user) {
   }
 });
 
-router.get('/u/:user', function(req, res, next) {
+router.get('/u/:user', async function(req, res, next) {
   try {
     var user = req.viewedUser;
+
+    await user.loadAuthoredNovels();
 
     res.render('pages/user/user', {u:user, message: req.flash('profileMessage')});
   } catch(err) {

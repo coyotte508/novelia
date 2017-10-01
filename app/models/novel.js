@@ -12,7 +12,10 @@ var novelSchema = new Schema({
   },
   author: {
     type: {
-      ref: Schema.Types.ObjectId,
+      ref: {
+        type: Schema.Types.ObjectId,
+        index: true
+      },
       name: String,
       link: String
     },
