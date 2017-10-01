@@ -29,7 +29,7 @@ var isGod = user && (user.isAdmin() || isDisplayedUser);
   <div class="user main">
     <% if (u.novels.length > 0 || isDisplayedUser) { %>
     <section>
-      <h2>Novels</h2>
+      <h3>Novels</h3>
       <%if (u.novels.length > 0) { %>
       <p><ul class="list-group">
         <% u.novels.forEach( (novel) => { %>
@@ -46,7 +46,7 @@ var isGod = user && (user.isAdmin() || isDisplayedUser);
     <% } %>
 
     <section>
-      <h2>Library</h2>
+      <h3>Library</h3>
       <% if (u.followedNovels.length > 0) { %>
       <ul class="list-group">
         <% u.followedNovels.forEach( (novel) => {
