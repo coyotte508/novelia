@@ -13,7 +13,7 @@ var isGod = user && (user.isAdmin() || isDisplayedUser);
 <div class="row">
   <div class="user sidebar">
     <section class="vcard">
-      <img src="<%=u.avatar()%>?s=230&d=mm"  class="avatar rounded-2"/>
+      <img src="<%=u.avatar()%>?s=230&d=retro"  class="avatar rounded-2"/>
       <h4>
         <span class="username"><%= u.displayName() %></span>
         <% if (isDisplayedUser) {%>
@@ -46,8 +46,8 @@ var isGod = user && (user.isAdmin() || isDisplayedUser);
     <% } %>
 
     <section>
-      <% if (u.followedNovels.length > 0) { %>
       <h2>Library</h2>
+      <% if (u.followedNovels.length > 0) { %>
       <ul class="list-group">
         <% u.followedNovels.forEach( (novel) => {
           var nLink = slug(novel.title); %>
