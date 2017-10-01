@@ -3,6 +3,8 @@ title = u.displayName();
 var isDisplayedUser = user && user.id == u.id;
 
 var isGod = user && (user.isAdmin() || isDisplayedUser);
+
+var novels = u.novels.filter(nov => nov.public || isGod);
 %>
 
 <%- contentFor('body') %>
@@ -26,15 +28,13 @@ var isGod = user && (user.isAdmin() || isDisplayedUser);
     </section>
   </div>
   <div class="user main">
-    <% if (u.novels.length > 0 || isDisplayedUser) { %>
+    <% if (novels.length > 0 || isDisplayedUser) { %>
     <section>
       <h3>Novels</h3>
-      <%if (u.novels.length > 0) { %>
+      <%if (novels.length > 0) { %>
       <p><ul class="list-group">
-        <% u.novels.forEach( (novel) => { %>
-          <% if (isGod || novel.public) { %>
+        <% novels.forEach( (novel) => { %>
           <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
-          <% } %>
         <% }); %>
       </ul></p>
       <% }
