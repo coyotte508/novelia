@@ -29,7 +29,7 @@ router.get('/:novel', async (req, res, next) => {
     var author;
 
     await Promise.all([
-      req.novel.getViews(),
+      novel.loadChapters(),
       User.findById(novel.author.ref, User.basics())
     ]).then((values) => {
       author = values[1];

@@ -8,15 +8,10 @@ router.param('chapter', async function(req, res, next, chapterNum) {
   try {
     var novel = req.novel;
     var chap = parseInt(chapterNum);
-    utils.assert404(chap >= 0 && chap <= novel.chapters.length && novel.chapters[chap].title, "Chapter not found");
 
-    if ( (chap == 0 && !novel.prologue) || chap < 0 || chap > novel.numChapters ) {
-      throw new utils.HttpError("Chapter not found", 404);
-    }
+    req.chapter = await Chapter.findOne({"novel.ref": novel.id, "number": chap});
 
-    req.chapter = await Chapter.findById(novel.chapters[chap].ref);
-
-    assert(req.chapter, "Error while fetching chapter");
+    utils.assert404(req.chapter, "Chapter not found");
 
     next();
   } catch(err) {
