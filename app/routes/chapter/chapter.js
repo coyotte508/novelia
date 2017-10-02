@@ -1,4 +1,3 @@
-const assert = require("assert");
 const {Chapter, Comment} = require("../../models");
 const utils = require("../utils");
 const router = require("express").Router();

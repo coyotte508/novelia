@@ -38,9 +38,9 @@ router.get('/u/:user', async function(req, res, next) {
   }
 });
 
-router.use("/", require("./changemajordetails"));
 router.use("/", require("./connection"));
 router.use("/", require("./resetpassword"));
 router.use("/", require("./signup"));
+router.use("/", require("./settings"));
 
 module.exports = router;

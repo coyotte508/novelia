@@ -1,14 +1,10 @@
 const assert = require("assert");
 const limiter = require("mongo-limiter");
 const val = require("validator");
-const utils = require("../utils");
+const utils = require("../../utils");
 const router = require("express").Router();
 
-router.get('/security', utils.isLoggedInAndNotSocial, function(req, res) {
-  res.render("pages/user/security", {req, message: req.flash('securityMessage')});
-});
-
-router.post('/security', utils.isLoggedInAndNotSocial, async function(req, res) {
+router.post('/settings/account', utils.isLoggedInAndNotSocial, async function(req, res) {
   try {
     var user = req.user;
     var newPw = req.body.newPassword ? val.validatePassword(req.body.newPassword) : "";
@@ -33,9 +29,8 @@ router.post('/security', utils.isLoggedInAndNotSocial, async function(req, res) 
 
     res.redirect("/profile");
   } catch(err) {
-    res.render("pages/user/security", {req, message: err.message});
+    res.render("pages/user/settings", {req, message: err.message, tab: "account", title: "Account settings"});
   }
 });
-
 
 module.exports = router;

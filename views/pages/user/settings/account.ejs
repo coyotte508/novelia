@@ -1,15 +1,6 @@
-<% title = "Security"; %>
 
-<%- contentFor('body') %>
-
-<div class="col-sm-6 col-sm-offset-3">
-
-  <h1><span class="fa fa-lock"></span> Security</h1>
-
-  <!-- show any messages that come back with authentication -->
-  <% if (message.length > 0) { %>
-  <div class="alert alert-danger"><%= message %></div>
-  <% } %>
+  <h3>Account</h3>
+  <hr>
 
   <!-- LOGIN FORM -->
   <form method="post" accept-charset="UTF-8" role="form">
@@ -18,14 +9,12 @@
       <input type="password" class="form-control" id="password" name="password" required>
     </div>
     <div class="form-group">
-      <label for="email">New email</label>
+      <label for="email">Email</label>
       <input type="email" class="form-control" id="email" name="email" value="<%= user.email() %>" required>
     </div>
     <div class="form-group">
       <label for="newPassword">New password</label>
       <input type="password" class="form-control" id="newPassword" name="newPassword">
     </div>
-    <button type="submit" class="btn btn-warning btn-lg">Change details</button>
+    <button type="submit" class="btn btn-warning">Change details</button>
   </form>
-
-</div>

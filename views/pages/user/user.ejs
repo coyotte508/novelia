@@ -25,9 +25,18 @@ var novels = u.novels.filter(nov => nov.public || isGod);
       <span class="bio">
           <%- u.bio || "<i>No bio yet.</i>" %>
       </span>
+      <% if (isGod) { %>
+        <a class="btn btn-primary form-control" href="/account"><i class="fa fa-pencil"></i> Edit profile</a>
+      <%}%>
     </section>
   </div>
   <div class="user main">
+    <div class="jumbotron text-md-center">
+      <h1 class="display-3"><span class="fa fa-user"></span> User information %></h1>
+
+      <p>Work in progress </p>
+    </div>
+
     <% if (novels.length > 0 || isDisplayedUser) { %>
     <section>
       <h3>Novels</h3>

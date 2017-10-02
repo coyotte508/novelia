@@ -71,7 +71,7 @@ novelSchema.methods.loadChapters = async function() {
     return;
   }
   this.chapters = await Chapter.find({"novel.ref": this.id}, "title number views").sort({number:1});
-}
+};
 
 novelSchema.methods.publicChaptersNum = function() {
   if (!this.public) {

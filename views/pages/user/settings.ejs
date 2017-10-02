@@ -1,0 +1,27 @@
+<%
+  tabs = ['Profile', 'Account'];
+%>
+<%- contentFor('body') %>
+
+<div class="row">
+  <div class="col-sm-3">
+    <div class="list-group menu">
+      <span class="menu-heading list-group-item">Personal settings</span>
+      <% tabs.forEach(function(ctab) {
+        var ltab = ctab.toLowerCase(); %>
+        <a href="/settings/<%- ltab %>" class="list-group-item <% if (ltab == tab) {%>active<%} else {%>list-group-item-action<%}%>">
+          <%= ctab %>
+        </a>
+      <%});%>
+    </div>
+  </div>
+  <div class="col-sm-9">
+    <!-- show any messages that come back with authentication -->
+    <% if (message.length > 0) { %>
+    <div class="alert alert-danger"><%= message %></div>
+    <% } %>
+
+
+    <%- include('settings/' + tab) %>
+  </div>
+</div>

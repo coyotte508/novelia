@@ -10,3 +10,18 @@
 .list-group-item .list-group-item-action {
   width: initial;
 }
+
+.list-group.menu {
+  font-size: 15px;
+
+  .list-group-item {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .list-group-item.menu-heading {
+    font-size: 14px;
+    font-weight: bold;
+    color: #586069;
+  }
+}

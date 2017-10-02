@@ -34,6 +34,7 @@ var userSchema = new Schema({
             issued   : Date
         }
     },
+    bio: String,
     authority: String,
     followedNovels   : [{title: String, ref: Schema.Types.ObjectId}]
 });
