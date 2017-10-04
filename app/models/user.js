@@ -61,8 +61,8 @@ userSchema.methods.resetPassword = function(password) {
     });
 };
 
-userSchema.methods.avatar = function() {
-  return `https://www.gravatar.com/avatar/${md5(this.email().toLowerCase())}`;
+userSchema.methods.avatar = function(size) {
+  return `https://www.gravatar.com/avatar/${md5(this.email().toLowerCase())}?d=retro&s=${size||250}`;
 };
 
 userSchema.methods.loadAuthoredNovels = async function() {
