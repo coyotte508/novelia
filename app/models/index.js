@@ -4,5 +4,6 @@ module.exports = {
   User: require("./user"),
   Image: require('./image'),
   Comment: require('./comment'),
+  Payment: require('./payment'),
   categories: require('./category').list()
 };

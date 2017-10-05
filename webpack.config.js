@@ -37,7 +37,7 @@ module.exports = {
         })
       },
       {
-        test: /\.(ttf|eot|svg|jpg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+        test: /\.(ttf|eot|svg|jpg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         use: "file-loader?publicPath=../&name=./files/[hash].[ext]"
       },
       {
@@ -59,6 +59,9 @@ module.exports = {
       context: __dirname,
       from: "node_modules/tether/dist/js/tether.min.js",
       to: "javascript"
+    }, {
+      from: 'images/profile-joined-litnovel.png',
+      to: 'images'
     }]),
     new webpack.ProvidePlugin({
       $: 'jquery', jquery: 'jquery', jQuery: 'jquery' ,

@@ -12,7 +12,7 @@ var novels = u.novels.filter(nov => nov.public || isGod);
 <% if (message.length > 0) { %>
 <div class="alert alert-info"><%= message %></div>
 <% } %>
-<div class="row">
+<div class="row only-one-row">
   <div class="user sidebar">
     <section class="vcard">
       <img src="<%=u.avatar(230)%>"  class="avatar rounded-2"/>
@@ -25,21 +25,15 @@ var novels = u.novels.filter(nov => nov.public || isGod);
       <span class="bio">
           <%- u.bio || "<i>No bio yet.</i>" %>
       </span>
-      <% if (isGod) { %>
+      <% if (isDisplayedUser) { %>
         <a class="btn btn-primary form-control" href="/account"><i class="fa fa-pencil"></i> Edit profile</a>
       <%}%>
     </section>
   </div>
-  <div class="user main">
-    <div class="jumbotron text-md-center">
-      <h1 class="display-3"><span class="fa fa-user"></span> User information %></h1>
-
-      <p>Work in progress </p>
-    </div>
-
+  <div class="user main" style="max-width: 700px">
     <% if (novels.length > 0 || isDisplayedUser) { %>
     <section>
-      <h3>Novels</h3>
+      <h4>Novels</h4>
       <%if (novels.length > 0) { %>
       <p><ul class="list-group">
         <% novels.forEach( (novel) => { %>
@@ -48,13 +42,13 @@ var novels = u.novels.filter(nov => nov.public || isGod);
       </ul></p>
       <% }
       if (isDisplayedUser) { %>
-      <p><a href="/addnovel"><span class="fa fa-plus"></span> New novel</a></p>
+      <p><a href="/addnovel" class="btn btn-secondary"><span class="fa fa-plus"></span> New novel</a></p>
       <% } %>
     </section>
     <% } %>
 
     <section>
-      <h3>Library</h3>
+      <h4>Library</h4>
       <% if (u.followedNovels.length > 0) { %>
       <ul class="list-group">
         <% u.followedNovels.forEach( (novel) => {
@@ -80,6 +74,17 @@ var novels = u.novels.filter(nov => nov.public || isGod);
         </div>
       </div>
       <% } %>
+    </section>
+
+    <section>
+      <h4>Activity</h4>
+      <div class="card">
+        <img src="/images/profile-joined-litnovel.png" class="width-fit" />
+        <div class="text-md-center">
+          <p class="text-success f3"><strong>Joined LitNovel</strong><br>
+          <small><time format="ago" unixtime="<%= sys.unixTime(u.id) %>" class="text-muted">on <%= sys.dayOfYear(u.id) %></time></small></p>
+        </div>
+      </div>
     </section>
   </div>
 </div>

@@ -15,6 +15,12 @@ function sysStuff(req, res, next) {
     return parseInt(date.substring(0, 8), 16);
   };
 
+  sys.dayOfYear = function(id) {
+    let date = new Date(parseInt(id.substring(0, 8), 16)*1000);
+    let options = {year: "numeric", month: "long", day: "numeric"};
+    return new Intl.DateTimeFormat("en-US", options).format(date);
+  };
+
   sys.timeSince = function(date) {
     var seconds = Math.floor((Date.now()/ 1000 - this.unixTime(date)));
     var interval = Math.floor(seconds / 31536000);

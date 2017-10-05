@@ -28,8 +28,8 @@
     width: 100% !important;
 }
 
-.rounded-2 {
-  border-radius: 6px !important;
+.width-fit {
+    max-width: 100% !important;
 }
 
 .avatar {
@@ -38,4 +38,8 @@
     line-height: 1;
     vertical-align: middle;
     border-radius: 3px;
+}
+
+.only-one-row {
+  flex-wrap: nowrap;
 }
