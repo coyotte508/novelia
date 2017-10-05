@@ -79,9 +79,9 @@ var novels = u.novels.filter(nov => nov.public || isGod);
     <section>
       <h4>Activity</h4>
       <div class="card">
-        <img src="/images/profile-joined-litnovel.png" class="width-fit" />
+        <img src="/images/profile-joined-litnovel.png" class="width-fit mt-5" />
         <div class="text-center">
-          <p class="text-success f3"><strong>Joined LitNovel</strong><br>
+          <p class="text-success f3 mb-3"><strong>Joined LitNovel</strong><br>
           <small><time format="ago" unixtime="<%= sys.unixTime(u.id) %>" class="text-muted">on <%= sys.dayOfYear(u.id) %></time></small></p>
         </div>
       </div>
