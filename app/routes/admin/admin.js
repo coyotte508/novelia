@@ -33,5 +33,6 @@ router.get("/admin", utils.isAdmin, async (req, res, next) => {
 router.use("/", require("./novels"));
 router.use("/", require("./users"));
 router.use("/", require("./comments"));
+router.use("/admin", utils.isAdmin, require("./backup"));
 
 module.exports = router;

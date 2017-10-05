@@ -41,3 +41,4 @@ data
 .node_repl_history
 .yarnclean
 package-lock.json
+bin

@@ -1,7 +1,6 @@
 const assert = require("assert");
 const fs = require("fs-extra");
 const jimp = require("jimp");
-const mkdirp = require("mkdirp");
 const path = require("path");
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
@@ -42,7 +41,7 @@ Image.create = async function(params) {
   image.what = params.type;
   image.source = params.source;
   let root = `./public/images/${params.type}`;
-  await mkdirp(root);
+  await fs.mkdirp(root);
 
   let fullname = params.name + ext;
 

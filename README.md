@@ -3,12 +3,20 @@
 ## Requirements
 
 ```bash
-sudo apt install nodejs npm ruby screen -y
+sudo apt install nodejs npm ruby screen docker -y
 sudo npm install -g n webpack nodemon
 
 sudo gem install sass
 
 sudo n latest
+
+sudo usermod -aG docker $USER
+```
+
+A logout/login will be needed, then:
+
+```bash
+docker pull mongo
 ```
 
 ## Nginx configuration
@@ -36,7 +44,7 @@ webpack
 ## Run
 
 ```bash
-./scripts/start.sh #webpack and nodemon server.js
+./scripts/start.sh #webpack and nodemon server.js, and docker
 ```
 
 It will listen in port 8010 if not specified in `env.PORT`.
