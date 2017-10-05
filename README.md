@@ -3,21 +3,24 @@
 ## Requirements
 
 ```bash
-sudo apt install nodejs npm ruby screen docker -y
+sudo apt install nodejs npm ruby screen mongodb-server mongodb-client -y
 sudo npm install -g n webpack nodemon
 
 sudo gem install sass
 
 sudo n latest
-
-sudo usermod -aG docker $USER
 ```
 
-A logout/login will be needed, then:
+## Mongodb Configuration
 
 ```bash
-docker pull mongo
+sudo usermod -aG mongodb $USER
+sudo mkdir -p /data/db
+sudo chmod 0775 /data/db
+sudo chown -R mongodb:mongodb /data/db
 ```
+
+A logout/login will be needed
 
 ## Nginx configuration
 
@@ -44,7 +47,7 @@ webpack
 ## Run
 
 ```bash
-./scripts/start.sh #webpack and nodemon server.js, and docker
+./scripts/start.sh #webpack and nodemon server.js, and mongod
 ```
 
 It will listen in port 8010 if not specified in `env.PORT`.
