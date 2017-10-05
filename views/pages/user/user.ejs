@@ -15,7 +15,7 @@ var novels = u.novels.filter(nov => nov.public || isGod);
 <div class="row only-one-row">
   <div class="user sidebar">
     <section class="vcard">
-      <img src="<%=u.avatar(230)%>"  class="avatar rounded-2"/>
+      <img src="<%=u.avatar(230)%>"  class="avatar rounded-2 width-fit"/>
       <h4>
         <span class="username"><%= u.displayName() %></span>
         <% if (isDisplayedUser) {%>
@@ -80,7 +80,7 @@ var novels = u.novels.filter(nov => nov.public || isGod);
       <h4>Activity</h4>
       <div class="card">
         <img src="/images/profile-joined-litnovel.png" class="width-fit" />
-        <div class="text-md-center">
+        <div class="text-center">
           <p class="text-success f3"><strong>Joined LitNovel</strong><br>
           <small><time format="ago" unixtime="<%= sys.unixTime(u.id) %>" class="text-muted">on <%= sys.dayOfYear(u.id) %></time></small></p>
         </div>

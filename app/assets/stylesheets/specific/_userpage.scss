@@ -5,7 +5,6 @@
 
   .avatar {
     width: 230px;
-    height: 230px;
     margin-bottom: 10px;
   }
 
@@ -21,22 +20,31 @@
   margin-left: 24px;
   margin-right: 24px;
 
+  max-width: 230px !important;
   @include media-breakpoint-up(lg) {
     width: 230px !important;
   }
   @include media-breakpoint-down(md) {
-    width: 100% !important;
+    width: 100%;
+  }
+
+  @include media-breakpoint-down(sm) {
+    margin-left: 12px;
+    margin-right: 12px;
   }
 }
 
 .user.main {
+  margin-left: 24px;
   margin-right: 24px;
+  flex-grow: 1;
 
-  @include media-breakpoint-up(lg) {
-    flex-grow: 1;
-  }
   @include media-breakpoint-down(md) {
-    margin-left: 24px;
     width: 100% !important;
+  }
+
+  @include media-breakpoint-down(sm) {
+    margin-left: 12px;
+    margin-right: 12px;
   }
 }
