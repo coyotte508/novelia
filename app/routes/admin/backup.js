@@ -6,7 +6,7 @@ const router = require("express").Router();
 const {Novel, Chapter, User, Image, Comment, Payment} = require("../../models");
 
 
-router.get("/backup/database", async (req, res, next) => {
+router.get("/backup/database.zip", async (req, res, next) => {
   try {
     const database =
       {

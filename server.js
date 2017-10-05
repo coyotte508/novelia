@@ -23,19 +23,28 @@ require('./config/limits');
 
 var app = express();
 const port = process.env.port || 8010;
-const dburl = process.env.local ? configDB.localdb : configDB.dburl;
+const dburl = configDB.localdb;//process.env.local ? configDB.localdb : configDB.dburl;
 
 /* Configuration */
-mongoose.connect(dburl, {server: {reconnectTries: Number.MAX_VALUE, reconnectInterval: 1000}});
+mongoose.connect(dburl, {useMongoClient:true});
 mongoose.Promise = global.Promise; //native promises
 
 mongoose.connection.on("error", (err) => {
   console.log(err);
 });
 
-mongoose.connection.on("open", () => {
-  //const migrations = require("./app/models/migrations");
-  //migrations["0.1.2"].up();
+mongoose.connection.on("open", async () => {
+  try {
+    const {User} = require("./app/models");
+    const {restore} = require("./app/models/backup");
+    if (await User.find({}).limit(1).count() == 0) {
+      await restore();
+    }
+    //const migrations = require("./app/models/migrations");
+    //migrations["0.1.2"].up();
+  } catch(err) {
+    console.error(err);
+  }
 });
 
 locks.init(mongoose.connection);
@@ -46,7 +55,7 @@ require('./config/passport')(passport);
 /* App stuff */
 app.use(morgan('dev'));
 
-app.set('view engine', 'ejs'); 
+app.set('view engine', 'ejs');
 
 app.set("layout extractScripts", true);
 app.set("layout extractMetas", true);
@@ -84,7 +93,7 @@ async function listen() {
       app.listen(port, 'localhost', () => {resolve();});
     });
 
-    await promise; 
+    await promise;
 
     console.log("app started on port", port);
   } catch(err) {

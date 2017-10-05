@@ -34,5 +34,6 @@ router.use("/", require("./novels"));
 router.use("/", require("./users"));
 router.use("/", require("./comments"));
 router.use("/admin", utils.isAdmin, require("./backup"));
+router.use("/admin", utils.isAdmin, require("./load"));
 
 module.exports = router;
