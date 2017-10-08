@@ -31,11 +31,19 @@
 
         <ul class="navbar-nav navbar-md-right ">
           <% if (user) { %>
-            <li class="nav-item"><% if (user.isAdmin()) {%>
+            <% if (user.isAdmin()) {%>
+            <li class="nav-item">
               <a href="/admin" class="nav-link navbar-text">Admin</a>
+            </li>
             <% } %>
-            <li class="nav-item"><span class="navbar-text text-muted">0 <i class="gold-amount" aria-label="gold"></i></span></li>
-            <li class="nav-item"><a class="nav-link navbar-text" href="<%- user.getLink() %>"><img src="<%- user.avatar(23) %>" class="avatar" aria-label="Profile"></a><</li>
+            <li class="nav-item">
+              <a class="navbar-text text-muted nav-link" href="/account/gold">0 <i class="gold-amount" aria-label="gold"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link navbar-text" href="<%- user.getLink() %>">
+                <img src="<%- user.avatar(23) %>" class="avatar" aria-label="Profile">
+              </a>
+            </li>
           <% } else { %>
           <li class="nav-item"><span class="navbar-text text-muted">Already have an account?</span></li>
           <li class="nav-item dropdown">
