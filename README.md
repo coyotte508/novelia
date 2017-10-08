@@ -3,7 +3,10 @@
 ## Requirements
 
 ```bash
-sudo apt install nodejs npm ruby screen mongodb-server mongodb-client -y
+#Optional, for latest mongo
+#sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
+#sudo apt update
+sudo apt install nodejs npm ruby screen mongodb-server mongodb-clients -y
 sudo npm install -g n webpack nodemon
 
 sudo gem install sass
