@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var goldSchema = new Schema({
-  owner: Schema.Types.ObjectId,
+  owner: {
+    type: Schema.Types.ObjectId,
+    index: true
+  },
   amount: Number,
   payment: Schema.Types.ObjectId,
   trace: [{

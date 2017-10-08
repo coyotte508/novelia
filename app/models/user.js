@@ -36,7 +36,11 @@ var userSchema = new Schema({
     },
     bio: String,
     authority: String,
-    followedNovels   : [{title: String, ref: Schema.Types.ObjectId}]
+    followedNovels   : [{title: String, ref: Schema.Types.ObjectId}],
+    gold: {
+        type: Number,
+        default: 0
+    }
 });
 
 userSchema.index({"local.username": "text"}, {unique: true, sparse: true});
@@ -225,6 +229,24 @@ userSchema.methods.isAdmin = function() {
     return this.authority == "admin";
 };
 
+userSchema.methods.loadGoldPouches = async function() {
+    return this.goldPouches = await Gold.find({owner: this.id});
+};
+
+userSchema.methods.recalculateGold = async function() {
+    if (!this.goldPouches) {
+        await this.loadGoldPouches();
+    }
+    let totalGold = 0;
+    for (let goldPouch of this.goldPouches) {
+        totalGold += goldPouch.amount;
+    }
+    if (totalGold != this.gold) {
+        this.gold = totalGold;
+        await User.update({_id: this.id}, {gold: this.gold});
+    }
+};
+
 var User = mongoose.model('User', userSchema);
 
 User.findByUrl = function(id) {
@@ -250,3 +272,4 @@ User.basics = function() {
 // create the model for users and expose it to our app
 module.exports = User;
 var Novel = require('./novel');
+var Gold = require('./gold');
