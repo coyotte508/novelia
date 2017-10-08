@@ -44,6 +44,11 @@ blockquote {
   @extend .blockquote;
 }
 
+/* Jumbotron is too light, might as well remove it to have consistent experience */
+.jumbotron {
+  color: transparent;
+}
+
 /* Multiple section layout, for example in user profile */
 
 section {
