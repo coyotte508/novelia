@@ -3,7 +3,10 @@ const Schema = mongoose.Schema;
 
 var paymentSchema = new Schema({
   author: Schema.Types.ObjectId,
-  type: String,
+  platform: {
+    name: String, /*Credit Card, paypal, stripe... */
+    paymentRef: String /* Id of payment on third party's platform */
+  },
   goldAmount: Number,
   money: {
     amount: Number,
