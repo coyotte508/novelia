@@ -42,5 +42,6 @@ router.use("/", require("./connection"));
 router.use("/", require("./resetpassword"));
 router.use("/", require("./signup"));
 router.use("/", require("./settings"));
+router.use("/", require("./gold"));
 
 module.exports = router;
