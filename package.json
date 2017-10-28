@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint app server.js",
     "build": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch",
     "test": "npm run lint"
   },
   "repository": {
