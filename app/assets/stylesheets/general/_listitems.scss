@@ -1,3 +1,7 @@
+.list-group-item {
+  display: flex;
+}
+
 /* Make sure there's spacing betweens items of a list, due to flexbox */
 .list-group-item > * {
   padding-left: 5px;

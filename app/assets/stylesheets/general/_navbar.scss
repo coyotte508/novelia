@@ -7,9 +7,9 @@
 
   /* remove margin to the right */
   @include media-breakpoint-up(md) {
-    margin-right: -($grid-gutter-width-base/2);
+    margin-right: -16px;
     .nav-item:last-child {
-      padding-right: $grid-gutter-width-base/2;
+      padding-right: 16px;
     }
   }
 }

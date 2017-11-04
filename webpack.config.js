@@ -57,19 +57,21 @@ module.exports = {
       to: "javascript"
     }, {
       context: __dirname,
-      from: "node_modules/tether/dist/js/tether.min.js",
+      from: "node_modules/popper.js/dist/umd/popper.min.js",
       to: "javascript"
     }, {
       from: 'images/profile-joined-litnovel.png',
       to: 'images'
     }]),
     new webpack.ProvidePlugin({
-      $: 'jquery', jquery: 'jquery', jQuery: 'jquery' ,
-      "window.Tether": 'tether'
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      Popper: ['popper.js', 'default']
     }),
     new ExtractTextPlugin("stylesheets/styles.css")
   ],
   externals: {
     jquery: 'jQuery'
   }
-}
+};

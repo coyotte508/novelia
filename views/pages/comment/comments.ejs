@@ -17,7 +17,7 @@ isAdmin = user && user.isAdmin();
   <% comments.forEach(function(comment) { %>
     <div class="card">
       <!--<img class="card-img-top" src="..." alt="Card image cap">-->
-      <div class="card-block">
+      <div class="card-body">
         <h4 class="card-title"><a href='<%- comment.author.link %>'><%= comment.author.name %></a><%if (isAdmin) {%><a href="/comment/<%- comment.id %>/delete"><i class="fa fa-trash pull-right"></i></a><%}%></h4>
         <p class="card-text"><%- comment.text %></p>
         <small><%= comment.id %></small>
