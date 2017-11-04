@@ -15,23 +15,30 @@
   <br/>
 </div>
 
-<div class="col-md-6">
-  <h2 class="card-title">Statistics</h2>
-  <ul>
-    <li>Number of <a href="/users">users</a>: <%= stats.nbUsers %></li>
-    <li>Number of <a href="/novels">novels</a>: <%= stats.nbNovels %></li>
-    <li>Number of <a href="/chapters">chapters</a>: <%= stats.nbChapters %></li>
-    <li>Number of <a href="/comments">comments</a>: <%= stats.nbComments %></li>
-  </ul>
-  <p><a href="/admin/backup/database.zip" class="btn btn-info" target="_blank"><i class="fa fa-download"></i> Backup Database</a>
-  <form action="/admin/load/database" method="post" enctype="multipart/form-data">
-    <input name="archive" required type="file">
-    <button class="btn btn-danger" type="submit"><i class="fa fa-upload"></i> Load database</button>
-  </form></p>
+<div class="row container">
+  <div class="col-md-6">
+    <h3 class="card-title">Statistics</h3>
+    <ul>
+      <li>Number of <a href="/users">users</a>: <%= stats.nbUsers %></li>
+      <li>Number of <a href="/novels">novels</a>: <%= stats.nbNovels %></li>
+      <li>Number of <a href="/chapters">chapters</a>: <%= stats.nbChapters %></li>
+      <li>Number of <a href="/comments">comments</a>: <%= stats.nbComments %></li>
+    </ul>
+  </div>
+  
+  <div class="col-md-6">
+    <h3 class="card-title">Database</h3>
+    <p><a href="/admin/backup/database.zip" class="btn btn-info" target="_blank"><i class="fa fa-download"></i> Backup Database</a>
+      <form action="/admin/load/database" method="post" enctype="multipart/form-data">
+        <input name="archive" required type="file">
+        <button class="btn btn-danger" type="submit"><i class="fa fa-upload"></i> Load database</button>
+      </form>
+    </p>
+  </div>
 </div>
 
 <div class="col-md-12">
-  <h2 class="card-title">User Actions</h2>
+  <h3 class="card-title">User actions</h3>
   <p class="text-muted">Here are displayed the actions in the last 24 hours</p>
   <table class="table">
     <tr>
