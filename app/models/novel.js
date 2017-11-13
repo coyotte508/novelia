@@ -46,7 +46,7 @@ var novelSchema = new Schema({
   prologue: Boolean,
   slug: {
     type: String,
-    unique: String
+    unique: true
   },
   numChapters: {
     type: Number,
