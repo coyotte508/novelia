@@ -6,7 +6,7 @@
 #Optional, for latest mongo
 #sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
 #sudo apt update
-sudo apt install nodejs npm ruby screen mongodb-server mongodb-clients -y
+sudo apt install nodejs npm ruby ruby-dev screen mongodb-server mongodb-clients -y
 sudo npm install -g n webpack nodemon
 
 sudo gem install sass
@@ -32,9 +32,9 @@ In the project's directory:
 ```bash
 sudo cp config/nginx /etc/nginx/sites-available/novelia
 sudo ln -s /etc/nginx/sites-available/novelia /etc/nginx/sites-enabled/novelia
+# Give proper path for public files
+sudo sed -i -e 's:root .*;:root '`pwd`'/public;:' /etc/nginx/sites-available/novelia
 ```
-
-Edit the `root` directive of `/etc/nginx/sites-available/novelia` to reflect the project's public subfolder.
 
 You may have a 403 forbidden error regarding js and css files if the folder is under your home folder, then you need to either give more permissions to your home folder or move the project elsewhere.
 
