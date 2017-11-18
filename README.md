@@ -19,7 +19,14 @@ sudo n latest
 ## Mongodb Configuration
 
 ```bash
-sudo service mongodb restart
+# sudo service mongodb restart
+
+sudo usermod -aG mongodb $USER
+sudo mkdir -p /data/db
+sudo chmod 0775 /data/db
+sudo chown -R mongodb:mongodb /data/db
+
+# A logout/login is needed
 ```
 
 ## Nginx configuration
