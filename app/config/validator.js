@@ -59,7 +59,7 @@ validator.validatePassword = (password) => {
     throw new Error("Password must be between 5 and 50 characters.");
   }
   return password;
-}
+};
 
 // validator.sanitize = (text) => {
 //   return text.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
@@ -73,34 +73,34 @@ validator.validateLatinSentence = (text) => {
     throw new Error("Invalid special characters: " + text.replace(validator.latinSentenceChar, ""));
   }
   return text;
-}
+};
 
 validator.validateLength = (text, desc, opt) => {
   if (!validator.isLength(text, opt)) {
     throw new Error(`The ${desc} must be more than ${opt.min || 0} and less than ${opt.max} characters`);
   }
-}
+};
 
 validator.validateTitle = (text) => {
   validator.validateLength(text, "title", {min: 1, max: cs.titleMaxLength});
   return validator.validateLatinSentence(text);
-}
+};
 
 validator.validateDescription = (text) => {
   validator.validateLength(text, "description", {min: 0, max: cs.descriptionMaxLength});
   return validator.textToDb(text);
-}
+};
 
 validator.validateChapter = (text) => {
   validator.validateLength(text, "chapter", {min: 1, max: cs.chapterMaxLength});
   return validator.textToDb(text);
-}
+};
 
 validator.validateComment = (text) => {
   console.log(text);
   validator.validateLength(text, "comment", {min: 1, max: cs.commentMaxLength});
   return validator.easyTextToDb(text);
-}
+};
 
 validator.validateCategories = (cats, list) => {
   var cat1 = cats[0], cat2 = cats[1];
@@ -113,6 +113,6 @@ validator.validateCategories = (cats, list) => {
   assert(cat1 != cat2, "Can't use identical categories");
 
   return cat2 ? [cat1, cat2] : [cat1];
-}
+};
 
 module.exports = validator;
