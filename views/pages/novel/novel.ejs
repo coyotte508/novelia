@@ -58,7 +58,9 @@ description = sys.makeDescription(novel.description);
     <h4>Chapters</h4>
     <p><ul class="list-group">
     <% if (!isGod) {
-       novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>
+       novel.chapters.forEach( (item, index) => { 
+         index = novel.prologue ? index : (+index + 1);
+        %>
       <a class="list-group-item list-group-item-action" href="<%= nLink + "/" + index %>">
         <span class="chapter-title mr-auto">
           <%= index %> - <%= item.title %>
@@ -73,9 +75,11 @@ description = sys.makeDescription(novel.description);
           <time format="ago" unixtime="<%= sys.unixTime(item.id) %>" class="when"><%= sys.timeSince(item.id) %> ago</time>
         </span>
       </a>
-    <% } });
+    <% });
      } else { %>
-    <% novel.chapters.forEach( (item, index) => { if (index > 0 || novel.prologue) { %>
+    <% novel.chapters.forEach( (item, index) =>  { 
+      index = novel.prologue ? index : (+index + 1);
+      %>
       <li class="list-group-item">
         <a class="mr-auto list-group-item-action" href="<%= nLink + "/" + index %>">
           <span class="chapter-title">
@@ -98,7 +102,7 @@ description = sys.makeDescription(novel.description);
           <span class="sr-only">Delete chapter</span><span class="fa fa-trash" aria-hidden="true"></span>
         </a>
       </li>
-    <% } });
+    <% });
     } %>
     </ul></p>
     <% if (isGod) {%><p><a href="<%= nLink %>/addchapter"><span class="fa fa-plus"></span> Add a chapter</a></p><% } %>
