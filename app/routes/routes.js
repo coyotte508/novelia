@@ -1,9 +1,11 @@
 const express = require("express");
+
+const {loadCategories} = require("../engine/middlewares/categories");
 const Chapter = require("../models/chapter");
 
 var router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", loadCategories, async (req, res, next) => {
   try {
     const latest = await Chapter.latestUpdates();
     //console.log(latest);

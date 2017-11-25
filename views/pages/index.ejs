@@ -20,7 +20,19 @@
 <% } %>
 
 <div class="text-md-center">
-  <p class="f3">Latest updates</p>
+  <p class="f3 mb-2">Latest updates</p>
 
+  <%
+    for (const category of req.categories) {
+      %>
+      <a href="/category/<%= category.shorthand %>"><span class="badge badge-primary"><%= category.name %></span></a>
+      <%
+    }
+  %>
+
+  <div class="mb-4"></div>
   <%- include("snippets/latest-updates") %>
+
+  
+   
 </div>
