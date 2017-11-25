@@ -1,6 +1,6 @@
 const limiter = require("mongo-limiter");
 const utils = require("../utils");
-const router = require("express").Router();
+const router = require("express-promise-router")();
 const locks = require("mongo-locks");
 const {User} = require("../../models");
 
@@ -27,9 +27,9 @@ router.all('/follow', utils.isLoggedIn, async (req, res, next) => {
     res.redirect(req.get('Referrer') || novel.getLink());
   } catch(err) {
     next(err);
+  } finally {
+    free();
   }
-
-  free();
 });
 
 router.all('/unfollow', utils.isLoggedIn, async (req, res, next) => {
@@ -51,9 +51,9 @@ router.all('/unfollow', utils.isLoggedIn, async (req, res, next) => {
     res.redirect(req.get('Referrer') || novel.getLink());
   } catch(err) {
     next(err);
+  } finally {
+    free();
   }
-
-  free();
 });
 
 module.exports = router;

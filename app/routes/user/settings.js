@@ -1,4 +1,4 @@
-const router = require("express").Router();
+const router = require("express-promise-router")();
 const utils = require("../utils");
 
 router.get('/account', utils.isLoggedIn, (req, res) => {

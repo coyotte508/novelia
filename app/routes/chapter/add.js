@@ -2,15 +2,11 @@ const val = require("validator");
 const limiter = require("mongo-limiter");
 const locks = require("mongo-locks");
 const utils = require("../utils");
-const router = require("express").Router();
+const router = require("express-promise-router")();
 const {Novel, Chapter} = require("../../models");
 
-router.get('/addchapter', utils.canTouchNovel, (req, res, next) => {
-  try {
-    res.render('pages/novel/addchapter', {novel: req.novel, message: "", action:"add"});
-  } catch(err) {
-    next(err);
-  }
+router.get('/addchapter', utils.canTouchNovel, async (req, res) => {
+  res.render('pages/novel/addchapter', {novel: req.novel, message: "", action:"add"});
 });
 
 router.post('/addchapter', utils.canTouchNovel, async (req, res) => {
@@ -52,9 +48,9 @@ router.post('/addchapter', utils.canTouchNovel, async (req, res) => {
   } catch (err) {
     res.status(err.statusCode || 500);
     res.render('pages/novel/addchapter', {novel: novel || {}, message: err.message, action: "add"});
+  } finally {
+    free();
   }
-
-  free();
 });
 
 module.exports = router;

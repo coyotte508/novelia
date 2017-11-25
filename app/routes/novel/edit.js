@@ -1,15 +1,11 @@
 const utils = require("../utils");
-const router = require("express").Router();
+const router = require("express-promise-router")();
 //const limiter = require("mongo-limiter");
 const val = require("validator");
 const {categories} = require("../../models");
 
-router.get('/edit', utils.canTouchNovel, (req, res, next) => {
-  try {
-    res.render('pages/novel/addnovel', {novel: req.novel, categories, action:'edit'});
-  } catch(err) {
-    next(err);
-  }
+router.get('/edit', utils.canTouchNovel, async (req, res) => {
+  res.render('pages/novel/addnovel', {novel: req.novel, categories, action:'edit'});
 });
 
 router.post('/edit', utils.canTouchNovel, async (req, res) => {

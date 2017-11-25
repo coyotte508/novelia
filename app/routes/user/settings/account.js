@@ -2,7 +2,7 @@ const assert = require("assert");
 const limiter = require("mongo-limiter");
 const val = require("validator");
 const utils = require("../../utils");
-const router = require("express").Router();
+const router = require("express-promise-router")();
 
 router.post('/settings/account', utils.isLoggedInAndNotSocial, async function(req, res) {
   try {

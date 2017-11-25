@@ -1,17 +1,13 @@
 const {Novel} = require("../../models");
-const router = require("express").Router();
+const router = require("express-promise-router")();
 
-router.get('/novels', async (req, res, next) => {
-  try {
-    let admin = req.user && req.user.isAdmin();
-    let filter = admin ? {} : {public: true};
+router.get('/novels', async (req, res) => {
+  let admin = req.user && req.user.isAdmin();
+  let filter = admin ? {} : {public: true};
 
-    let novels = await Novel.find(filter, "title latestChapter author numChapters").sort({_id: -1}).limit(50);
+  let novels = await Novel.find(filter, "title latestChapter author numChapters").sort({_id: -1}).limit(50);
 
-    res.render('pages/novel/novels', {novels});
-  } catch (err) {
-    next(err);
-  }
+  res.render('pages/novel/novels', {novels});
 });
 
 module.exports = router;

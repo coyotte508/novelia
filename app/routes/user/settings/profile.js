@@ -1,6 +1,6 @@
 const val = require("validator");
 const limit = require("mongo-limiter");
-const router = require("express").Router();
+const router = require("express-promise-router")();
 const utils = require("../../utils");
 
 router.post('/settings/profile', utils.isLoggedIn, async function(req, res) {

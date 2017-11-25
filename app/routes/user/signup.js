@@ -1,5 +1,5 @@
 const utils = require("../utils");
-const router = require("express").Router();
+const router = require("express-promise-router")();
 const passport = require("passport");
 const limiter = require("mongo-limiter");
 

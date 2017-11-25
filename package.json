@@ -34,6 +34,7 @@
     "ejs": "^2.5.5",
     "express": "^4.14.0",
     "express-ejs-layouts": "^2.2.0",
+    "express-promise-router": "^2.0.0",
     "express-session": "^1.14.2",
     "file-loader": "^0.10.0",
     "font-awesome": "^4.7.0",

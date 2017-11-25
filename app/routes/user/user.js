@@ -1,13 +1,9 @@
 const {User} = require("../../models");
 const utils = require("../utils");
-const router = require("express").Router();
+const router = require("express-promise-router")();
 
-router.get('/profile', utils.isLoggedIn, function(req, res, next) {
-  try {
-    res.redirect(req.user.getLink());
-  } catch(err) {
-    next(err);
-  }
+router.get('/profile', utils.isLoggedIn, function(req, res) {
+  res.redirect(req.user.getLink());
 });
 
 router.param('user', async function(req, res, next, user) {
@@ -26,16 +22,12 @@ router.param('user', async function(req, res, next, user) {
   }
 });
 
-router.get('/u/:user', async function(req, res, next) {
-  try {
-    var user = req.viewedUser;
+router.get('/u/:user', async function(req, res) {
+  var user = req.viewedUser;
 
-    await user.loadAuthoredNovels();
+  await user.loadAuthoredNovels();
 
-    res.render('pages/user/user', {u:user, message: req.flash('profileMessage')});
-  } catch(err) {
-    next(err);
-  }
+  res.render('pages/user/user', {u:user, message: req.flash('profileMessage')});
 });
 
 router.use("/", require("./connection"));

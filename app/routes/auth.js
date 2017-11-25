@@ -1,4 +1,4 @@
-const router = require("express").Router();
+const router = require("express-promise-router")();
 const passport = require("passport");
 const configAuth = require("../config/auth");
 

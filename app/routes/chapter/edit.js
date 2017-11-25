@@ -1,13 +1,9 @@
 const val = require("validator");
 const utils = require("../utils");
-const router = require("express").Router();
+const router = require("express-promise-router")();
 
-router.get('/edit',utils.canTouchNovel, (req, res, next) => {
-  try {
-    res.render('pages/novel/addchapter', {novel: req.novel, chapter: req.chapter,  action:"edit"});
-  } catch(err) {
-    next(err);
-  }
+router.get('/edit', utils.canTouchNovel, async (req, res) => {
+  res.render('pages/novel/addchapter', {novel: req.novel, chapter: req.chapter,  action:"edit"});
 });
 
 

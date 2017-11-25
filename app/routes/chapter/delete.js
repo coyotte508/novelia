@@ -1,7 +1,7 @@
 const locks = require("mongo-locks");
 const limiter = require("mongo-limiter");
 const utils = require("../utils");
-const router = require("express").Router();
+const router = require("express-promise-router")();
 const {Novel} = require("../../models");
 
 router.all('/delete', utils.canTouchNovel, async (req, res, next) => {
@@ -22,9 +22,9 @@ router.all('/delete', utils.canTouchNovel, async (req, res, next) => {
     res.redirect(novel.getLink());
   } catch(err) {
     next(err);
+  } finally {
+    free();
   }
-
-  free();
 });
 
 module.exports = router;

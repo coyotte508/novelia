@@ -1,10 +1,10 @@
 const utils = require("../utils");
-const router = require("express").Router();
+const router = require("express-promise-router")();
 const limiter = require("mongo-limiter");
 const val = require("validator");
 const {Novel, categories} = require("../../models");
 
-router.get('/addnovel', utils.isLoggedIn, (req, res) => {
+router.get('/addnovel', utils.isLoggedIn, async (req, res) => {
   res.render('pages/novel/addnovel', {req,categories, action:'add'});
 });
 
