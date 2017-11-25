@@ -12,9 +12,9 @@ body {
 /* Only load image when necessary */
 @media (min-width: 881px) {
   body {
-    background: url('../images/peaceful-background.jpg') fixed;
+    background-image: url('../images/peaceful-background.jpg'), linear-gradient(to bottom, #ddd, #ccf);
     background-size: auto 100%;
-    background-color: rgba(0,0,0,0.88);
+    background-attachment: fixed; 
   }
 
   /* Hack to show "right" part of background at the right */
