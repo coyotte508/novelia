@@ -34,7 +34,7 @@ sudo chown -R mongodb:mongodb /data/db
 In the project's directory:
 
 ```bash
-sudo cp config/nginx /etc/nginx/sites-available/novelia
+sudo cp app/config/nginx /etc/nginx/sites-available/novelia
 sudo ln -s /etc/nginx/sites-available/novelia /etc/nginx/sites-enabled/novelia
 # Give proper path for public files
 sudo sed -i -e 's:root .*;:root '`pwd`'/public;:' /etc/nginx/sites-available/novelia

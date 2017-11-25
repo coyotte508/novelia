@@ -10,7 +10,7 @@ router.post('/settings/profile', utils.isLoggedIn, async function(req, res) {
     await limit.action(req.user.id, "update-profile");
     await req.user.save();
 
-    res.redirect("/profile");
+    res.redirect("/profile"); 
   } catch(err) {
     res.render("pages/user/settings", {req, message: err.message, tab: "profile", title: "Public profile"});
   }

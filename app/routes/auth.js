@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const passport = require("passport");
-const configAuth = require("../../config/auth");
+const configAuth = require("../config/auth");
 
 // =====================================
 // GOOGLE ROUTES =======================

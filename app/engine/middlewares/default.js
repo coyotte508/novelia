@@ -1,4 +1,4 @@
-const pjson = require('../../package.json');
+const pjson = require('../../../package.json');
 const constants = require('../../config/constants');
 const validator = require('validator');
 const slug = require("slug");
@@ -80,4 +80,10 @@ function defaultLocals (req, res, next) {
   }
 }
 
-module.exports = [sysStuff, defaultLocals];
+const middlewares = [defaultLocals, sysStuff];
+
+module.exports = {
+  middlewares,
+  defaultLocals,
+  sysStuff
+};

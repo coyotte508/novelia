@@ -3,7 +3,7 @@ const bcrypt   = require('bcrypt');
 const sha1     = require('sha1');
 const md5     = require('md5');
 const sendmail = require('sendmail')();
-const config = require('../../config/general');
+const config = require('../config/general');
 const assert = require('assert');
 
 const Schema = mongoose.Schema;
