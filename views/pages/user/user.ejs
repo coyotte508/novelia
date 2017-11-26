@@ -30,62 +30,73 @@ var novels = u.novels.filter(nov => nov.public || isGod);
       <%}%>
     </section>
   </div>
-  <div class="user main" style="max-width: 700px">
-    <% if (novels.length > 0 || isDisplayedUser) { %>
-    <section>
-      <h4>Novels</h4>
-      <%if (novels.length > 0) { %>
-      <p><ul class="list-group">
-        <% novels.forEach( (novel) => { %>
-          <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
-        <% }); %>
-      </ul></p>
-      <% }
-      if (isDisplayedUser) { %>
-      <p><a href="/addnovel" class="btn btn-secondary"><span class="fa fa-plus"></span> New novel</a></p>
-      <% } %>
-    </section>
-    <% } %>
+  <div class="user main container" style="max-width: 800px">
+    <ul class="nav nav-pills mb-3">
+      <li class="nav-item">
+        <a class="nav-link <%- !req.params.tab ? 'active' : '' %>" role="tab" href="<%- u.getLink() %>">Overview</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <%- req.params.tab == "novels" ? 'active' : '' %>" role="tab" href="<%- u.getLink() %>/novels">Novels</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <%- req.params.tab == "library" ? 'active' : '' %>" role="tab" href="<%- u.getLink() %>/library">Library</a>
+      </li>
+    </ul>
 
-    <section>
-      <h4>Library</h4>
-      <% if (u.followedNovels.length > 0) { %>
-      <ul class="list-group">
-        <% u.followedNovels.forEach( (novel) => {
-          var nLink = "/"+slug(novel.title); %>
-
-          <% if (isDisplayedUser) { %>
-          <li class="list-group-item">
-            <a class="list-group-item-action mr-auto" href="<%= nLink %>"><%= novel.title %></a>
-            <a href="<%= nLink + "/unfollow" %>">
-              <span class="sr-only">Unlike</span>
-              <span class="fa fa-times" aria-hidden="true"></span>
-            </a>
-          </li>
-          <% } else { %>
-          <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
+    <div class="tab-content">
+      <% if (!req.params.tab) { %>
+        <div class="tab-pane active %>" id="activity" role="tabpanel">
+          <div class="card">
+            <img src="/images/profile-joined-litnovel.png" class="width-fit mt-5" />
+            <div class="text-center">
+              <p class="text-success f3 mb-3"><strong>Joined LitNovel</strong><br>
+              <small><time format="ago" unixtime="<%= sys.unixTime(u.id) %>" class="text-muted">on <%= sys.dayOfYear(u.id) %></time></small></p>
+            </div>
+          </div>
+        </div>
+      <% } else if (req.params.tab == "novels") { %>
+        <div class="tab-pane active" id="novels" role="tabpanel">
+          <%if (novels.length > 0) { %>
+          <p><ul class="list-group">
+            <% novels.forEach( (novel) => { %>
+              <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
+            <% }); %>
+          </ul></p>
+          <% }
+          if (isDisplayedUser) { %>
+          <p><a href="/addnovel" class="btn btn-secondary"><span class="fa fa-plus"></span> New novel</a></p>
           <% } %>
-        <% }); %>
-      </ul>
-      <% } else { %>
-      <div class="card">
-        <div class="card-body">
-          <i>This user doesn't have any favorite novels.</i>
         </div>
-      </div>
+      <% } else if (req.params.tab == "library") { %>
+        <div class="tab-pane active" id="library" role="tabpanel">
+          <% if (u.followedNovels.length > 0) { %>
+            <ul class="list-group">
+              <% u.followedNovels.forEach( (novel) => {
+                var nLink = "/"+slug(novel.title); %>
+      
+                <% if (isDisplayedUser) { %>
+                <li class="list-group-item">
+                  <a class="list-group-item-action mr-auto" href="<%= nLink %>"><%= novel.title %></a>
+                  <a href="<%= nLink + "/unfollow" %>">
+                    <span class="sr-only">Unlike</span>
+                    <span class="fa fa-times" aria-hidden="true"></span>
+                  </a>
+                </li>
+                <% } else { %>
+                <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
+                <% } %>
+              <% }); %>
+            </ul>
+            <% } else { %>
+            <div class="card">
+              <div class="card-body">
+                <i>This user doesn't have any favorite novels.</i>
+              </div>
+            </div>
+          <% } %>
+        </div>
       <% } %>
-    </section>
-
-    <section>
-      <h4>Activity</h4>
-      <div class="card">
-        <img src="/images/profile-joined-litnovel.png" class="width-fit mt-5" />
-        <div class="text-center">
-          <p class="text-success f3 mb-3"><strong>Joined LitNovel</strong><br>
-          <small><time format="ago" unixtime="<%= sys.unixTime(u.id) %>" class="text-muted">on <%= sys.dayOfYear(u.id) %></time></small></p>
-        </div>
-      </div>
-    </section>
+    </div>
   </div>
 </div>
 

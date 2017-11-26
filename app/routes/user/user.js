@@ -30,6 +30,14 @@ router.get('/u/:user', async function(req, res) {
   res.render('pages/user/user', {u:user, message: req.flash('profileMessage')});
 });
 
+router.get('/u/:user/:tab(novels|library)', async function(req, res) {
+  var user = req.viewedUser;
+  
+  await user.loadAuthoredNovels();
+
+  res.render('pages/user/user', {u:user, message: req.flash('profileMessage')});
+});
+
 router.use("/", require("./connection"));
 router.use("/", require("./resetpassword"));
 router.use("/", require("./signup"));
