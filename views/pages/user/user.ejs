@@ -56,12 +56,18 @@ var novels = u.novels.filter(nov => nov.public || isGod);
         </div>
       <% } else if (req.params.tab == "novels") { %>
         <div class="tab-pane active" id="novels" role="tabpanel">
-          <%if (novels.length > 0) { %>
+          <%if (novels.length > 0 && 0) { %>
           <p><ul class="list-group">
             <% novels.forEach( (novel) => { %>
               <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>
             <% }); %>
           </ul></p>
+          <% } else { %>
+            <div class="card mb-4">
+              <div class="card-body">
+                <i>This user hasn't published any novel.</i>
+              </div>
+            </div>
           <% }
           if (isDisplayedUser) { %>
           <p><a href="/addnovel" class="btn btn-secondary"><span class="fa fa-plus"></span> New novel</a></p>
