@@ -7,7 +7,7 @@
 #sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
 #echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
 #sudo apt update
-sudo apt install nodejs npm ruby ruby-dev screen mongodb-org -y
+sudo apt install nodejs npm ruby ruby-dev screen mongodb-org libffi-dev -y
 sudo npm install -g n webpack nodemon
 sudo systemctl unmask mongodb
 
@@ -38,6 +38,7 @@ sudo cp app/config/nginx /etc/nginx/sites-available/novelia
 sudo ln -s /etc/nginx/sites-available/novelia /etc/nginx/sites-enabled/novelia
 # Give proper path for public files
 sudo sed -i -e 's:root .*;:root '`pwd`'/public;:' /etc/nginx/sites-available/novelia
+sudo rm /etc/nginx/sites-enabled/default 
 sudo service nginx restart
 ```
 
