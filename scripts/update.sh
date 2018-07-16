@@ -1,3 +1,3 @@
 #!/bin/sh
 
-git pull && npm install
+git pull && yarn install

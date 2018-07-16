@@ -87,7 +87,7 @@ const categoryList = (() => {
   return ret.sort((a, b) => a.name.localeCompare(b.name));
 })();
 
-export default {
+const toExport = {
   find(shorthand: string): Promise<CategoryDocument> {
     if (shorthand in categories) {
       return Promise.resolve(categories[shorthand]);
@@ -99,3 +99,5 @@ export default {
     return Promise.resolve(categoryList);
   }
 };
+
+export default toExport;
