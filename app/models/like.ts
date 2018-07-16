@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import { Types } from 'mongoose';
 const Schema = mongoose.Schema;
 
-interface LikeDocument extends mongoose.Document {
+export interface LikeDocument extends mongoose.Document {
   source: Types.ObjectId;
   sourceType: string;
   author: Types.ObjectId;

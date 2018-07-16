@@ -1,11 +1,13 @@
 import { BSON } from 'bson';
-import fs from 'fs-extra';
+import * as fs from 'fs-extra';
 import * as assert from 'assert';
+import * as os from 'os';
+import * as path from 'path';
 import {Novel, Chapter, User, Image, Comment, Payment} from './';
 
 async function restore() {
   console.log("Restoring from backup...");
-  assert(await fs.exists("/tmp/novelia/User.bson"), "File /tmp/novelia/Users.bson is not there. Extract backup in /tmp/novelia");
+  assert(await fs.pathExists(path.join(os.tmpdir(), `novelia/User.bson`)), `File ${os.tmpdir()}/Users.bson is not there. Extract backup in ${os.tmpdir()}`);
 
   const database = {
     Novel,
@@ -17,8 +19,9 @@ async function restore() {
   };
 
   for (const key of Object.keys(database)) {
-    if (await fs.exists(`/tmp/novelia/${key}.bson`)) {
-      const contents = await fs.readFile(`/tmp/novelia/${key}.bson`);
+    const filePath = path.join(os.tmpdir(), `novelia/${key}.bson`);
+    if (await fs.pathExists(filePath)) {
+      const contents = await fs.readFile(filePath);
 
       const bson = new BSON();
       const documents = bson.deserialize(contents);

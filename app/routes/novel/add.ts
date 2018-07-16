@@ -1,6 +1,6 @@
 import * as utils from '../utils';
 import limiter from 'mongo-limiter';
-import * as val from 'validator';
+import val from '../../config/validator';
 import {Novel, Category as categories} from '../../models';
 
 import Router from 'express-promise-router';

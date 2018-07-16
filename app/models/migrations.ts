@@ -1,6 +1,6 @@
 'use strict';
 
-import Novel, {NovelDocument} from './novel';
+import Novel from './novel';
 
 function latest(doc: any) {
   const chaps = doc.chapters.map((it: any) => it.ref || null).filter((it: any) => !!it).sort().reverse();

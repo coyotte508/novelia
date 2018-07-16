@@ -1,9 +1,7 @@
 import * as mongoose from 'mongoose';
 import limiter from 'mongo-limiter';
 
-limiter.init(mongoose);
-
-limiter.setLimits({
+limiter.init(mongoose.connection, {
   comment: {limit: 20, duration: 3600},
   addchapter: {limit: 10, duration: 3600 * 24},
   uploadimage: {limit: 10, duration: 3600 * 24},
@@ -18,7 +16,5 @@ limiter.setLimits({
   confirm: {limit: 3, duration: 3600 * 12},
   security: {limit: 20, duration: 3600 * 12}
 });
-
-limiter.maxAccountsPerIp = 10;
 
 export default limiter;

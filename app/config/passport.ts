@@ -1,6 +1,7 @@
-import * as validator from 'validator';
+import validator from './validator';
 import limiter from './limits';
 import locks from 'mongo-locks';
+import constants from './constants';
 
 import {Strategy as LocalStrategy} from 'passport-local';
 import {OAuth2Strategy as GoogleStrategy} from 'passport-google-oauth';
@@ -51,8 +52,8 @@ module.exports = (passport) => {
         email = validator.validateEmail(email);
         validator.validatePassword(password);
 
-        const count = await User.count({"security.lastIp": req.ip}).limit(limiter.maxAccountsPerIp);
-        if (count >= limiter.maxAccountsPerIp || !(await limiter.possible(req.ip, "accountip"))) {
+        const count = await User.count({"security.lastIp": req.ip}).limit(constants.maxAccountsPerIp);
+        if (count >= constants.maxAccountsPerIp || !(await limiter.possible(req.ip, "accountip"))) {
           throw new Error("Too many users with that ip, you can't create a new account");
         }
 
@@ -85,7 +86,7 @@ module.exports = (passport) => {
         // set the user's local credentials
         newUser.local.username = username;
         newUser.local.email    = email;
-        newUser.local.password = await newUser.generateHash(password);
+        newUser.local.password = await User.generateHash(password);
         newUser.fillInSecurity(req.ip);
 
         // save the user
@@ -181,7 +182,7 @@ module.exports = (passport) => {
     clientSecret    : configAuth.googleAuth.clientSecret,
     callbackURL     : configAuth.googleAuth.callbackURL,
   },
-  function(token, refreshToken, profile, done) {
+  (token, refreshToken, profile, done) => {
       // make the code asynchronous
       // User.findOne won't fire until we have all our data back from Google
       process.nextTick(() => {
@@ -210,9 +211,9 @@ module.exports = (passport) => {
           newUser.new = true; // newUser.fillInSecurity(req.ip);
 
           // save the user
-          newUser.save(err => {
-            if (err) {
-              return done(err);
+          newUser.save(_err => {
+            if (_err) {
+              return done(_err);
             }
             return done(null, newUser);
           });

@@ -6,3 +6,11 @@ declare module 'archiver-promise';
 //     file: any;
 //   }
 // }
+
+declare module 'validator' {
+  export namespace ValidatorJS {
+    export interface ValidatorStatic {
+      validateUser(username: string): string
+    }
+  }
+}

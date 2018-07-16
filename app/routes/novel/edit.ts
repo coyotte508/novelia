@@ -1,5 +1,5 @@
 import * as utils from '../utils';
-import * as val from 'validator';
+import val from '../../config/validator';
 import {Category as categories} from '../../models';
 
 import Router from 'express-promise-router';

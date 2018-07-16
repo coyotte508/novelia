@@ -22,7 +22,7 @@ export interface ChapterDocument extends mongoose.Document {
 }
 
 interface Chapter extends mongoose.Model<ChapterDocument> {
-  latestUpdates(conditions: object): Promise<Chapter[]>;
+  latestUpdates(conditions?: object): Promise<Chapter[]>;
 }
 
 // define the schema for our user model
@@ -65,7 +65,7 @@ chapterSchema.methods("getLink", function(this: ChapterDocument) {
     return this.getNovelLink() + "/" + this.number;
 });
 
-chapterSchema.static("latestUpdates", async function(this: Chapter, filter: string) {
+chapterSchema.static("latestUpdates", async function(this: Chapter, filter: object) {
   const novels = await Novel.latestUpdates(filter);
   const chapters = await this.find({
     _id: {$in: novels.map((item: NovelDocument) => item.latestChapter)}

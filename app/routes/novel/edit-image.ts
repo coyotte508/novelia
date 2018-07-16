@@ -1,8 +1,8 @@
 import limiter from 'mongo-limiter';
-import multer from 'multer';
-import assert from 'assert';
-import path from 'path';
-import utils from '../utils';
+import * as multer from 'multer';
+import * as assert from 'assert';
+import * as path from 'path';
+import * as utils from '../utils';
 import {Image} from '../../models';
 import Router from 'express-promise-router';
 

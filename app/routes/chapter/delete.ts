@@ -1,6 +1,6 @@
 import locks from 'mongo-locks';
 import limiter from 'mongo-limiter';
-import utils from '../utils';
+import * as utils from '../utils';
 import {Novel} from '../../models';
 import Router from 'express-promise-router';
 

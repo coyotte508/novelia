@@ -1,6 +1,8 @@
-import multer from 'multer';
+import * as multer from 'multer';
 import * as fs from 'fs-extra';
 import * as unzip from 'unzipper';
+import * as os from 'os';
+import * as path from 'path';
 import {Novel, Chapter, User, Image, Comment, Payment} from "../../models";
 import {restore} from '../../models/backup';
 import Router from 'express-promise-router';
@@ -22,13 +24,14 @@ router.post("/load/database", upload.single("archive"), async (req, res) => {
   console.log(req.file);
 
   const filePath = req.file.path;
+  const folder = path.join(os.tmpdir(), 'novelia');
 
   /* Remove old files before extraction */
   for (const key of Object.keys(database)) {
-    await fs.remove(`/tmp/novelia/${key}.bson`);
+    await fs.remove(path.join(folder, `${key}.bson`));
   }
 
-  const extracter = unzip.Extract({ path: '/tmp/novelia' });
+  const extracter = unzip.Extract({ path: folder });
 
   const extractProcess = new Promise((resolve, reject) => {
     fs.createReadStream(filePath).pipe(extracter);

@@ -40,7 +40,7 @@ import editImage from './edit-image';
 import _delete from './delete';
 import visibility from './visibility';
 import social from './social';
-import chapter from './chapter/chapter';
+import chapter from '../chapter/chapter';
 
 router.use("/:novel/", edit);
 router.use("/:novel/", editImage);

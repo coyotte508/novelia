@@ -6,7 +6,7 @@ import * as mongoose from 'mongoose';
 import { Types } from 'mongoose';
 const Schema = mongoose.Schema;
 
-interface ImageParams {
+export interface ImageParams {
   name: string;
   ext: string;
   type: string;
@@ -14,7 +14,7 @@ interface ImageParams {
   buffer: Buffer;
 }
 
-interface ImageDocument extends mongoose.Document {
+export interface ImageDocument extends mongoose.Document {
   location: string;
   what: string;
   source: Types.ObjectId;

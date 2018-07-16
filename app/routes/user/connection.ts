@@ -21,7 +21,7 @@ router.post('/login', async (req, res, next) => {
 router.get('/logout', async (req, res) => {
   req.logout();
   res.redirect('/');
-  req.session.destroy();
+  req.session.destroy(() => {});
 });
 
 export default router;

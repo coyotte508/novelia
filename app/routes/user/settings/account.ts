@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import limiter from 'mongo-limiter';
-import * as val from 'validator';
+import val from '../../../config/validator';
 import * as utils from '../../utils';
 import Router from 'express-promise-router';
 

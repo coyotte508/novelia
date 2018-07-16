@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import { Types } from 'mongoose';
 const Schema = mongoose.Schema;
 
-interface PaymentDocument extends mongoose.Document {
+export interface PaymentDocument extends mongoose.Document {
   author: Types.ObjectId;
   platform: {
     name: string;

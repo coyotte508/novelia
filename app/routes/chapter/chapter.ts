@@ -1,6 +1,6 @@
 import {Chapter, Comment} from '../../models';
-import utils from '../utils';
-import viewcounter from '../../engine/viewcounter';
+import * as utils from '../utils';
+import * as viewcounter from '../../engine/viewcounter';
 import Router from 'express-promise-router';
 
 import add from './add';
@@ -10,7 +10,7 @@ import comment from './comment';
 
 const router = Router();
 
-router.param('chapter', async function(req, res, next, chapterNum) {
+router.param('chapter', async (req, res, next, chapterNum) => {
   const novel = req.novel;
   const chap = +chapterNum;
 

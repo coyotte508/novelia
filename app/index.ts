@@ -1,17 +1,18 @@
-import passport from 'passport';
-import mongoose from 'mongoose';
+import * as passport from 'passport';
+import * as mongoose from 'mongoose';
 import locks from 'mongo-locks';
 
 /* Express stuff */
-import express from 'express';
-import expressLayouts from 'express-ejs-layouts';
-import compression from 'compression';
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import session from 'express-session';
-import connectMongo from 'connect-mongo';
-import morgan from 'morgan';
-import flash from 'connect-flash';
+import * as express from 'express';
+import * as expressLayouts from 'express-ejs-layouts';
+import * as compression from 'compression';
+import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
+import * as session from 'express-session';
+import * as connectMongo from 'connect-mongo';
+import * as morgan from 'morgan';
+// tslint:disable-next-line no-var-requires
+const flash = require('connect-flash');
 
 /* Local stuff */
 import {middlewares} from "./engine/middlewares/default";
@@ -29,7 +30,6 @@ const dburl = configDB.localdb; // process.env.local ? configDB.localdb : config
 
 /* Configuration */
 mongoose.connect(dburl, {useMongoClient: true});
-mongoose.Promise = global.Promise; // native promises
 
 mongoose.connection.on("error", (err) => {
   console.log(err);

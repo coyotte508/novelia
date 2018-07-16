@@ -1,5 +1,5 @@
 import limiter from 'mongo-limiter';
-import val from 'validator';
+import val from '../../config/validator';
 import * as utils from '../utils';
 import {Comment} from '../../models';
 import Router from 'express-promise-router';

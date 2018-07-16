@@ -3,12 +3,6 @@ import * as utils from '../utils';
 import {Novel, Chapter, User, Comment} from "../../models";
 import limiter from 'mongo-limiter';
 
-/* Routers */
-import novels from './novels';
-import users from './users';
-import comments from './comments';
-import backup from './backup';
-import load from './load';
 
 const router = Router();
 
@@ -35,8 +29,14 @@ router.get("/admin", utils.isAdmin, async (req, res) => {
   res.render("pages/admin", {actions, stats});
 });
 
+import novels from './novels';
+import usersR from './users';
+import comments from './comments';
+import backup from './backup';
+import load from './load';
+
 router.use("/", novels);
-router.use("/", users);
+router.use("/", usersR);
 router.use("/", comments);
 router.use("/admin", utils.isAdmin, backup);
 router.use("/admin", utils.isAdmin, load);

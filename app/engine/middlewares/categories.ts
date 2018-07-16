@@ -1,6 +1,6 @@
 import {Category} from '../../models';
 
-async function loadCategories(req, res, next) {
+export async function loadCategories(req, res, next) {
   if (req.categories) {
     next();
   }
@@ -9,7 +9,3 @@ async function loadCategories(req, res, next) {
 
   next();
 }
-
-module.exports = {
-  loadCategories
-};

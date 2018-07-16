@@ -1,4 +1,11 @@
-const categories: {[category: string]: {name: string, icon: string, description: string, shorthand?: string}} = {
+export interface CategoryDocument {
+  name: string;
+  icon: string;
+  description: string;
+  shorthand?: string;
+}
+
+const categories: {[category: string]: CategoryDocument} = {
   martial: {
     name: "Martial Art",
     icon: "",

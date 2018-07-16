@@ -1,4 +1,4 @@
-import * as val from 'validator';
+import val from '../../../config/validator';
 import limit from 'mongo-limiter';
 import * as utils from '../../utils';
 import Router from 'express-promise-router';

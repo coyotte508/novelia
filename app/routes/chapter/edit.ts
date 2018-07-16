@@ -1,5 +1,5 @@
-import val from 'validator';
-import utils from '../utils';
+import val from '../../config/validator';
+import * as utils from '../utils';
 import Router from 'express-promise-router';
 
 const router = Router();

@@ -40,7 +40,7 @@ export interface NovelDocument extends mongoose.Document {
 }
 
 interface Novel extends mongoose.Model<NovelDocument> {
-  latestUpdates(conditions?: object): Promise<Novel[]>;
+  latestUpdates(conditions?: object): Promise<NovelDocument[]>;
 }
 
 // define the schema for our user model

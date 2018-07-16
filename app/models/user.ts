@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import Novel, { NovelDocument } from './novel';
 import Gold, { GoldDocument } from './gold';
-import md5 from 'md5';
+import * as md5 from 'md5';
 import Sendmail from 'sendmail';
 import config from '../config/general';
 import * as crypto from 'crypto';
@@ -12,7 +12,7 @@ import { Types } from "mongoose";
 const sendmail = Sendmail();
 const Schema = mongoose.Schema;
 
-interface UserDocument extends mongoose.Document {
+export interface UserDocument extends mongoose.Document {
   local: {
     username: string;
     email: string;
@@ -46,25 +46,30 @@ interface UserDocument extends mongoose.Document {
   gold: number;
 
   /* Virtuals */
-  email?: string;
-  novels?: NovelDocument[];
-  displayName?: string;
-  isSocialAccount?: boolean;
-  link?: string;
-  resetKey?: string;
-  confirmKey?: string;
   confirmed?: boolean;
+  confirmKey?: string;
+  displayName?: string;
+  email?: string;
+  isSocialAccount?: boolean;
   goldPouches?: GoldDocument[];
+  link?: string;
+  new?: boolean;
+  novels?: NovelDocument[];
+  resetKey?: string;
 
   /* Methods */
-  validPassword(password: string): Promise<boolean>;
-  resetPassword(password: string): Promise<void>;
+  fillInSecurity(ip: string): void;
   followsNovel(novel: Types.ObjectId): Promise<boolean>;
   loadGoldPouches(): Promise<void>;
+  notifyLogin(ip: string): void;
+  resetPassword(password: string): Promise<void>;
+  sendConfirmationEmail(): void;
+  validateResetKey(key: string): void;
+  validPassword(password: string): Promise<boolean>;
 }
 
 interface User extends mongoose.Model<UserDocument> {
-  generateHash(password: string): string;
+  generateHash(password: string): Promise<string>;
 
   findByEmail(email: string): Promise<UserDocument>;
   /** Basic fields to be projected */
@@ -207,7 +212,7 @@ userSchema.method('generateConfirmKey', function(this: UserDocument) {
   this.confirmKey = crypto.randomBytes(16).toString('base64');
 
   return this.update({"security.confirmKey": this.security.confirmKey}).exec();
-};
+});
 
 userSchema.virtual('confirmKey', function(this: UserDocument) {
   return this.security.confirmKey;
@@ -330,4 +335,6 @@ userSchema.static('basics', function(this: UserDocument) {
 });
 
 // create the model for users and expose it to our app
-export default mongoose.model<UserDocument, User>('User', userSchema);
+const User = mongoose.model<UserDocument, User>('User', userSchema);
+
+export default User;
