@@ -4,9 +4,11 @@ import Router from 'express-promise-router';
 
 const router = Router();
 
-router.use("/", require("./add"));
+import add from "./add";
 
-router.param('novel', async function(req, res, next, lnovel) {
+router.use("/", add);
+
+router.param('novel', async (req, res, next, lnovel) => {
   const novel = await Novel.findOne({slug: lnovel.toLowerCase()});
 
   if (!novel) {
@@ -16,7 +18,7 @@ router.param('novel', async function(req, res, next, lnovel) {
 
   req.novel = novel;
 
-  req.categoryName = (cat: string) => categories.find(x => x.shorthand === cat).name;
+  req.categoryName = (cat: string) => req.categories.find(x => x.shorthand === cat).name;
 
   next();
 });

@@ -6,7 +6,7 @@ class HttpError extends Error {
   }
 }
 
-function assert404(condition: boolean, message: string) {
+function assert404(condition: any, message: string) {
   try {
     assert(condition, message);
   } catch (err) {
@@ -15,7 +15,7 @@ function assert404(condition: boolean, message: string) {
   }
 }
 
-function assert403(condition: boolean, message: string) {
+function assert403(condition: any, message: string) {
   try {
     assert(condition, message);
   } catch (err) {

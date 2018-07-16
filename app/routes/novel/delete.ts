@@ -20,10 +20,8 @@ router.all('/delete', utils.canTouchNovel, async (req, res) => {
     }
   }
 
-  if (novel.prologue) {
-    Chapter.findOneAndRemove(novel.chapters[0].ref).exec();
-  }
-  novel.remove();
+  Chapter.remove({"novel.ref": novel._id});
+  await novel.remove();
 
   res.redirect("/profile");
 });

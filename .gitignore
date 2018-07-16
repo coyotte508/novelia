@@ -42,3 +42,4 @@ data
 .yarnclean
 package-lock.json
 bin
+dist

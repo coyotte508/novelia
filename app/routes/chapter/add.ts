@@ -4,6 +4,7 @@ import locks from 'mongo-locks';
 import * as utils from '../utils';
 import {Novel, Chapter} from '../../models';
 import Router from 'express-promise-router';
+import { NovelDocument } from '../../models/novel';
 
 const router = Router();
 
@@ -14,8 +15,9 @@ router.get('/addchapter', utils.canTouchNovel, async (req, res) => {
 router.post('/addchapter', utils.canTouchNovel, async (req, res) => {
   /* Todo: check if user can post new novel */
   let free = () => {};
+  let novel: NovelDocument;
   try {
-    let novel = req.novel;
+    novel = req.novel;
     const prologue = (req.body.options || "").split(",").indexOf("prologue") !== -1;
     const number = prologue ? 0 : (novel.numChapters + 1);
 

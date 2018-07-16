@@ -88,14 +88,14 @@ const categoryList = (() => {
 })();
 
 export default {
-  find(cat: string) {
-    if (cat in categories) {
-      return Promise.resolve(categories[cat]);
+  find(shorthand: string): Promise<CategoryDocument> {
+    if (shorthand in categories) {
+      return Promise.resolve(categories[shorthand]);
     }
-    return Promise.reject(`Category "${cat}" not found`);
+    return Promise.reject(`Category "${shorthand}" not found`);
   },
 
-  list() {
-    return categoryList;
+  list(): Promise<CategoryDocument[]> {
+    return Promise.resolve(categoryList);
   }
 };

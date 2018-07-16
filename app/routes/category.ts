@@ -3,7 +3,7 @@ import {Category, Chapter} from '../models';
 
 const router = Router();
 
-router.param('category', async (req, res, next, category: string) => {
+router.param('category', async (req: Express.Request, res, next, category: string) => {
   req.category = await Category.find(category);
 
   next();

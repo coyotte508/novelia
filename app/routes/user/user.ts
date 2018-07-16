@@ -8,8 +8,8 @@ router.get('/profile', utils.isLoggedIn, (req, res) => {
   res.redirect(req.user.getLink());
 });
 
-router.param('user', async (req, res, next, user) => {
-  user = await User.findByUrl(user);
+router.param('user', async (req: Express.Request, res, next, param: string) => {
+  const user = await User.findByUrl(param);
 
   if (!user) {
     res.status(404);
@@ -20,7 +20,7 @@ router.param('user', async (req, res, next, user) => {
   next();
 });
 
-router.get('/u/:user', async (req, res) => {
+router.get('/u/:user', async (req: Express.Request, res) => {
   const user = req.viewedUser;
 
   await user.loadAuthoredNovels();

@@ -1,25 +1,16 @@
 import * as XRegExp from 'xregexp';
 import * as validator from 'validator';
 import * as marked from 'marked';
-import * as toMarkdown from 'to-markdown';
+import * as ToMarkdown from 'turndown';
+import * as gfm from 'turndown-plugin-gfm';
 import * as assert from 'assert';
 import * as _ from 'lodash';
 import cs from './constants';
 import { CategoryDocument } from '../models/category';
 
-// import createDOMPurify from 'dompurify';
-// import jsdom from 'jsdom';
-// const window = jsdom.jsdom('', {
-//   features: {
-//     FetchExternalResources: false, // disables resource loading over HTTP / filesystem
-//     ProcessExternalResources: false // do not execute JS within script blocks
-//   }
-// }).defaultView;
-
-// const DOMPurify = createDOMPurify(window);
-// validator.purify = (dirty) => {
-//   return DOMPurify.sanitize(dirty);
-// }
+const toMarkdownInst = new ToMarkdown();
+toMarkdownInst.use(gfm);
+const toMarkdown = text => toMarkdownInst.turndown(text);
 
 marked.setOptions({sanitize: true, breaks: true});
 
@@ -34,7 +25,7 @@ export default _.assign(validator, {
 
   dbToText(html: string) {
     // below replace is for align in tables to be properly conveyed
-    return toMarkdown((html || "").replace(/style="text-align:([^"]*)"/g, 'align="$1"'), {gfm: true});
+    return toMarkdown((html || "").replace(/style="text-align:([^"]*)"/g, 'align="$1"'));
   },
 
   validateUser(username: string) {

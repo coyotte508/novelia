@@ -25,7 +25,7 @@ import './config/limits';
 
 const MongoStore = connectMongo(session);
 const app = express();
-const port = process.env.port || 8010;
+const port = +process.env.port || 8010;
 const dburl = configDB.localdb; // process.env.local ? configDB.localdb : configDB.dburl;
 
 /* Configuration */
@@ -52,7 +52,8 @@ mongoose.connection.on("open", async () => {
 locks.init(mongoose.connection);
 
 /* Configure passport */
-require('./config/passport')(passport);
+import configPassport from './config/passport';
+configPassport(passport);
 
 /* App stuff */
 app.use(morgan('dev'));
@@ -77,7 +78,7 @@ app.use(session(
     saveUninitialized: false,
     store: new MongoStore({mongooseConnection: mongoose.connection}),
     maxAge: new Date(Date.now() + 120 * 3600 * 1000), // 120 days expire
-  })
+  } as any)
 );
 app.use(passport.initialize());
 app.use(passport.session());

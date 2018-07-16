@@ -11,7 +11,7 @@ import User from '../models/user';
 import configAuth from './auth';
 
 // expose this function to our app using module.exports
-module.exports = (passport) => {
+export default (passport) => {
 
   // =========================================================================
   // passport session setup ==================================================
@@ -43,7 +43,7 @@ module.exports = (passport) => {
       passwordField : 'password',
       passReqToCallback : true // allows us to pass back the entire request to the callback
     },
-    async (req, email, password, done) => {
+    async (req: Express.Request, email, password, done) => {
       let free = () => {};
       try {
         // find a user whose email is the same as the forms email

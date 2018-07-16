@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import { Types } from 'mongoose';
 const Schema = mongoose.Schema;
 
-interface CommentDocument extends mongoose.Document {
+export interface CommentDocument extends mongoose.Document {
   text: string;
   source: Types.ObjectId;
   sourceType: string;

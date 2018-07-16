@@ -28,7 +28,7 @@ router.post('/addnovel', utils.isLoggedIn, async (req, res) => {
     const novel = new Novel();
     novel.title = title;
     novel.description = description;
-    novel.author = {ref: req.user.id, name: req.user.displayName(), link: req.user.getLink()};
+    novel.author = {ref: req.user.id, name: req.user.displayName, link: req.user.getLink()};
     novel.categories = cats;
 
     await novel.save();

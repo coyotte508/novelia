@@ -20,7 +20,7 @@ router.post('/settings/account', utils.isLoggedInAndNotSocial, async (req, res) 
       await user.resetPassword(newPw);
     }
 
-    if (email !== user.email()) {
+    if (email !== user.email) {
       await user.changeEmail(email);
       user.sendConfirmationEmail();
 

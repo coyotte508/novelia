@@ -59,11 +59,16 @@ export interface UserDocument extends mongoose.Document {
 
   /* Methods */
   fillInSecurity(ip: string): void;
+  followNovel(novel: {ref: Types.ObjectId, title: string}): Promise<void>;
   followsNovel(novel: Types.ObjectId): Promise<boolean>;
+  generateResetLink(): Promise<void>;
+  loadAuthoredNovels(): Promise<void>;
   loadGoldPouches(): Promise<void>;
   notifyLogin(ip: string): void;
   resetPassword(password: string): Promise<void>;
   sendConfirmationEmail(): void;
+  sendResetEmail(): Promise<void>;
+  unfollowNovel(novelId: Types.ObjectId): Promise<void>;
   validateResetKey(key: string): void;
   validPassword(password: string): Promise<boolean>;
 }
@@ -72,6 +77,7 @@ interface User extends mongoose.Model<UserDocument> {
   generateHash(password: string): Promise<string>;
 
   findByEmail(email: string): Promise<UserDocument>;
+  findByUrl(param: string): Promise<UserDocument>;
   /** Basic fields to be projected */
   basics(): string;
 }

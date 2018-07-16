@@ -4,7 +4,7 @@ import constants from '../../config/constants';
 import * as validator from 'validator';
 import * as slug from 'slug';
 
-function sysStuff(req, res, next) {
+function sysStuff(req, res: Express.Response, next) {
   const sys = {
     makeDescription(descr: string) {
       descr = descr.replace(/(<([^>]+)>)/g, "") || "";
@@ -54,7 +54,7 @@ function sysStuff(req, res, next) {
   next();
 }
 
-function defaultLocals(req, res, next) {
+function defaultLocals(req: Express.Request, res: Express.Response, next) {
   try {
     // res.locals.error = req.flash('error');
     // res.locals.success = req.flash('success');

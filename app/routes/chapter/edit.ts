@@ -1,6 +1,7 @@
 import val from '../../config/validator';
 import * as utils from '../utils';
 import Router from 'express-promise-router';
+import { NovelDocument } from '../../models/novel';
 
 const router = Router();
 
@@ -10,8 +11,9 @@ router.get('/edit', utils.canTouchNovel, async (req, res) => {
 
 
 router.post('/edit', utils.canTouchNovel, async (req, res) => {
+  let novel: NovelDocument;
   try {
-    const novel = req.novel;
+    novel = req.novel;
     const title = val.validateTitle(req.body.chapterTitle);
     const content = val.validateChapter(req.body.chapterContent);
     const authorNote = val.validateDescription(req.body.authorNote);

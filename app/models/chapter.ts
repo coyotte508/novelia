@@ -1,5 +1,5 @@
-import * as slug from 'slug';
 import * as mongoose from 'mongoose';
+import * as slug from 'slug';
 import {Types} from 'mongoose';
 import Novel from "./novel";
 import { NovelDocument } from './novel';

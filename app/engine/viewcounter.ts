@@ -4,7 +4,7 @@ const cache = new NodeCache({
   stdTTL: 3600 * 6
 });
 
-function addView(req) {
+function addView(req: Express.Request) {
   if (!req.chapter.public) {
     return;
   }
