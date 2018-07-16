@@ -61,7 +61,7 @@ chapterSchema.method("getNovelLink", function(this: ChapterDocument) {
     return /*"/nv/" +*/ "/" + slug(this.novel.title, {lower: false});
 });
 
-chapterSchema.methods("getLink", function(this: ChapterDocument) {
+chapterSchema.method("getLink", function(this: ChapterDocument) {
     return this.getNovelLink() + "/" + this.number;
 });
 

@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt';
 import Novel, { NovelDocument } from './novel';
 import Gold, { GoldDocument } from './gold';
 import * as md5 from 'md5';
-import Sendmail from 'sendmail';
+import * as Sendmail from 'sendmail';
 import config from '../config/general';
 import * as crypto from 'crypto';
 import * as assert from 'assert';
@@ -182,7 +182,7 @@ userSchema.method('followNovel', function(this: UserDocument, item: {ref: Types.
   return this.update({$push: {followedNovels: item}});
 });
 
-userSchema.methods('unfollowNovel', function(this: UserDocument, ref: Types.ObjectId) {
+userSchema.method('unfollowNovel', function(this: UserDocument, ref: Types.ObjectId) {
   assert(this.followsNovel(ref));
 
   return this.update({$pull: {followedNovels: {ref}}});

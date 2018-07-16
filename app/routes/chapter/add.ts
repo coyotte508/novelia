@@ -1,6 +1,6 @@
 import val from '../../config/validator';
 import limiter from 'mongo-limiter';
-import locks from 'mongo-locks';
+import * as locks from 'mongo-locks';
 import * as utils from '../utils';
 import {Novel, Chapter} from '../../models';
 import Router from 'express-promise-router';

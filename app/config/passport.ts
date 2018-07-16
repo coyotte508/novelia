@@ -1,6 +1,6 @@
 import validator from './validator';
 import limiter from './limits';
-import locks from 'mongo-locks';
+import * as locks from 'mongo-locks';
 import constants from './constants';
 
 import {Strategy as LocalStrategy} from 'passport-local';

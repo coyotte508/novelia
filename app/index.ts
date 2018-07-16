@@ -1,6 +1,6 @@
 import * as passport from 'passport';
 import * as mongoose from 'mongoose';
-import locks from 'mongo-locks';
+import * as locks from 'mongo-locks';
 
 /* Express stuff */
 import * as express from 'express';
@@ -29,7 +29,7 @@ const port = +process.env.port || 8010;
 const dburl = configDB.localdb; // process.env.local ? configDB.localdb : configDB.dburl;
 
 /* Configuration */
-mongoose.connect(dburl, {useMongoClient: true});
+mongoose.connect(dburl, {useNewUrlParser: true});
 
 mongoose.connection.on("error", (err) => {
   console.log(err);

@@ -1,4 +1,4 @@
-import locks from 'mongo-locks';
+import * as locks from 'mongo-locks';
 import limiter from 'mongo-limiter';
 import * as utils from '../utils';
 import {Novel} from '../../models';

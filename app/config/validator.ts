@@ -9,7 +9,7 @@ import cs from './constants';
 import { CategoryDocument } from '../models/category';
 
 const toMarkdownInst = new ToMarkdown();
-toMarkdownInst.use(gfm);
+toMarkdownInst.use(gfm.gfm);
 const toMarkdown = text => toMarkdownInst.turndown(text);
 
 marked.setOptions({sanitize: true, breaks: true});
