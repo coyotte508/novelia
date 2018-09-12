@@ -1,7 +1,8 @@
 import validator from './validator';
 import limiter from './limits';
-import * as locks from 'mongo-locks';
+import locks from 'mongo-locks';
 import constants from './constants';
+import { Request } from '../types';
 
 import {Strategy as LocalStrategy} from 'passport-local';
 import {OAuth2Strategy as GoogleStrategy} from 'passport-google-oauth';
@@ -43,7 +44,7 @@ export default (passport) => {
       passwordField : 'password',
       passReqToCallback : true // allows us to pass back the entire request to the callback
     },
-    async (req: Express.Request, email, password, done) => {
+    async (req: Request, email, password, done) => {
       let free = () => {};
       try {
         // find a user whose email is the same as the forms email
@@ -110,7 +111,7 @@ export default (passport) => {
       passwordField : 'password',
       passReqToCallback : true // allows us to pass back the entire request to the callback
     },
-    async (req, email, password, done) => {
+    async (req: Request, email, password, done) => {
       try {
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
@@ -151,7 +152,7 @@ export default (passport) => {
       passwordField : 'password',
       passReqToCallback : true // allows us to pass back the entire request to the callback
     },
-    async (req, email, password, done) => {
+    async (req: Request, email, password, done) => {
       try {
         const user = await User.findOne({ 'local.email' :  email });
         // if no user is found, return the message
