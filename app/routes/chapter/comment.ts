@@ -21,7 +21,7 @@ router.post('/', utils.isLoggedIn, async (req, res) => {
   const comment = new Comment();
   comment.source = req.chapter.id;
   comment.sourceType = "chapter";
-  comment.author = {ref: req.user.id, name: req.user.displayName, link: req.user.link};
+  comment.author = {ref: req.user.id, name: req.user.displayName, link: req.user.link()};
   comment.text = content;
 
   await comment.save();

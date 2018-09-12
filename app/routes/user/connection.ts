@@ -6,7 +6,7 @@ const router = Router();
 
 router.get("/login", async (req: Request, res) => {
   if (req.isAuthenticated()) {
-    return res.redirect(req.user.link);
+    return res.redirect(req.user.link());
   }
   res.render('pages/user/login', {message: req.flash('loginMessage')});
 });

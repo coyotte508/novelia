@@ -33,13 +33,13 @@ var novels = u.novels.filter(nov => nov.public || isGod);
   <div class="user main container" style="max-width: 800px">
     <ul class="nav nav-pills mb-3">
       <li class="nav-item">
-        <a class="nav-link <%- !req.params.tab ? 'active' : '' %>" role="tab" href="<%- u.link %>">Overview</a>
+        <a class="nav-link <%- !req.params.tab ? 'active' : '' %>" role="tab" href="<%- u.link() %>">Overview</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link <%- req.params.tab == "novels" ? 'active' : '' %>" role="tab" href="<%- u.link %>/novels">Novels</a>
+        <a class="nav-link <%- req.params.tab == "novels" ? 'active' : '' %>" role="tab" href="<%- u.link() %>/novels">Novels</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link <%- req.params.tab == "library" ? 'active' : '' %>" role="tab" href="<%- u.link %>/library">Library</a>
+        <a class="nav-link <%- req.params.tab == "library" ? 'active' : '' %>" role="tab" href="<%- u.link() %>/library">Library</a>
       </li>
     </ul>
 

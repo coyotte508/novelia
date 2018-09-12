@@ -16,7 +16,7 @@ title = "List of Users";
   <ul class="list-group text-md-left novelia-list">
     <% users.forEach(user => {%>
     <li class="list-group-item">
-      <a href="<%- user.link %>">
+      <a href="<%- user.link() %>">
         <%= user.displayName %>  
       </a>
     <% });%>

@@ -19,6 +19,7 @@ declare global {
       categoryName(cat: string): string;
       get(header: string): string;
       params: {[key: string]: string};
+      query: {[key: string]: string};
 
       session?: Session;
 

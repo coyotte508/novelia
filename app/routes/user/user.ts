@@ -6,7 +6,7 @@ import { Request } from '../../types';
 const router = Router();
 
 router.get('/profile', utils.isLoggedIn, (req, res) => {
-  res.redirect(req.user.link);
+  res.redirect(req.user.link());
 });
 
 router.param('user', async (req: Request, res, next, param: string) => {

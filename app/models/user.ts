@@ -52,7 +52,6 @@ export interface UserDocument extends mongoose.Document {
   email?: string;
   isSocialAccount?: boolean;
   goldPouches?: GoldDocument[];
-  link?: string;
   new?: boolean;
   novels?: NovelDocument[];
   resetKey?: string;
@@ -72,6 +71,7 @@ export interface UserDocument extends mongoose.Document {
   unfollowNovel(novelId: Types.ObjectId): Promise<void>;
   validateResetKey(key: string): void;
   validPassword(password: string): Promise<boolean>;
+  link(): string;
 }
 
 interface User extends mongoose.Model<UserDocument> {
@@ -168,7 +168,7 @@ userSchema.method('changeEmail', async function(this: UserDocument, email: strin
   await this.update({"local.email" : email, "security.confirmed": false, "security.confirmKey": this.security.confirmKey});
 });
 
-userSchema.virtual('link', function(this: UserDocument) {
+userSchema.method('link', function(this: UserDocument) {
   return "/u/" + (this.local.username || "g-" + this.google.id);
 });
 
