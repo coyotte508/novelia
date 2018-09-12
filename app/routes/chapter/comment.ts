@@ -15,13 +15,13 @@ router.post('/', utils.isLoggedIn, async (req, res) => {
   const content = val.validateComment(req.body.commentBody);
 
   if (!(await limiter.attempt(req.user.id, 'comment', req.novel.title + "-" + req.chapter.number))) {
-    throw new utils.HttpError(`You can only leave ${limiter.limits().comment.limit} comments per hour`, 403);
+    throw new utils.HttpError(`You can only leave ${limiter.limits.comment.limit} comments per hour`, 403);
   }
 
   const comment = new Comment();
   comment.source = req.chapter.id;
   comment.sourceType = "chapter";
-  comment.author = {ref: req.user.id, name: req.user.displayName, link: req.user.getLink()};
+  comment.author = {ref: req.user.id, name: req.user.displayName, link: req.user.link};
   comment.text = content;
 
   await comment.save();

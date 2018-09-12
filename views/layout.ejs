@@ -30,7 +30,7 @@
 
         <ul class="navbar-nav navbar-md-right ">
           <% if (user) { %>
-            <% if (user.isAdmin()) {%>
+            <% if (user.isAdmin {%>
             <li class="nav-item">
               <a href="/admin" class="nav-link navbar-text">Admin</a>
             </li>
@@ -39,7 +39,7 @@
               <a class="navbar-text text-muted nav-link" href="/account/gold"><%- user.gold %> <i class="gold-amount" aria-label="gold"></i></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link navbar-text" href="<%- user.getLink() %>">
+              <a class="nav-link navbar-text" href="<%- user.link %>">
                 <img src="<%- user.avatar(23) %>" class="avatar" aria-label="Profile">
               </a>
             </li>

@@ -1,14 +1,15 @@
 import {User} from '../../models';
 import * as utils from '../utils';
 import Router from 'express-promise-router';
+import { Request } from '../../types';
 
 const router = Router();
 
 router.get('/profile', utils.isLoggedIn, (req, res) => {
-  res.redirect(req.user.getLink());
+  res.redirect(req.user.link);
 });
 
-router.param('user', async (req: Express.Request, res, next, param: string) => {
+router.param('user', async (req: Request, res, next, param: string) => {
   const user = await User.findByUrl(param);
 
   if (!user) {
@@ -20,7 +21,7 @@ router.param('user', async (req: Express.Request, res, next, param: string) => {
   next();
 });
 
-router.get('/u/:user', async (req: Express.Request, res) => {
+router.get('/u/:user', async (req: Request, res) => {
   const user = req.viewedUser;
 
   await user.loadAuthoredNovels();
@@ -28,7 +29,7 @@ router.get('/u/:user', async (req: Express.Request, res) => {
   res.render('pages/user/user', {u: user, message: req.flash('profileMessage')});
 });
 
-router.get('/u/:user/:tab(novels|library)', async (req, res) => {
+router.get('/u/:user/:tab(novels|library)', async (req: Request, res) => {
   const user = req.viewedUser;
 
   await user.loadAuthoredNovels();

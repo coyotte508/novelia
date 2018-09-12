@@ -4,6 +4,8 @@ import { ChapterDocument } from "./models/chapter";
 import { CommentDocument } from "./models/comment";
 import { CategoryDocument } from "./models/category";
 
+import {Request, Response} from 'express';
+
 declare global {
   namespace Express {
     export interface User extends UserDocument {
@@ -15,7 +17,9 @@ declare global {
       flash(message: string): any;
       flash(event: string, message: string): any;
       categoryName(cat: string): string;
-  
+
+      session?: Session;
+
       user?: User;
       viewedUser?: UserDocument;
       chapter?: ChapterDocument;
@@ -32,3 +36,8 @@ declare global {
     }
   }
 }
+
+import EResponse = Express.Response;
+import ERequest = Express.Request;
+
+export { EResponse as Response, ERequest as Request };

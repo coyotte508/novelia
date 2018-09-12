@@ -56,6 +56,7 @@ export interface UserDocument extends mongoose.Document {
   new?: boolean;
   novels?: NovelDocument[];
   resetKey?: string;
+  isAdmin?: boolean;
 
   /* Methods */
   fillInSecurity(ip: string): void;

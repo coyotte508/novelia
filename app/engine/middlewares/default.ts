@@ -3,8 +3,9 @@ const pjson = require('../../../package.json');
 import constants from '../../config/constants';
 import * as validator from 'validator';
 import * as slug from 'slug';
+import { Response } from '../../types';
 
-function sysStuff(req, res: Express.Response, next) {
+function sysStuff(req, res: Response, next) {
   const sys = {
     makeDescription(descr: string) {
       descr = descr.replace(/(<([^>]+)>)/g, "") || "";

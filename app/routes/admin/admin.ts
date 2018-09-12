@@ -2,11 +2,11 @@ import Router from 'express-promise-router';
 import * as utils from '../utils';
 import {Novel, Chapter, User, Comment} from "../../models";
 import limiter from 'mongo-limiter';
-
+import { Request } from '../../types';
 
 const router = Router();
 
-router.get("/admin", utils.isAdmin, async (req, res) => {
+router.get("/admin", utils.isAdmin, async (req: Request, res) => {
   const [nbNovels, nbChapters, nbUsers, nbComments, actions] = await Promise.all([Novel.count({}), Chapter.count({}), User.count({}), Comment.count({}), limiter.logs({})]);
 
   const userIds = actions.map(x => x.user).filter(x => !x.includes(".") && !x.includes(":"));

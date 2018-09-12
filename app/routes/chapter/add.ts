@@ -5,14 +5,15 @@ import * as utils from '../utils';
 import {Novel, Chapter} from '../../models';
 import Router from 'express-promise-router';
 import { NovelDocument } from '../../models/novel';
+import { Request } from '../../types';
 
 const router = Router();
 
-router.get('/addchapter', utils.canTouchNovel, async (req, res) => {
+router.get('/addchapter', utils.canTouchNovel, async (req: Request, res) => {
   res.render('pages/novel/addchapter', {novel: req.novel, message: "", action: "add"});
 });
 
-router.post('/addchapter', utils.canTouchNovel, async (req, res) => {
+router.post('/addchapter', utils.canTouchNovel, async (req: Request, res) => {
   /* Todo: check if user can post new novel */
   let free = () => {};
   let novel: NovelDocument;
@@ -22,7 +23,7 @@ router.post('/addchapter', utils.canTouchNovel, async (req, res) => {
     const number = prologue ? 0 : (novel.numChapters + 1);
 
     if (!(await limiter.possible(req.user.id, 'addchapter'))) {
-      throw new utils.HttpError(`You can only add ${limiter.limits().addchapter.limit} chapters per day`, 403);
+      throw new utils.HttpError(`You can only add ${limiter.limits.addchapter.limit} chapters per day`, 403);
     }
 
     const title = val.validateTitle(req.body.chapterTitle || ("" + number));

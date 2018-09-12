@@ -1,7 +1,7 @@
 <%
 
 title = novel.title;
-isGod = user && (user.isAdmin() || user.id == author.id);
+isGod = user && (user.isAdmin || user.id == author.id);
 nLink = novel.getLink();
 authorName = author.displayName();
 followed = user && user.isFollowNovel(novel.id);

@@ -1,10 +1,11 @@
 import {Novel} from "../../models";
 import Router from 'express-promise-router';
+import { Request } from '../../types';
 
 const router = Router();
 
-router.get('/novels', async (req, res) => {
-  const admin = req.user && req.user.isAdmin();
+router.get('/novels', async (req: Request, res) => {
+  const admin = req.user && req.user.isAdmin;
   const filter = admin ? {} : {public: true};
 
   const novels = await Novel.find(filter, "title latestChapter author numChapters").sort({_id: -1}).limit(50);

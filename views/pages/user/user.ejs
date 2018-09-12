@@ -2,7 +2,7 @@
 title = u.displayName();
 var isDisplayedUser = user && user.id == u.id;
 
-var isGod = user && (user.isAdmin() || isDisplayedUser);
+var isGod = user && (user.isAdmin || isDisplayedUser);
 
 var novels = u.novels.filter(nov => nov.public || isGod);
 %>
