@@ -139,7 +139,8 @@ userSchema.method('resetPassword', function(this: UserDocument, password: string
 });
 
 userSchema.method('avatar', function(this: UserDocument, size: number) {
-  return `https://www.gravatar.com/avatar/${md5(this.email.toLowerCase())}?d=retro&s=${size || 250}`;
+  const email = this.local.email || this.google.email;
+  return `https://www.gravatar.com/avatar/${md5(email.toLowerCase())}?d=retro&s=${size || 250}`;
 });
 
 userSchema.method('loadAuthoredNovels', async function(this: UserDocument) {
