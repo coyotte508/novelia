@@ -86,14 +86,14 @@ interface User extends mongoose.Model<UserDocument> {
 // define the schema for our user model
 const userSchema = new Schema({
   local            : {
-    username     : String,
-    email        : {type: String, unique: true, sparse: true},
+    username     : {type: String, unique: true, sparse: true, trim: true},
+    email        : {type: String, unique: true, sparse: true, trim: true},
     password     : String
   },
   google           : {
     id           : String,
     token        : String,
-    email        : {type: String, unique: true, sparse: true},
+    email        : {type: String, unique: true, sparse: true, trim: true},
     name         : String
   },
   security: {
@@ -116,9 +116,7 @@ const userSchema = new Schema({
     type: Number,
     default: 0
   }
-});
-
-userSchema.index({"local.username": "text"}, {unique: true, sparse: true});
+}, {collation: { locale: 'en', strength: 2 }});
 
 // methods ======================
 // generating a hash
