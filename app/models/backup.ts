@@ -7,7 +7,7 @@ import {Novel, Chapter, User, Image, Comment, Payment} from './';
 
 async function restore() {
   console.log("Restoring from backup...");
-  assert(await fs.pathExists(path.join(os.tmpdir(), `novelia/User.bson`)), `File ${os.tmpdir()}/Users.bson is not there. Extract backup in ${os.tmpdir()}`);
+  assert(await fs.pathExists(path.join(os.tmpdir(), `novelia/User.bson`)), `File ${path.join(os.tmpdir(), `novelia/User.bson`)} is not there. Extract backup in ${os.tmpdir()}`);
 
   const database = {
     Novel,
@@ -28,7 +28,7 @@ async function restore() {
 
       console.log(`${Object.keys(documents).length} records for ${key}`);
 
-      for (const docId of documents) {
+      for (const docId of Object.keys(documents)) {
         const document = documents[docId];
 
         /* Sadly, using upsert below seems to cause an error when the item is new. So 7 lines instead of 1 */

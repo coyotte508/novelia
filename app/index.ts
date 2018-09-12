@@ -1,9 +1,9 @@
 import * as passport from 'passport';
 import * as mongoose from 'mongoose';
-import * as locks from 'mongo-locks';
 
 /* Express stuff */
 import * as express from 'express';
+import * as ejs from 'ejs';
 import * as expressLayouts from 'express-ejs-layouts';
 import * as compression from 'compression';
 import * as bodyParser from 'body-parser';
@@ -17,7 +17,7 @@ const flash = require('connect-flash');
 /* Local stuff */
 import {middlewares} from "./engine/middlewares/default";
 import configAuth from './config/auth';
-import configDB from './config/general';
+import './config/db';
 import router from './routes';
 
 import './config/validator';
@@ -26,10 +26,8 @@ import './config/limits';
 const MongoStore = connectMongo(session);
 const app = express();
 const port = +process.env.port || 8010;
-const dburl = configDB.localdb; // process.env.local ? configDB.localdb : configDB.dburl;
 
 /* Configuration */
-mongoose.connect(dburl, {useNewUrlParser: true});
 
 mongoose.connection.on("error", (err) => {
   console.log(err);
@@ -48,8 +46,6 @@ mongoose.connection.on("open", async () => {
     console.error(err);
   }
 });
-
-locks.init(mongoose.connection);
 
 /* Configure passport */
 import configPassport from './config/passport';

@@ -4,7 +4,7 @@ import Novel, { NovelDocument } from './novel';
 import Gold, { GoldDocument } from './gold';
 import * as md5 from 'md5';
 import * as Sendmail from 'sendmail';
-import config from '../config/general';
+import config from '../config/env';
 import * as crypto from 'crypto';
 import * as assert from 'assert';
 import { Types } from "mongoose";

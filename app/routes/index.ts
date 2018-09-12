@@ -14,7 +14,7 @@ const router = Router();
 
 router.get("/", loadCategories, async (req, res) => {
   const latest = await Chapter.latestUpdates();
-  // console.log(latest);
+
   res.render("pages/index", {error: null, latest, req});
 });
 
