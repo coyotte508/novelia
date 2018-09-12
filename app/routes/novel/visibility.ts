@@ -14,7 +14,7 @@ router.all('/show', utils.canTouchNovel, async (req, res) => {
   Chapter.update({"novel.ref": novel.id}, {public: true}, {multi: true}).then();
   await novel.update({public: true});
 
-  res.redirect(novel.getLink());
+  res.redirect(novel.link);
 });
 
 router.all('/hide', utils.canTouchNovel, async (req, res) => {
@@ -23,7 +23,7 @@ router.all('/hide', utils.canTouchNovel, async (req, res) => {
   Chapter.update({"novel.ref": novel.id}, {public: false}, {multi: true}).then();
   await novel.update({public: false});
 
-  res.redirect(novel.getLink());
+  res.redirect(novel.link);
 });
 
 export default router;

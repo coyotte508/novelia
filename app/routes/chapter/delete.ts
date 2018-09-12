@@ -1,12 +1,13 @@
-import * as locks from 'mongo-locks';
+import locks from 'mongo-locks';
 import limiter from 'mongo-limiter';
 import * as utils from '../utils';
 import {Novel} from '../../models';
 import Router from 'express-promise-router';
+import {Request} from '../../types';
 
 const router = Router();
 
-router.all('/delete', utils.canTouchNovel, async (req, res, next) => {
+router.all('/delete', utils.canTouchNovel, async (req: Request, res, next) => {
   let free = () => {};
   try {
     free = await locks.lock("major-novel-change", req.novel.id);
@@ -21,7 +22,7 @@ router.all('/delete', utils.canTouchNovel, async (req, res, next) => {
 
     chapter.remove();
 
-    res.redirect(novel.getLink());
+    res.redirect(novel.link);
   } catch (err) {
     next(err);
   } finally {

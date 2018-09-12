@@ -30,10 +30,10 @@ export interface NovelDocument extends mongoose.Document {
   publicChaptersCount: number;
   classySlug: string;
   chapters?: ChapterDocument[];
+  link?: string;
 
   /* Methods */
   loadChapters(): Promise<void>;
-  getLink(): string;
   addChapter(chapter: ChapterDocument): Promise<void>;
   deleteChapter(chapter: ChapterDocument): Promise<void>;
   getImageLink(format?: string): string;
@@ -123,7 +123,7 @@ novelSchema.virtual('classySlug', function(this: NovelDocument) {
   return slug(this.title, {lower: false});
 });
 
-novelSchema.virtual('getLink', function(this: NovelDocument) {
+novelSchema.virtual('link', function(this: NovelDocument) {
     return /*"/nv/" +*/ "/" + this.classySlug;
 });
 

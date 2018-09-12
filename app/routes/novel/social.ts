@@ -1,12 +1,13 @@
 import limiter from "mongo-limiter";
 import * as utils from "../utils";
-import * as locks from "mongo-locks";
+import locks from "mongo-locks";
 import {User} from "../../models";
 import Router from "express-promise-router";
+import {Request} from '../../types';
 
 const router = Router();
 
-router.all('/follow', utils.isLoggedIn, async (req, res, next) => {
+router.all('/follow', utils.isLoggedIn, async (req: Request, res, next) => {
   let free = () => {};
   try {
     const novel = req.novel;
@@ -15,18 +16,14 @@ router.all('/follow', utils.isLoggedIn, async (req, res, next) => {
       throw new utils.HttpError(`You can only follow ${limiter.limits.follow.limit} times per hour`, 403);
     }
 
-    try {
-      free = await locks.lock("followNovel", req.user.id, novel.id);
+    free = await locks.lock("followNovel", req.user.id, novel.id);
 
-      const user = await User.findById(req.user.id); // Force update after lock
+    const user = await User.findById(req.user.id); // Force update after lock
 
-      await user.followNovel({ref: novel.id, title: novel.title});
-      await novel.update({$inc: {follows: 1}});
-    } catch (err) {
-      console.error(err);
-    }
+    await user.followNovel({ref: novel.id, title: novel.title});
+    await novel.update({$inc: {follows: 1}});
 
-    res.redirect(req.get('Referrer') || novel.getLink());
+    res.redirect(req.get('Referrer') || novel.link);
   } catch (err) {
     next(err);
   } finally {
@@ -34,7 +31,7 @@ router.all('/follow', utils.isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.all('/unfollow', utils.isLoggedIn, async (req, res, next) => {
+router.all('/unfollow', utils.isLoggedIn, async (req: Request, res, next) => {
   let free = () => {};
   try {
     const novel = req.novel;
@@ -50,7 +47,7 @@ router.all('/unfollow', utils.isLoggedIn, async (req, res, next) => {
       console.error(err);
     }
 
-    res.redirect(req.get('Referrer') || novel.getLink());
+    res.redirect(req.get('Referrer') || novel.link);
   } catch (err) {
     next(err);
   } finally {

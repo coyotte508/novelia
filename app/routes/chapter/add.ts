@@ -1,6 +1,6 @@
 import val from '../../config/validator';
 import limiter from 'mongo-limiter';
-import * as locks from 'mongo-locks';
+import locks from 'mongo-locks';
 import * as utils from '../utils';
 import {Novel, Chapter} from '../../models';
 import Router from 'express-promise-router';
@@ -49,7 +49,7 @@ router.post('/addchapter', utils.canTouchNovel, async (req: Request, res) => {
 
     limiter.action(req.user.id, "addchapter", {title, novel: novel.title});
 
-    res.redirect(novel.getLink() + "/" + (prologue ? 0 : novel.numChapters + 1));
+    res.redirect(novel.link + "/" + (prologue ? 0 : novel.numChapters + 1));
   } catch (err) {
     res.status(err.statusCode || 500);
     res.render('pages/novel/addchapter', {novel: novel || {}, message: err.message, action: "add"});

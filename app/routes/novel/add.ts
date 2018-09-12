@@ -2,16 +2,17 @@ import * as utils from '../utils';
 import limiter from 'mongo-limiter';
 import val from '../../config/validator';
 import {Novel} from '../../models';
+import {Request} from '../../types';
 
 import Router from 'express-promise-router';
 
 const router = Router();
 
-router.get('/addnovel', utils.isLoggedIn, async (req, res) => {
+router.get('/addnovel', utils.isLoggedIn, async (req: Request, res) => {
   res.render('pages/novel/addnovel', {req, categories: req.categories, action: 'add'});
 });
 
-router.post('/addnovel', utils.isLoggedIn, async (req, res) => {
+router.post('/addnovel', utils.isLoggedIn, async (req: Request, res) => {
   try {
     const title = val.validateTitle(req.body.novelTitle);
     const description = val.validateDescription(req.body.novelDescription);
@@ -34,7 +35,7 @@ router.post('/addnovel', utils.isLoggedIn, async (req, res) => {
     await novel.save();
 
     // req.flash('addnovelMessage', "New novel added (sort of)");
-    res.redirect(novel.getLink());
+    res.redirect(novel.link);
   } catch (err) {
     res.status(err.statusCode || 500);
     res.render('pages/novel/addnovel', {message: err.message, categories: req.categories, action: 'add'});

@@ -17,6 +17,8 @@ declare global {
       flash(message: string): any;
       flash(event: string, message: string): any;
       categoryName(cat: string): string;
+      get(header: string): string;
+      params: {[key: string]: string};
 
       session?: Session;
 

@@ -16,7 +16,7 @@ router.post('/edit', utils.canTouchNovel, async (req, res) => {
 
     await req.novel.update({description, categories: cats});
 
-    res.redirect(req.novel.getLink());
+    res.redirect(req.novel.link);
   } catch (err) {
     res.status(err.statusCode || 500);
     res.render('pages/novel/addnovel', {novel: req.novel, categories: req.categories, message: err.message, action: 'edit'});

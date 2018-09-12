@@ -20,7 +20,7 @@ router.post('/edit', utils.canTouchNovel, async (req, res) => {
 
     await req.chapter.update({title, content, authorNote});
 
-    res.redirect(novel.getLink() + "/" + req.chapter.number);
+    res.redirect(novel.link + "/" + req.chapter.number);
   } catch (err) {
     res.status(err.statusCode || 500);
     res.render('pages/novel/addchapter', {novel: novel || {}, chapter: req.chapter,  message: err.message, action: "edit"});
