@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import Novel, { NovelDocument } from './novel';
 import Gold, { GoldDocument } from './gold';
 import * as md5 from 'md5';
@@ -66,7 +66,9 @@ export interface UserDocument extends mongoose.Document {
   loadGoldPouches(): Promise<void>;
   notifyLogin(ip: string): void;
   resetPassword(password: string): Promise<void>;
-  sendConfirmationEmail(): void;
+  confirm(): Promise<void>;
+  generateConfirmKey(): Promise<void>;
+  sendConfirmationEmail(): Promise<void>;
   sendResetEmail(): Promise<void>;
   unfollowNovel(novelId: Types.ObjectId): Promise<void>;
   validateResetKey(key: string): void;

@@ -24,7 +24,7 @@
   "homepage": "https://github.com/coyotte508/novelia#readme",
   "dependencies": {
     "archiver-promise": "^1.0.0",
-    "bcrypt": "latest",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.15.2",
     "bootstrap": "^4.0.0",
     "bson": "^3.0.2",
@@ -67,7 +67,7 @@
     "xregexp": "^4.2.0"
   },
   "devDependencies": {
-    "@types/bcrypt": "^2.0.0",
+    "@types/bcryptjs": "^2.4.1",
     "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.4",
     "@types/compression": "0.0.36",
