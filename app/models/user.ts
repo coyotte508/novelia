@@ -60,7 +60,7 @@ export interface UserDocument extends mongoose.Document {
   /* Methods */
   fillInSecurity(ip: string): void;
   followNovel(novel: {ref: Types.ObjectId, title: string}): Promise<void>;
-  followsNovel(novel: Types.ObjectId): Promise<boolean>;
+  followsNovel(novel: Types.ObjectId): boolean;
   generateResetLink(): Promise<void>;
   loadAuthoredNovels(): Promise<void>;
   loadGoldPouches(): Promise<void>;

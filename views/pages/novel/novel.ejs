@@ -4,7 +4,7 @@ title = novel.title;
 isGod = user && (user.isAdmin || user.id == author.id);
 nLink = novel.link;
 authorName = author.displayName;
-followed = user && user.isFollowNovel(novel.id);
+followed = user && user.followsNovel(novel.id);
 description = sys.makeDescription(novel.description);
 
 %>
