@@ -1,20 +1,25 @@
-import * as NodeCache from 'node-cache';
+import { DailyCount, DailyThrottle } from '../models';
 
-const cache = new NodeCache({
-  stdTTL: 3600 * 6
-});
+async function addView(req: Express.Request) {
+  try {
+    if (!req.chapter.public) {
+      return;
+    }
 
-function addView(req: Express.Request) {
-  if (!req.chapter.public) {
-    return;
+    try {
+      await DailyThrottle.add(req.ip, "view-chapter");
+    } catch (err) {
+      return;
+    }
+
+    await Promise.all([
+      req.chapter.update({$inc: {views: 1}}),
+      req.novel.update({$inc: {totalViews: 1}}),
+      DailyCount.add("view-novel", req.novel.id)
+    ]);
+  } catch (err) {
+    console.error(err);
   }
-  if (cache.get(req.chapter.id + "-" + req.ip) !== undefined) {
-    return;
-  }
-  cache.set(req.chapter.id + "-" + req.ip, Date.now());
-
-  req.chapter.update({$inc: {views: 1}}).exec();
-  req.novel.update({$inc: {totalViews: 1}}).exec();
 }
 
 export {

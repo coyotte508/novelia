@@ -3,7 +3,6 @@ import * as mongoose from 'mongoose';
 
 /* Express stuff */
 import * as express from 'express';
-import * as ejs from 'ejs';
 import * as expressLayouts from 'express-ejs-layouts';
 import * as compression from 'compression';
 import * as bodyParser from 'body-parser';

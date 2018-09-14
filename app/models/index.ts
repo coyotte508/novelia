@@ -6,6 +6,8 @@ import Comment from './comment';
 import Payment from './payment';
 import Gold from './gold';
 import categories from './category';
+import DailyCount from './dailyCount';
+import DailyThrottle from './dailyThrottle';
 
 export {
   Novel,
@@ -15,5 +17,7 @@ export {
   Comment,
   Payment,
   Gold,
+  DailyCount,
+  DailyThrottle,
   categories as Category
 };
