@@ -1,12 +1,15 @@
 import * as utils from '../utils';
 import {Novel, User, Category as categories} from '../../models';
 import Router from 'express-promise-router';
+import {loadCategories} from "../../engine/middlewares/categories";
 
 const router = Router();
 
 import add from "./add";
 
 router.use("/", add);
+
+router.use(loadCategories);
 
 router.param('novel', async (req, res, next, lnovel) => {
   const novel = await Novel.findOne({slug: lnovel.toLowerCase()});
