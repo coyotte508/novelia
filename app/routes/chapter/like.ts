@@ -14,10 +14,13 @@ router.all('/like', utils.isLoggedIn, async (req: Request, res) => {
   await Like.create({source: req.chapter.id, sourceType: "chapter", author: req.user._id});
   await Promise.all([
     req.chapter.update({$inc: {likes: 1}}),
+    req.novel.update({$inc: {totalLikes: 1}}),
     DailyCount.add("like-novel", req.novel.id)
   ]);
   
   res.redirect(req.get('Referrer') || req.chapter.getLink());
+
+  req.novel.adjustDailyLikes().catch(console.error);
 });
 
 router.all('/unlike', utils.isLoggedIn, async (req: Request, res) => {
@@ -26,11 +29,14 @@ router.all('/unlike', utils.isLoggedIn, async (req: Request, res) => {
   if (result.n > 0) {
     await Promise.all([
       req.chapter.update({$inc: {likes: -1}}),
+      req.novel.update({$inc: {totalLikes: -1}}),
       DailyCount.add("unlike-novel", req.novel.id)
     ]);
   }
   
   res.redirect(req.get('Referrer') || req.chapter.getLink());
+
+  req.novel.adjustDailyLikes().catch(console.error);
 });
 
 export default router;

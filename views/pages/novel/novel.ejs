@@ -38,7 +38,8 @@ description = sys.makeDescription(novel.description);
         <% }%>
         <small class="pull-right">
           <a href="<%= novel.link() + (followed ? "/unfollow" : "/follow") %>" class="btn btn-sm btn-secondary<%- followed ? " active" : "" %>" aria-pressed="<%- followed ? "true" : "false" %>"><span class="fa fa-plus"></span> Follow <span class="badge badge-default"><%- novel.follows %></span></a>
-          <a class="btn btn-sm btn-secondary"><span class="fa fa-eye"><span class="sr-only">Views: </span></span> <span class="badge badge-default"><%= novel.totalViews %></span></a>
+          <span class="btn btn-sm btn-secondary"><span class="fa fa-eye"><span class="sr-only">Views </span></span> <span class="badge badge-secondary"><%= novel.totalViews %></span></span>
+          <span class="btn btn-sm btn-secondary"><span class="fa fa-thumbs-up"><span class="sr-only">Likes </span></span> <span class="badge badge-secondary"><%= novel.totalLikes %></span></span>
         </small>
       </p>
       <h4>Synopsis</h4>

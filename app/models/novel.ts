@@ -4,7 +4,7 @@ import * as slug from 'slug';
 const Schema = mongoose.Schema;
 import * as assert from 'assert';
 import Chapter, { ChapterDocument } from './chapter';
-import { DailyCount } from '.';
+import DailyCount from './dailyCount';
 
 export interface NovelDocument extends mongoose.Document {
   title: string;
@@ -21,6 +21,7 @@ export interface NovelDocument extends mongoose.Document {
   latestChapter: Types.ObjectId;
   description: string;
   totalViews: number;
+  totalLikes: number;
   public: boolean;
   prologue: boolean;
   slug: string;
@@ -40,6 +41,7 @@ export interface NovelDocument extends mongoose.Document {
   loadChapters(): Promise<void>;
   addChapter(chapter: ChapterDocument): Promise<void>;
   deleteChapter(chapter: ChapterDocument): Promise<void>;
+  adjustDailyLikes(): Promise<void>;
   getImageLink(format?: string): string;
 }
 
@@ -78,6 +80,10 @@ const novelSchema = new Schema({
   },
   description: String,
   totalViews: {
+    type: Number,
+    default: 0
+  },
+  totalLikes: {
     type: Number,
     default: 0
   },
@@ -124,11 +130,11 @@ novelSchema.method("loadChapters",  async function(this: NovelDocument) {
   this.chapters = await Chapter.find({"novel.ref": this.id}, "title number views").sort({number: 1});
 });
 
-// novelSchema.method("loadDailyLikes", async function(this: NovelDocument) {
-//   const [likes, unlikes] = await Promise.all([DailyCount.dailyCount("like-novel", this.id), DailyCount.dailyCount("unlike-novel", this.id)]);
+novelSchema.method("adjustDailyLikes", async function(this: NovelDocument) {
+  const [likes, unlikes] = await Promise.all([DailyCount.dailyCount("like-novel", this.id), DailyCount.dailyCount("unlike-novel", this.id)]);
 
-//   return this.dailyLikes = likes - unlikes;
-// });
+  await this.update({dailyLikes: likes - unlikes});
+});
 
 novelSchema.virtual("publicChaptersCount", function(this: NovelDocument) {
   if (!this.public) {
