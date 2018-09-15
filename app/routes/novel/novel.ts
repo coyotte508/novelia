@@ -1,5 +1,5 @@
 import * as utils from '../utils';
-import {Novel, User, Category as categories} from '../../models';
+import {Novel, User} from '../../models';
 import Router from 'express-promise-router';
 import {loadCategories} from "../../engine/middlewares/categories";
 

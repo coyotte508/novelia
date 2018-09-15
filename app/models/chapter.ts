@@ -9,6 +9,7 @@ export interface ChapterDocument extends mongoose.Document {
   title: string;
   content: string;
   views: number;
+  likes: number;
   novel: {
     ref: Types.ObjectId,
     title: string
@@ -36,6 +37,10 @@ const chapterSchema = new Schema({
     required: true
   },
   views: {
+    type: Number,
+    default: 0
+  },
+  likes: {
     type: Number,
     default: 0
   },

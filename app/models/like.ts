@@ -4,13 +4,16 @@ const Schema = mongoose.Schema;
 
 export interface LikeDocument extends mongoose.Document {
   source: Types.ObjectId;
-  sourceType: string;
+  sourceType: "chapter" | "comment";
   author: Types.ObjectId;
 }
 
 const likeSchema = new Schema({
   source: Schema.Types.ObjectId, // Id of object liked
-  sourceType: String, // What is liked? Chapter, comment, ...
+  sourceType: {
+    type: String,
+    enum: ["chapter", "comment"]
+  },
   author: {
     type: Schema.Types.ObjectId, // author
     required: true

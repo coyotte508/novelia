@@ -17,6 +17,10 @@ async function addView(req: Express.Request) {
       req.novel.update({$inc: {totalViews: 1}}),
       DailyCount.add("view-novel", req.novel.id)
     ]);
+
+    // Todo: instead of counting everytime, schedule jobs?
+    const novelViews = await DailyCount.dailyCount("view-novel", req.novel.id);
+    await req.novel.update({dailyViews: novelViews});
   } catch (err) {
     console.error(err);
   }

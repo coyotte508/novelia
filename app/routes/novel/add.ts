@@ -35,7 +35,7 @@ router.post('/addnovel', utils.isLoggedIn, async (req: Request, res) => {
     await novel.save();
 
     // req.flash('addnovelMessage', "New novel added (sort of)");
-    res.redirect(novel.link);
+    res.redirect(novel.link());
   } catch (err) {
     res.status(err.statusCode || 500);
     res.render('pages/novel/addnovel', {message: err.message, categories: req.categories, action: 'add'});

@@ -22,7 +22,7 @@ router.all('/delete', utils.canTouchNovel, async (req: Request, res, next) => {
 
     chapter.remove();
 
-    res.redirect(novel.link);
+    res.redirect(novel.link());
   } catch (err) {
     next(err);
   } finally {

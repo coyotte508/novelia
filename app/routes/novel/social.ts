@@ -23,7 +23,7 @@ router.all('/follow', utils.isLoggedIn, async (req: Request, res, next) => {
     await user.followNovel({ref: novel.id, title: novel.title});
     await novel.update({$inc: {follows: 1}});
 
-    res.redirect(req.get('Referrer') || novel.link);
+    res.redirect(req.get('Referrer') || novel.link());
   } catch (err) {
     next(err);
   } finally {
@@ -47,7 +47,7 @@ router.all('/unfollow', utils.isLoggedIn, async (req: Request, res, next) => {
       console.error(err);
     }
 
-    res.redirect(req.get('Referrer') || novel.link);
+    res.redirect(req.get('Referrer') || novel.link());
   } catch (err) {
     next(err);
   } finally {

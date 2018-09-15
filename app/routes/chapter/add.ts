@@ -49,7 +49,7 @@ router.post('/addchapter', utils.canTouchNovel, async (req: Request, res) => {
 
     limiter.action(req.user.id, "addchapter", {title, novel: novel.title});
 
-    res.redirect(novel.link + "/" + (prologue ? 0 : novel.numChapters + 1));
+    res.redirect(novel.link() + "/" + (prologue ? 0 : novel.numChapters + 1));
   } catch (err) {
     res.status(err.statusCode || 500);
     res.render('pages/novel/addchapter', {novel: novel || {}, message: err.message, action: "add"});

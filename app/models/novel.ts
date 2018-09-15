@@ -27,18 +27,17 @@ export interface NovelDocument extends mongoose.Document {
   numChapters: number;
   follows: number;
 
-  /* Virtuals */
-  publicChaptersCount: number;
-  classySlug: string;
-  chapters?: ChapterDocument[];
-  link?: string;
   dailyLikes: number;
   dailyViews: number;
 
+  /* Virtuals */
+  publicChaptersCount: number;
+  chapters?: ChapterDocument[];
+
   /* Methods */
+  link(): string;
+  classySlug(): string;
   loadChapters(): Promise<void>;
-  loadDailyLikes(): Promise<number>;
-  loadDailyViews(): Promise<number>;
   addChapter(chapter: ChapterDocument): Promise<void>;
   deleteChapter(chapter: ChapterDocument): Promise<void>;
   getImageLink(format?: string): string;
@@ -99,6 +98,15 @@ const novelSchema = new Schema({
     type: Number,
     default: 0
   },
+  dailyViews: {
+    type: Number,
+    default: 0,
+    index: true
+  },
+  dailyLikes: {
+    type: Number,
+    default: 0
+  }
 });
 
 // novelSchema.index({"title": "text"});
@@ -116,15 +124,11 @@ novelSchema.method("loadChapters",  async function(this: NovelDocument) {
   this.chapters = await Chapter.find({"novel.ref": this.id}, "title number views").sort({number: 1});
 });
 
-novelSchema.method("loadDailyLikes", async function(this: NovelDocument) {
-  const [likes, unlikes] = await Promise.all([DailyCount.dailyCount("like-novel", this.id), DailyCount.dailyCount("unlike-novel", this.id)]);
+// novelSchema.method("loadDailyLikes", async function(this: NovelDocument) {
+//   const [likes, unlikes] = await Promise.all([DailyCount.dailyCount("like-novel", this.id), DailyCount.dailyCount("unlike-novel", this.id)]);
 
-  return this.dailyLikes = likes - unlikes;
-});
-
-novelSchema.method("loadDailyViews", async function(this: NovelDocument) {
-  return this.dailyViews = await DailyCount.dailyCount("view-novel", this.id);
-});
+//   return this.dailyLikes = likes - unlikes;
+// });
 
 novelSchema.virtual("publicChaptersCount", function(this: NovelDocument) {
   if (!this.public) {
@@ -134,12 +138,12 @@ novelSchema.virtual("publicChaptersCount", function(this: NovelDocument) {
   return this.numChapters + (this.prologue ? 0 : 1);
 });
 
-novelSchema.virtual('classySlug', function(this: NovelDocument) {
+novelSchema.method('classySlug', function(this: NovelDocument) {
   return slug(this.title, {lower: false});
 });
 
-novelSchema.virtual('link', function(this: NovelDocument) {
-    return /*"/nv/" +*/ "/" + this.classySlug;
+novelSchema.method('link', function(this: NovelDocument) {
+    return /*"/nv/" +*/ "/" + this.classySlug();
 });
 
 novelSchema.method('addChapter', async function(this: NovelDocument, chapter: ChapterDocument) {

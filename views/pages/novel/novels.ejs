@@ -16,7 +16,7 @@ title = "List of Novels";
   <ul class="list-group text-md-left novel-list">
     <% novels.forEach(novel => {%>
     <li class="list-group-item">
-      <a class="novel-title-link" href="<%- novel.link %>">
+      <a class="novel-title-link" href="<%- novel.link() %>">
         <span class="novel-title"><%= novel.title %>  
         </span>
       </a>

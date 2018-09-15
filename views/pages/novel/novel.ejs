@@ -2,7 +2,7 @@
 
 title = novel.title;
 isGod = user && (user.isAdmin || user.id == author.id);
-nLink = novel.link;
+nLink = novel.link();
 authorName = author.displayName;
 followed = user && user.followsNovel(novel.id);
 description = sys.makeDescription(novel.description);
@@ -14,7 +14,7 @@ description = sys.makeDescription(novel.description);
 <meta property="og:title" content="<%= title %>" />
 <meta property="og:type" content="books.book" />
 <meta property="books:author" content="<%= authorName %>" />
-<meta property="og:url" content="http://" + reg.get("host") + "/" + novel.link />
+<meta property="og:url" content="http://" + reg.get("host") + "/" + novel.link() />
 <!--<meta property="og:image" content="http://ia.media-imdb.com/images/rock.jpg" />-->
 <meta name="author" content="<%= authorName %>" />
 
@@ -37,7 +37,7 @@ description = sys.makeDescription(novel.description);
           <a href="/category/<%= novel.categories[1] %>"><span class="badge badge-secondary"><%= req.categoryName(novel.categories[1]) %></span></a>
         <% }%>
         <small class="pull-right">
-          <a href="<%= novel.link + (followed ? "/unfollow" : "/follow") %>" class="btn btn-sm btn-secondary<%- followed ? " active" : "" %>" aria-pressed="<%- followed ? "true" : "false" %>"><span class="fa fa-plus"></span> Follow <span class="badge badge-default"><%- novel.follows %></span></a>
+          <a href="<%= novel.link() + (followed ? "/unfollow" : "/follow") %>" class="btn btn-sm btn-secondary<%- followed ? " active" : "" %>" aria-pressed="<%- followed ? "true" : "false" %>"><span class="fa fa-plus"></span> Follow <span class="badge badge-default"><%- novel.follows %></span></a>
           <a class="btn btn-sm btn-secondary"><span class="fa fa-eye"><span class="sr-only">Views: </span></span> <span class="badge badge-default"><%= novel.totalViews %></span></a>
         </small>
       </p>

@@ -3,10 +3,13 @@ title = chapter.title;
 isGod = user && (user.isAdmin || user.id == novel.author.ref);
 isAdmin = user && user.isAdmin;
 canComment = !!user;
-novelLink = novel.link;
+novelLink = novel.link();
 num = +req.params.chapter;
 description = sys.makeDescription(chapter.content);
-chapterLink = novel.link + "/" + num;
+chapterLink = novel.link() + "/" + num;
+
+liked = likesChapter;
+likes = chapter.likes;
 
 %>
 
@@ -15,12 +18,15 @@ chapterLink = novel.link + "/" + num;
 <meta name="author" content="<%= novel.author.name %>" />
 
 <div class="offset-lg-1 col-lg-10 offset-xl-2 col-xl-8 sm-no-padding">
-  <h2 class="text-center"><a href="<%= novel.link %>"><%= novel.title %></a> - <%= num %> <% if (isGod) {%><small><a href="<%= novelLink + "/" + num  + "/edit" %>"><small><span class="fa fa-pencil-square-o smaller"></span></small></a></small><% } %></h2>
+  <h2 class="text-center"><a href="<%= novelLink %>"><%= novel.title %></a> - <%= num %> <% if (isGod) {%><small><a href="<%= novelLink + "/" + num  + "/edit" %>"><small><span class="fa fa-pencil-square-o smaller"></span></small></a></small><% } %></h2>
   <div class="pos-r">
     <h6 class="text-center text-muted">
       by <a href="<%= novel.author.link || ("/u/"+novel.author.name) %>" class="authorLink"><%= novel.author.name %></a>
     </h6>
-    <small><time class="float-right text-muted pos-a" format="ago" unixtime="<%= sys.unixTime(chapter.id) %>" style="right: 0; bottom: -10%"><%= sys.timeSince(chapter.id) %> ago</time></small>
+    <a href="<%= chapterLink + (liked ? "/unlike" : "/like") %>" class="btn pos-a btn-sm btn-secondary<%- liked ? " active" : "" %>" aria-pressed="<%- liked ? "true" : "false" %>" style="left: 0; bottom: -50%">
+      <span class="fa fa-thumbs-up"></span> Like <span class="badge badge-default"><%- likes %></span>
+    </a>
+    <small><time class="text-muted pos-a" format="ago" unixtime="<%= sys.unixTime(chapter.id) %>" style="right: 0; bottom: -10%"><%= sys.timeSince(chapter.id) %> ago</time></small>
   </div>
   <hr/>
   <h3 class="chapter-title"><%= chapter.title %></h3>
@@ -42,9 +48,9 @@ chapterLink = novel.link + "/" + num;
 
   <div class="text-center chapter-navigation-bottom">
     <div class="btn-group" role="group" aria-label="Navigation">
-      <a href="<%= novel.link + "/" + (num-1) %>" class="btn btn-primary<%= num == (novel.prologue? 0 : 1) ? " disabled" : ""%>"><span class="fa fa-lg fa-long-arrow-left"></span> <span class="hidden-sm-down">Previous Chapter</span></a>
-      <a href="<%= novel.link%>" class="btn btn-primary"><span class="fa fa-lg fa-th-list"></span> <span class="hidden-sm-down">Table of Contents</span></button>
-      <a href="<%= novel.link + "/" + (num+1) %>" class="btn btn-primary<%= num == novel.numChapters ? " disabled" : ""%>"><span class="hidden-sm-down">Next Chapter</span> <span class="fa fa-lg fa-long-arrow-right"></span></a>
+      <a href="<%= novel.link() + "/" + (num-1) %>" class="btn btn-primary<%= num == (novel.prologue? 0 : 1) ? " disabled" : ""%>"><span class="fa fa-lg fa-long-arrow-left"></span> <span class="hidden-sm-down">Previous Chapter</span></a>
+      <a href="<%= novel.link()%>" class="btn btn-primary"><span class="fa fa-lg fa-th-list"></span> <span class="hidden-sm-down">Table of Contents</span></button>
+      <a href="<%= novel.link() + "/" + (num+1) %>" class="btn btn-primary<%= num == novel.numChapters ? " disabled" : ""%>"><span class="hidden-sm-down">Next Chapter</span> <span class="fa fa-lg fa-long-arrow-right"></span></a>
     </div>
   </div>
 

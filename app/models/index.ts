@@ -8,6 +8,7 @@ import Gold from './gold';
 import categories from './category';
 import DailyCount from './dailyCount';
 import DailyThrottle from './dailyThrottle';
+import Like from './like';
 
 export {
   Novel,
@@ -19,5 +20,6 @@ export {
   Gold,
   DailyCount,
   DailyThrottle,
+  Like,
   categories as Category
 };
