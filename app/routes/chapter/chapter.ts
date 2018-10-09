@@ -15,7 +15,7 @@ router.param('chapter', async (req, res, next, chapterNum) => {
   const novel = req.novel;
   const chap = +chapterNum;
 
-  req.chapter = await Chapter.findOne({"novel.ref": novel.id, "number": chap});
+  req.chapter = await Chapter.findOne({"novel.ref": novel._id, "number": chap});
 
   utils.assert404(req.chapter, "Chapter not found");
 
@@ -25,7 +25,7 @@ router.param('chapter', async (req, res, next, chapterNum) => {
 router.get('/:chapter(\\d+)/', async (req, res) => {
   const likesChapter = req.user ? await Like.count({source: req.chapter._id, author: req.user.id}) : false;
   viewcounter.addView(req);
-  const comments = await Comment.commentsFor(req.chapter.id);
+  const comments = await Comment.commentsFor(req.chapter._id);
   res.render('pages/novel/chapter', {novel: req.novel, chapter: req.chapter, comments, likesChapter});
 });
 

@@ -129,7 +129,7 @@ novelSchema.method("loadChapters",  async function(this: NovelDocument) {
   if (this.chapters) {
     return;
   }
-  this.chapters = await Chapter.find({"novel.ref": this.id}, "title number views").sort({number: 1});
+  this.chapters = await Chapter.find({"novel.ref": this._id}, "title number views").sort({number: 1});
 });
 
 novelSchema.method("adjustDailyLikes", async function(this: NovelDocument) {

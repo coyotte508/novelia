@@ -77,9 +77,9 @@ description = sys.makeDescription(novel.description);
         </span>
       </a>
     <% });
-     } else { %>
-    <% novel.chapters.forEach( (item, index) =>  { 
-      index = novel.prologue ? index : (+index + 1);
+     } else { 
+       novel.chapters.forEach( (item, index) =>  { 
+       index = novel.prologue ? index : (+index + 1);
       %>
       <li class="list-group-item">
         <a class="mr-auto list-group-item-action" href="<%= nLink + "/" + index %>">
