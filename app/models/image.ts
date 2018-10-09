@@ -1,93 +1,113 @@
+import '../config/db';
 import * as assert from 'assert';
-import * as fs from 'fs-extra';
-import * as jimp from 'jimp';
-import * as path from 'path';
+import jimp = require('jimp');
 import * as mongoose from 'mongoose';
-import { Types } from 'mongoose';
+import * as _ from 'lodash';
+import { Types, mongo } from 'mongoose';
+import { ObjectId } from 'bson';
+import { GridFSBucketReadStream, GridFSBucket } from '../../node_modules/@types/mongodb';
 const Schema = mongoose.Schema;
+
+let bucket: GridFSBucket = null;
+
+mongoose.connection.on("open", () => {
+  bucket = new mongo.GridFSBucket(mongoose.connection.db, {bucketName: 'files'});
+});
 
 export interface ImageParams {
   name: string;
-  ext: string;
+  ext: ".png" | ".jpg" | ".jpeg";
   type: string;
   source: Types.ObjectId;
   buffer: Buffer;
 }
 
 export interface ImageDocument extends mongoose.Document {
-  location: string;
-  what: string;
   source: Types.ObjectId;
-  formats: Array<{format: string, location: string}>;
+  type: string;
+  name: string;
+  ext: ".png" | ".jpg" | ".jpeg";
+  formats: Array<{format: string, filename: string, _id: Types.ObjectId}>;
 
   delete(): Promise<void>;
   getLink(): string;
 }
 
 interface Image extends mongoose.Model<ImageDocument> {
+  downloadStream(type: string, filename: string): Promise<GridFSBucketReadStream>;
   createFromData(params: ImageParams): Promise<ImageDocument>;
   createOrUpdate(params: ImageParams, old?: Types.ObjectId): Promise<ImageDocument>;
 }
 
 const imageSchema = new Schema({
-  location: String,
-  what: String,
   source: Schema.Types.ObjectId,
-  formats: [{format: String, location: String}]
+  type: String,
+  name: String,
+  ext: {
+    type: String,
+    enum: [".png", ".jpg", ".jpeg"]
+  },
+  formats: [{
+    filename: String,
+    format: String,
+    _id: Schema.Types.ObjectId
+  }]
 });
 
+imageSchema.index({'type': 1, 'formats.filename': 1}, {unique: true});
+
 imageSchema.method('delete', async function(this: ImageDocument) {
-  if (await fs.pathExists(this.location)) {
-    await fs.remove(this.location);
-  }
-
   for (const item of this.formats) {
-    if (await fs.pathExists(item.location)) {
-      await fs.remove(item.location);
-    }
+    bucket.delete(item._id);
   }
 
-  return this.remove();
+  await this.remove();
 });
 
 imageSchema.method('getLink', function(this: ImageDocument) {
-  return this.location.substr(this.location.indexOf("/images"));
+  return `/images/${this.type}/${this.name}${this.ext}`;
 });
 
 imageSchema.static('createFromData', async function(this: Image, params: ImageParams) {
-  const ext = params.ext.toLowerCase();
+  const ext = params.ext.toLowerCase() as ".png" | ".jpeg" | ".jpg";
   assert([".jpg", ".jpeg", ".png"].includes(ext), "Unsupported image format: " + ext);
 
   const image = new this();
-  image.what = params.type;
+  image.type = params.type;
   image.source = params.source;
-  const root = `./public/images/${params.type}`;
-  await fs.mkdirp(root);
+  image.ext = ext;
+  image.name = params.name;
 
-  const fullname = params.name + ext;
-
-
-  const localPath = path.join(root, fullname);
-
-  image.location = localPath;
-  const str = await fs.createWriteStream(localPath);
-  await str.write(params.buffer);
-
+  let filename = `${image.name}${image.ext}`;
+  let stream = bucket.openUploadStream(filename, {metadata: Object.assign(_.omit(params, "buffer"), {format: "original"})});
+  stream.end(params.buffer);
+  image.formats.push({_id: new ObjectId(stream.id as string), format: "original", filename});
   const jimage = await jimp.read(params.buffer);
 
   if (params.type === "novel") {
-    const smallName = `${params.name}-200x300${ext}`;
-    const smallPath = path.join(root, smallName);
     await jimage.cover(200, 300);
     if (ext.includes("jp")) {
       await jimage.quality(85);
     }
-    await jimage.write(smallPath);
-    image.formats.push({format: "200x300", location: smallPath});
+
+    filename = `${image.name}-200x300${image.ext}`;
+    stream = bucket.openUploadStream(filename, {metadata: Object.assign(_.omit(params, "buffer"), {format: "200x300"})});
+    stream.end(await jimage.getBufferAsync(jimage.getMIME()));
+    image.formats.push({_id: new ObjectId(stream.id as string), format: "200x300", filename});
   }
 
   await image.save();
   return image;
+});
+
+imageSchema.static('downloadStream', async function(this: Image, type: string, filename: string) {
+  const image = await this.findOne({type, 'formats.filename': filename});
+
+  if (!image) {
+    return null;
+  }
+
+  return bucket.openDownloadStream(image.formats.find(format => format.filename === filename)._id);
 });
 
 imageSchema.static('createOrUpdate', async function(this: Image, params: ImageParams, old?: Types.ObjectId) {

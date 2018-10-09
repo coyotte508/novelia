@@ -54,7 +54,6 @@ export interface UserDocument extends mongoose.Document {
   new?: boolean;
   novels?: NovelDocument[];
   resetKey?: string;
-  isAdmin?: boolean;
 
   /* Methods */
   fillInSecurity(ip: string): void;
@@ -74,6 +73,7 @@ export interface UserDocument extends mongoose.Document {
   validPassword(password: string): Promise<boolean>;
   link(): string;
   displayName(): string;
+  isAdmin(): boolean;
 }
 
 interface User extends mongoose.Model<UserDocument> {
@@ -300,7 +300,7 @@ userSchema.method('notifyLastIp', function(this: UserDocument, ip: string) {
   }
 });
 
-userSchema.virtual('isAdmin', function(this: UserDocument) {
+userSchema.method('isAdmin', function(this: UserDocument) {
   return this.authority === "admin";
 });
 

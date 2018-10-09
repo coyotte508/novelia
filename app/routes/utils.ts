@@ -45,7 +45,7 @@ function canTouchNovel(req, res, next) {
   isLoggedIn(req, res, () => {
     try {
       console.log(req.novel.author.ref, req.user._id);
-      assert403(req.user.isAdmin || req.novel.author.ref.equals(req.user._id), "You are not authorized to manage this novel.");
+      assert403(req.user.isAdmin() || req.novel.author.ref.equals(req.user._id), "You are not authorized to manage this novel.");
       next();
     } catch (err) {
       next(err);
@@ -56,7 +56,7 @@ function canTouchNovel(req, res, next) {
 function canTouchComment(req, res, next) {
   isLoggedIn(req, res, () => {
     try {
-      assert403(req.user.isAdmin || req.comment.author.ref.equals(req.user._id), "You are not authorized to manage this comment.");
+      assert403(req.user.isAdmin() || req.comment.author.ref.equals(req.user._id), "You are not authorized to manage this comment.");
       next();
     } catch (err) {
       next(err);

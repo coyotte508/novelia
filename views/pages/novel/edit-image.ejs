@@ -11,7 +11,7 @@ title = `Change ${novel.title}'s cover`;
 <div class="text-md-center">
   <img src="<%- novel.getImageLink() %>" />
 
-  <form method="post" enctype='multipart/form-data'>
+  <form method="post" enctype='multipart/form-data' class="mt-2">
     <input type="file" name="cover" required>
     <button type="submit" class="btn btn-primary">Upload</button>
   </form>

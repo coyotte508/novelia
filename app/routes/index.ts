@@ -9,6 +9,7 @@ import user from './user/user';
 import category from './category';
 import comment from './comment/comment';
 import novel from './novel/novel';
+import images from './images';
 
 const router = Router();
 
@@ -35,6 +36,8 @@ const modules = [
 ];
 
 /* Aggregate routers */
+
+router.use('/images', images);
 for (const mod of modules) {
   router.use("/", mod);
 }

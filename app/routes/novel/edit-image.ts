@@ -29,7 +29,7 @@ router.post('/edit-image', utils.canTouchNovel, upload.single('cover'), async (r
     type: "novel",
     buffer: req.file.buffer,
     name: novel.slug,
-    ext: path.extname(req.file.originalname),
+    ext: path.extname(req.file.originalname) as ".png" | ".jpeg" | ".jpg",
     source: novel._id
   }, req.novel.image.ref);
 

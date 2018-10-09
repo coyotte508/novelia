@@ -1,7 +1,7 @@
 <%
 title = chapter.title;
-isGod = user && (user.isAdmin || user.id == novel.author.ref);
-isAdmin = user && user.isAdmin;
+isGod = user && (user.isAdmin() || user.id == novel.author.ref);
+isAdmin = user && user.isAdmin();
 canComment = !!user;
 novelLink = novel.link();
 num = +req.params.chapter;
