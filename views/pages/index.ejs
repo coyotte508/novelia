@@ -60,10 +60,10 @@ for (const category of req.categories) {
     
   </div>
   <div class="text-md-center col-md-6">
-    <p class="f3">Top 10</p>
+    <p class="f3">Top 10 novels</p>
   
     <div class="mb-4"></div>
-    <%- include("snippets/latest-updates") %>
+    <%- include("snippets/best-novels", {novels: dailyTop}) %>
     
   </div>          
 </div>

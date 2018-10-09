@@ -3,6 +3,16 @@
     <% chapters.forEach((item) => {%>
     <a class="list-group-item list-group-item-action" href="<%- item.getNovelLink() %>">
       <%= item.novel.title %>  
+      <span class="ml-auto mr-2 text-muted" title="Chapter number">
+        <span class="sr-only">Chapter</span> <%= item.number %>
+        <span class="fa fa-bookmark"></span>
+      </span>
+      <span class="text-muted" title="Chapter views">
+        <%= item.views %>
+        <span class="fa fa-eye">
+          <span class="sr-only">Views</span>
+        </span>
+      </span>
     </a>
     <% });%>
   </ul>

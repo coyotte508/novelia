@@ -10,15 +10,16 @@ import category from './category';
 import comment from './comment/comment';
 import novel from './novel/novel';
 import images from './images';
+import { Novel } from '../models';
 
 const router = Router();
 
 router.get("/", loadCategories, async (req, res) => {
   const latest = await Chapter.latestUpdates();
 
-  const [best1, best30] = await Promise.all([Chapter.best(1), Chapter.best(30)]);
+  const [todayBest, monthlyBest, dailyTop] = await Promise.all([Chapter.best(1), Chapter.best(30), Novel.dailyTop()]);
 
-  res.render("pages/index", {error: null, latest, req, todayBest: best1, monthlyBest: best30});
+  res.render("pages/index", {error: null, latest, req, todayBest, monthlyBest, dailyTop});
 });
 
 router.get("/contact", (req, res) => {

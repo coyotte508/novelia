@@ -1,0 +1,21 @@
+<% if (novels.length > 0) {%>
+  <ul class="list-group text-md-left latest-updates mb-2">
+    <% novels.forEach((item) => {%>
+    <a class="list-group-item list-group-item-action" href="<%- item.link() %>">
+      <%= item.title %>
+      <span class="views ml-auto text-muted" title="Novel views">
+        <%= item.dailyViews %>
+        <span class="fa fa-eye">
+          <span class="sr-only">Views</span>
+        </span>
+      </span>
+    </a>
+    <% });%>
+  </ul>
+  <% } else { %>
+  <div class="card">
+    <div class="card-body">
+      No novels in that category. Write one?
+    </div>
+  </div>
+<% } %>

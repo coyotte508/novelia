@@ -47,6 +47,11 @@ export interface NovelDocument extends mongoose.Document {
 
 interface Novel extends mongoose.Model<NovelDocument> {
   latestUpdates(conditions?: object): Promise<NovelDocument[]>;
+  /**
+   * 10 novels with the most daily views
+   * @param conditions Additional conditions (category, ...)
+   */
+  dailyTop(conditions?: object): Promise<NovelDocument[]>;
 }
 
 // define the schema for our user model
@@ -203,6 +208,14 @@ novelSchema.static('latestUpdates', async function(this: Novel, conditions?: obj
   conditions = Object.assign({public: true}, conditions);
 
   const results = await this.find(conditions, "title latestChapter").sort({latestChapter: -1}).limit(10);
+
+  return results;
+});
+
+novelSchema.static('dailyTop', async function(this: Novel, conditions?: object) {
+  conditions = Object.assign({public: true}, conditions);
+
+  const results = await this.find(conditions, "title dailyViews").sort({dailyViews: -1}).limit(10);
 
   return results;
 });

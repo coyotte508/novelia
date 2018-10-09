@@ -95,7 +95,8 @@ chapterSchema.static("best", async function(this: Chapter, days = 1, conditions?
       {
         _id: "$novel.ref",
         title: {$first: "$novel.title"},
-        views: {$max: "$views"}
+        number: {$first: "$number"},
+        views: {$first: "$views"}
       }
     },
     { $sort: {views : -1}},
