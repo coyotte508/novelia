@@ -15,7 +15,9 @@ const router = Router();
 router.get("/", loadCategories, async (req, res) => {
   const latest = await Chapter.latestUpdates();
 
-  res.render("pages/index", {error: null, latest, req});
+  const [best1, best30] = await Promise.all([Chapter.best(1), Chapter.best(30)]);
+
+  res.render("pages/index", {error: null, latest, req, todayBest: best1, monthlyBest: best30});
 });
 
 router.get("/contact", (req, res) => {

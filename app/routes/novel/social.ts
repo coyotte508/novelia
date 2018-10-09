@@ -20,7 +20,7 @@ router.all('/follow', utils.isLoggedIn, async (req: Request, res, next) => {
 
     const user = await User.findById(req.user.id); // Force update after lock
 
-    await user.followNovel({ref: novel.id, title: novel.title});
+    await user.followNovel({ref: novel._id, title: novel.title});
     await novel.update({$inc: {follows: 1}});
 
     res.redirect(req.get('Referrer') || novel.link());

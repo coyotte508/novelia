@@ -3,6 +3,7 @@ import * as slug from 'slug';
 import {Types} from 'mongoose';
 import Novel from "./novel";
 import { NovelDocument } from './novel';
+import { ObjectId } from 'bson';
 const Schema = mongoose.Schema;
 
 export interface ChapterDocument extends mongoose.Document {
@@ -24,6 +25,7 @@ export interface ChapterDocument extends mongoose.Document {
 
 interface Chapter extends mongoose.Model<ChapterDocument> {
   latestUpdates(conditions?: object): Promise<Chapter[]>;
+  best(days?: number, conditions?: object): Promise<Chapter[]>;
 }
 
 // define the schema for our user model
@@ -74,46 +76,38 @@ chapterSchema.static("latestUpdates", async function(this: Chapter, filter: obje
   const novels = await Novel.latestUpdates(filter);
   const chapters = await this.find({
     _id: {$in: novels.map((item: NovelDocument) => item.latestChapter)}
-  }, "title novel number").sort({_id: -1});
+  }, "title novel number").sort({_id: -1}).limit(10);
 
   return chapters;
+});
+
+chapterSchema.static("best", async function(this: Chapter, days = 1, conditions?: object) {
+  const deadline = ObjectId.createFromTime(Date.now() / 1000 - days * 24 * 3600);
+  conditions = Object.assign({_id: {$gt: deadline}, public: true}, conditions);
+
   /* Map reduce version, to return only chapters from different novels */
-  // let results = await Chapter.aggregate([
-  //   { $match: filter },
-  //   { $sort: {_id : -1}},
-  //   //{ $limit: 100},
-  //   {
-  //     $group:
-  //     {
-  //       _id: "$novel",
-  //       id: {$first: "$_id"},
-  //       title: {$first: "$title"},
-  //       novel: {$first: "$novel"},
-  //       number: {$first: "$number"}
-  //     }
-  //   },
-  //   {
-  //     $group:
-  //     {
-  //       _id: "$id",
-  //       title: {$first: "$title"},
-  //       novel: {$first: "$novel"},
-  //       number: {$first: "$number"}
-  //     }
-  //   },
-  //   { $sort: {_id : -1}},
-  //   { $limit: 10}
-  // ]);
+  const results = await this.aggregate([
+    { $match:  conditions},
+    { $sort: {views : -1}},
+    { $limit: 100},
+    {
+      $group:
+      {
+        _id: "$novel.ref",
+        title: {$first: "$novel.title"},
+        views: {$max: "$views"}
+      }
+    },
+    { $sort: {views : -1}},
+    { $limit: 10}
+  ]);
 
-  // for (let result of results) {
-  //   result.getLink = chapterSchema.methods.getLink;
-  //   result.getNovelLink = chapterSchema.methods.getNovelLink;
-  // }
+  for (const result of results) {
+    result.getNovelLink = chapterSchema.methods.getNovelLink;
+    result.novel = {title: result.title};
+  }
 
-  // return results;
-
-  /// * Non map-reduce version, much simpler */
-  //// return Chapter.find({public: true}, "title novel number").sort({_id: -1}).limit(10);
+  return results;
 });
 
 export default mongoose.model<ChapterDocument, Chapter>('Chapter', chapterSchema);

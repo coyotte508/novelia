@@ -118,7 +118,9 @@ const novelSchema = new Schema({
 // novelSchema.index({"title": "text"});
 
 novelSchema.pre<NovelDocument>("save", function(next) {
-  this.slug = slug(this.title, {lower: true});
+  if (this.title) {
+    this.slug = slug(this.title, {lower: true});
+  }
 
   next();
 });

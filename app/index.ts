@@ -39,8 +39,9 @@ mongoose.connection.on("open", async () => {
     if (await User.find({}).limit(1).count() === 0) {
       await restore();
     }
-    // const migrations = require("./models/migrations");
-    // migrations["0.1.2"].up();
+
+    const migrations = require("./models/migrations");
+    // migrations["0.1.6"].up();
   } catch (err) {
     console.error(err);
   }

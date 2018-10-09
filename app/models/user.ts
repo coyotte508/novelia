@@ -48,7 +48,6 @@ export interface UserDocument extends mongoose.Document {
   /* Virtuals */
   confirmed?: boolean;
   confirmKey?: string;
-  displayName?: string;
   email?: string;
   isSocialAccount?: boolean;
   goldPouches?: GoldDocument[];
@@ -74,6 +73,7 @@ export interface UserDocument extends mongoose.Document {
   validateResetKey(key: string): void;
   validPassword(password: string): Promise<boolean>;
   link(): string;
+  displayName(): string;
 }
 
 interface User extends mongoose.Model<UserDocument> {
@@ -146,10 +146,10 @@ userSchema.method('avatar', function(this: UserDocument, size: number) {
 });
 
 userSchema.method('loadAuthoredNovels', async function(this: UserDocument) {
-  return this.novels = await Novel.find({"author.ref": this.id});
+  this.novels = await Novel.find({"author.ref": this._id});
 });
 
-userSchema.virtual('displayName', function(this: UserDocument) {
+userSchema.method('displayName', function(this: UserDocument) {
   return this.local.username || this.google.name;
 });
 
@@ -247,7 +247,7 @@ userSchema.virtual('sendConfirmationEmail', function(this: UserDocument) {
     from: config.noreply,
     to: this.email,
     subject: 'Confirm your account',
-    html: `<p>To finish your registration and confirm your account ${this.displayName}, click <a href='http://www.${config.domain}/confirm?key=${this.confirmKey}&user=${this.email}'>this link</a>.</p>
+    html: `<p>To finish your registration and confirm your account ${this.displayName()}, click <a href='http://www.${config.domain}/confirm?key=${this.confirmKey}&user=${this.email}'>this link</a>.</p>
 
     <p>If you didn't create an account with us, then just ignore this email.</p>`,
   });
@@ -258,7 +258,7 @@ userSchema.method('sendResetEmail', function(this: UserDocument) {
     from: config.noreply,
     to: this.email,
     subject: 'Forgotten password',
-    html: `<p>A password reset was requested for your account ${this.local.username}, click <a href='http://www.${config.domain}/reset?key=${this.resetKey}'>this link</a> to proceed with it.</p>
+    html: `<p>A password reset was requested for your account ${this.displayName()}, click <a href='http://www.${config.domain}/reset?key=${this.resetKey}'>this link</a> to proceed with it.</p>
 
     <p>If you didn't request a password reset, then just ignore this email.</p>`,
   });

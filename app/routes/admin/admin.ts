@@ -16,7 +16,7 @@ router.get("/admin", utils.isAdmin, async (req: Request, res) => {
 
   const actionsB = actions.map(x => ({
     data: x.data ? JSON.stringify(x.data) : undefined,
-    user: userD[x.user].displayName,
+    user: userD[x.user].displayName(),
     userLink: userD[x.user].link,
     action: x.action
   }));

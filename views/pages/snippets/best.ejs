@@ -1,0 +1,15 @@
+<% if (chapters.length > 0) {%>
+  <ul class="list-group text-md-left latest-updates mb-2">
+    <% chapters.forEach((item) => {%>
+    <a class="list-group-item list-group-item-action" href="<%- item.getNovelLink() %>">
+      <%= item.novel.title %>  
+    </a>
+    <% });%>
+  </ul>
+  <% } else { %>
+  <div class="card">
+    <div class="card-body">
+      No chapters in that timeframe.
+    </div>
+  </div>
+<% } %>

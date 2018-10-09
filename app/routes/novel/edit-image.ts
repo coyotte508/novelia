@@ -33,7 +33,7 @@ router.post('/edit-image', utils.canTouchNovel, upload.single('cover'), async (r
     source: novel._id
   }, req.novel.image.ref);
 
-  await novel.update({image: {ref: fullImage.id, link: fullImage.getLink()}});
+  await novel.update({image: {ref: fullImage._id, link: fullImage.getLink()}});
 
   res.redirect(novel.link());
 });

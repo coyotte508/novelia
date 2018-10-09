@@ -1,5 +1,5 @@
 <%
-title = u.displayName;
+title = u.displayName();
 var isDisplayedUser = user && user.id == u.id;
 
 var isGod = user && (user.isAdmin || isDisplayedUser);
@@ -17,7 +17,7 @@ var novels = u.novels.filter(nov => nov.public || isGod);
     <section class="vcard">
       <img src="<%=u.avatar(230)%>"  class="avatar rounded-2 width-fit"/>
       <h4>
-        <span class="username"><%= u.displayName %></span>
+        <span class="username"><%= u.displayName() %></span>
         <% if (isDisplayedUser) {%>
           <a href="/logout" class="btn btn-secondary btn-sm pull-right">Logout</a>
           <%}%>
@@ -56,7 +56,7 @@ var novels = u.novels.filter(nov => nov.public || isGod);
         </div>
       <% } else if (req.params.tab == "novels") { %>
         <div class="tab-pane active" id="novels" role="tabpanel">
-          <%if (novels.length > 0 && 0) { %>
+          <%if (novels.length > 0) { %>
           <p><ul class="list-group">
             <% novels.forEach( (novel) => { %>
               <a href="/<%= slug(novel.title) %>" class="list-group-item list-group-item-action"><%= novel.title %></a>

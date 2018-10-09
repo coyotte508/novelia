@@ -15,7 +15,7 @@ router.param('novel', async (req, res, next, lnovel) => {
   const novel = await Novel.findOne({slug: lnovel.toLowerCase()});
 
   if (!novel) {
-    const message = lnovel[0] === lnovel[0].toLowerCase() ? "Page not found" : "Novel not found";
+    const message = lnovel[0] === lnovel[0].toLowerCase() ? "Page not found " + lnovel : "Novel not found " + lnovel;
     throw new utils.HttpError(message, 404);
   }
 

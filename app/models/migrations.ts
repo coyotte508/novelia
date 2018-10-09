@@ -1,6 +1,7 @@
 'use strict';
 
-import Novel from './novel';
+import { ObjectId } from 'bson';
+import { Chapter, Comment, Novel } from '.';
 
 function latest(doc: any) {
   const chaps = doc.chapters.map((it: any) => it.ref || null).filter((it: any) => !!it).sort().reverse();
@@ -22,6 +23,27 @@ const migrations = {
       console.log("end");
     }, async down() {
       await Novel.updateMany({}, {$unset: {latestChapter: ""}});
+    }
+  },
+  "0.1.6": {
+    name: "refs are ids, not strings",
+    async up() {
+      console.log("Starting migration process...");
+
+      const update = async (model, field) => {
+        const docs = await model.find({}, field.split(".")[0]);
+        console.log("found", docs.length, "docs");
+        for (const doc of docs) {
+          doc.set(field, new ObjectId(doc.get(field)));
+          await doc.save();
+        }
+      };
+
+      await update(Novel, "author.ref");
+      await update(Chapter, "novel.ref");
+      await update(Comment, "author.ref");
+
+      console.log("end");
     }
   }
 };

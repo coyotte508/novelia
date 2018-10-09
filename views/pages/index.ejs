@@ -6,6 +6,17 @@
 
 <!-- body -->
 
+
+<div class="text-md-center">
+<%
+for (const category of req.categories) {
+  %>
+  <a href="/category/<%= category.shorthand %>"><span class="badge badge-primary"><%= category.name %></span></a>
+  <%
+}
+%>
+</div>
+
 <div class="starter-template">
   <h1>LitNovel <span class="fa fa-fire"></span></h1>
   <p class="lead">Home to some beautiful novels and a lit community.</p>
@@ -19,18 +30,40 @@
 </div>
 <% } %>
 
-<div class="text-md-center">
-  <p class="f3 mb-2">Latest updates</p>
+<div class="row">
+  <div class="text-md-center col-md-6">
+    <p class="f3">Monthly best</p>
+  
+    <div class="mb-4"></div>
+    <%- include("snippets/best", {chapters: monthlyBest}) %>
+  </div>
+  <div class="text-md-center col-md-6">
+    <p class="f3">Today's best</p>
+  
+    <div class="mb-4"></div>
+    <%- include("snippets/best", {chapters: todayBest}) %>
+  </div>          
+</div>
 
-  <%
-    for (const category of req.categories) {
-      %>
-      <a href="/category/<%= category.shorthand %>"><span class="badge badge-primary"><%= category.name %></span></a>
-      <%
-    }
-  %>
+<div class="starter-template">
+  <h1>Sponsored content</h1>
+  <p class="lead">Here goes your promoted content.</p>
+</div>
 
-  <div class="mb-4"></div>
-  <%- include("snippets/latest-updates") %>
- 
+
+<div class="row">
+  <div class="text-md-center col-md-6">
+    <p class="f3">Latest updates</p>
+  
+    <div class="mb-4"></div>
+    <%- include("snippets/latest-updates") %>
+    
+  </div>
+  <div class="text-md-center col-md-6">
+    <p class="f3">Trending</p>
+  
+    <div class="mb-4"></div>
+    <%- include("snippets/latest-updates") %>
+    
+  </div>          
 </div>
