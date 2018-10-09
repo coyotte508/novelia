@@ -28,7 +28,8 @@ dailyCountSchema.static('add', async function(this: DailyCount, ...args: any[]) 
 });
 
 dailyCountSchema.static('dailyCount', async function(this: DailyCount, ...args: any[]) {
-  return await this.count({action: args.join('_')});
+  console.log("counting", args.join('-'));
+  return await this.count({action: args.join('-')});
 });
 
 const DailyCount = mongoose.model<DailyCountDocument, DailyCount>('DailyCount', dailyCountSchema);
