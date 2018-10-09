@@ -1,13 +1,14 @@
 import { DailyCount, DailyThrottle } from '../models';
+import { Request } from '../types';
 
-async function addView(req: Express.Request) {
+async function addView(req: Request) {
   try {
     if (!req.chapter.public) {
       return;
     }
 
     try {
-      await DailyThrottle.add(req.ip, "view-chapter");
+      await DailyThrottle.add(req.ip, "view-chapter", req.novel.id, req.chapter.number);
     } catch (err) {
       return;
     }
