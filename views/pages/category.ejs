@@ -12,8 +12,18 @@
 </div>
 
 
-<div class="text-md-center">
-    <p class="f3 mt-0">Latest updates</p>
+<div class="row">
+  <div class="text-md-center col-md-6">
+    <p class="f3">Latest updates</p>
   
-  <%- include("snippets/latest-updates") %>
+    <div class="mb-4"></div>
+    <%- include("snippets/latest-updates") %>
+    
+  </div>
+  <div class="text-md-center col-md-6">
+    <p class="f3">Top 10 novels</p>
+  
+    <div class="mb-4"></div>
+    <%- include("snippets/best-novels", {novels: dailyTop}) %>    
+  </div>
 </div>
