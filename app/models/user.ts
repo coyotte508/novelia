@@ -3,13 +3,12 @@ import * as bcrypt from 'bcryptjs';
 import Novel, { NovelDocument } from './novel';
 import Gold, { GoldDocument } from './gold';
 import * as md5 from 'md5';
-import * as Sendmail from 'sendmail';
+import sendmail from '../config/sendmail';
 import config from '../config/env';
 import * as crypto from 'crypto';
 import * as assert from 'assert';
 import { Types } from "mongoose";
 
-const sendmail = Sendmail();
 const Schema = mongoose.Schema;
 
 export interface UserDocument extends mongoose.Document {
