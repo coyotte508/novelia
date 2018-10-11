@@ -7,6 +7,18 @@ if (action == "add") {
   title = "Edit chapter " + req.chapter.number + " of " + novel.title;
   btnText = "Edit chapter";
 }
+
+placeholder = `The place is all yours!
+
+You can try **bold** text, *italics*, [link description](url), or:
+
+> This is a quote
+
+- This is a
+- two-item list
+
+and all the other things possible with Markdown, including tables!`;
+
 %>
 
 <%- contentFor('body') %>
@@ -27,19 +39,24 @@ if (action == "add") {
     <label for="chapterTitle">Chapter title</label>
     <input type="text" class="form-control" id="chapterTitle" name="chapterTitle" placeholder="Title for the new chapter" maxlength="<%- constants.titleMaxLength %>" value="<%= req.body.chapterTitle || chapter.title %>">
   </div>
-  <div class="form-group">
-    <label for="chapterContent">Content</label>
-    <textarea class="form-control squire-replace" name="chapterContent" id="chapterContent" rows="20" placeholder="The place is all yours!
-
-You can try **bold** text, *italics*, [link description](url), or:
-
-> This is a quote
-
-- This is a
-- two-item list
-
-and all the other things possible with Markdown, including tables!" minlength="100" maxlength="<%- constants.chapterMaxLength %>" aria-describedby="formattingHelp" required><%- req.body.chapterContent || validator.dbToText(chapter.content) %></textarea>
-  <small id="formattingHelp" class="form-text text-muted"><a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="blank">Formatting help</a> (<a href="https://www.reddit.com/wiki/commenting" target="blank">2</a>). We use markdown formatting.</small>
+  <div>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" href="#">Write</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Preview</a>
+      </li>
+      <li class="ml-3">
+        <a class="py-2 px-1 d-inline-block black-link nav-icon" title="Heading" href=""><i class="fa fa-font"></i></a>
+        <a class="py-2 px-1 d-inline-block black-link nav-icon" title="Bold" href=""><i class="fa fa-bold"></i></a>
+        <a class="py-2 px-1 d-inline-block black-link nav-icon" title="Italic" href=""><i class="fa fa-italic"></i></a>
+      </li>
+    </ul>
+    <div class="card p-2 tab-card">
+      <textarea class="form-control squire-replace" name="chapterContent" id="chapterContent" rows="20" placeholder="<%= placeholder%>" minlength="100" maxlength="<%- constants.chapterMaxLength %>" aria-describedby="formattingHelp" required><%- req.body.chapterContent || validator.dbToText(chapter.content) %></textarea>
+      <small id="formattingHelp" class="form-text text-muted"><a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="blank">Formatting help</a> (<a href="https://www.reddit.com/wiki/commenting" target="blank">2</a>). We use markdown formatting.</small>
+    </div>
   </div>
   <% if (action == "add" && !novel.prologue) { %>
   <div class="form-check">
