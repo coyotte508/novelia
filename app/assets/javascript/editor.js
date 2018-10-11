@@ -1,3 +1,6 @@
+import * as marked from "marked";
+
+marked.setOptions({sanitize: true, breaks: true});
 let textarea = null;
 
 $(function() {
@@ -33,4 +36,22 @@ $(function() {
   $("textarea").on("focus", function() {
     textarea = this;
   });
+
+  /* Fill preview text */
+  $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+    // e.target // newly activated tab
+    // e.relatedTarget // previous active tab
+
+    const source = e.relatedTarget.getAttribute("href");
+    const target = e.target.getAttribute("href");
+
+    if (target === "#preview") {
+      const $p = $(target).find("p");
+      const $textarea = $(source).find("textarea");
+      $p.html(marked("### " + $("#chapterTitle").val() + "\n\n" + $textarea.val()));
+
+      // Make the preview at least as tall as the text area
+      $p.css('min-height', $textarea.height());
+    }
+  })
 });

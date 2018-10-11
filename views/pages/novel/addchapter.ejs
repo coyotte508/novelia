@@ -40,12 +40,12 @@ and all the other things possible with Markdown, including tables!`;
     <input type="text" class="form-control" id="chapterTitle" name="chapterTitle" placeholder="Title for the new chapter" maxlength="<%- constants.titleMaxLength %>" value="<%= req.body.chapterTitle || chapter.title %>">
   </div>
   <div>
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" href="#">Write</a>
+        <a class="nav-link active" data-toggle="tab" id="content-tab" href="#content">Write</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled" href="#">Preview</a>
+        <a class="nav-link" data-toggle="tab" id="preview-tab" href="#preview">Preview</a>
       </li>
       <li class="ml-3">
         <a class="py-2 px-1 d-inline-block black-link nav-icon" title="Heading" href=""><i class="fa fa-font"></i></a>
@@ -53,9 +53,16 @@ and all the other things possible with Markdown, including tables!`;
         <a class="py-2 px-1 d-inline-block black-link nav-icon" title="Italic" href=""><i class="fa fa-italic"></i></a>
       </li>
     </ul>
-    <div class="card p-2 tab-card">
-      <textarea class="form-control squire-replace" name="chapterContent" id="chapterContent" rows="20" placeholder="<%= placeholder%>" minlength="100" maxlength="<%- constants.chapterMaxLength %>" aria-describedby="formattingHelp" required><%- req.body.chapterContent || validator.dbToText(chapter.content) %></textarea>
-      <small id="formattingHelp" class="form-text text-muted"><a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="blank">Formatting help</a> (<a href="https://www.reddit.com/wiki/commenting" target="blank">2</a>). We use markdown formatting.</small>
+    <div class="card p-2 tab-card mb-3">
+      <div class="tab-content">
+        <div class="tab-pane show active" id="content" role="tabpanel" aria-labelledby="content-tab">
+          <textarea class="form-control squire-replace" name="chapterContent" id="chapterContent" rows="20" placeholder="<%= placeholder%>" minlength="100" maxlength="<%- constants.chapterMaxLength %>" aria-describedby="formattingHelp" required><%- req.body.chapterContent || validator.dbToText(chapter.content) %></textarea>
+          <small id="formattingHelp" class="form-text text-muted"><a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="blank">Formatting help</a> (<a href="https://www.reddit.com/wiki/commenting" target="blank">2</a>). We use markdown formatting.</small>
+        </div>
+        <div class="tab-pane" id="preview" role="tabpanel" aria-labelledby="preview-tab">
+          <p id="chapterPreview" class="p-2"></p>
+        </div>
+      </div>
     </div>
   </div>
   <% if (action == "add" && !novel.prologue) { %>
@@ -70,7 +77,8 @@ and all the other things possible with Markdown, including tables!`;
     <label for="authorNote">Author's note</label>
     <textarea class="form-control" name="authorNote" id="authorNote" rows="4" placeholder="Optional, if you have something more to say" maxlength="<%- constants.descriptionMaxLength %>"><%- req.body.authorNote || validator.dbToText(chapter.authorNote) %></textarea>
   </div>
-  <button type="submit" class="btn btn-primary"><%- btnText %></button>
+  <button type="submit" class="btn btn-primary pull-right"><%- btnText %></button>
+  <div class="clearfix"></div>
 </form>
 
 <!-- <link rel="stylesheet" href="/assets/stylesheets/squire-ui.css"><script type="text/javascript" src="/app/assets/javascript/squire.js"></script>-->
