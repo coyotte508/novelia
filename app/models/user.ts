@@ -45,14 +45,19 @@ export interface UserDocument extends mongoose.Document {
   gold: number;
 
   /* Virtuals */
-  confirmed?: boolean;
-  confirmKey?: string;
-  email?: string;
-  isSocialAccount?: boolean;
-  goldPouches?: GoldDocument[];
-  new?: boolean;
-  novels?: NovelDocument[];
-  resetKey?: string;
+  goldPouches: GoldDocument[];
+  new: boolean;
+  novels: NovelDocument[];
+
+  /* Fake virtuals */
+  confirmed(): boolean;
+  confirmKey(): string;
+  email(): string;
+  isSocialAccount(): boolean;
+  resetKey(): string;
+  link(): string;
+  displayName(): string;
+  isAdmin(): boolean;
 
   /* Methods */
   fillInSecurity(ip: string): void;
@@ -63,6 +68,7 @@ export interface UserDocument extends mongoose.Document {
   loadGoldPouches(): Promise<void>;
   notifyLogin(ip: string): void;
   resetPassword(password: string): Promise<void>;
+  changeEmail(newEmail: string): Promise<void>;
   confirm(): Promise<void>;
   generateConfirmKey(): Promise<void>;
   sendConfirmationEmail(): Promise<void>;
@@ -70,9 +76,6 @@ export interface UserDocument extends mongoose.Document {
   unfollowNovel(novelId: Types.ObjectId): Promise<void>;
   validateResetKey(key: string): void;
   validPassword(password: string): Promise<boolean>;
-  link(): string;
-  displayName(): string;
-  isAdmin(): boolean;
 }
 
 interface User extends mongoose.Model<UserDocument> {
@@ -152,7 +155,7 @@ userSchema.method('displayName', function(this: UserDocument) {
   return this.local.username || this.google.name;
 });
 
-userSchema.virtual('email', function(this: UserDocument) {
+userSchema.method('email', function(this: UserDocument) {
   return this.local.email || this.google.email;
 });
 
@@ -198,7 +201,7 @@ userSchema.method('generateResetLink', function(this: UserDocument) {
   return this.update({"security.reset": this.security.reset});
 });
 
-userSchema.virtual('resetKey', function(this: UserDocument) {
+userSchema.method('resetKey', function(this: UserDocument) {
   return this.security.reset.key;
 });
 
@@ -206,7 +209,7 @@ userSchema.method('validateResetKey', function(this: UserDocument, key: string) 
   if (!this.security.reset || !this.resetKey) {
     throw new Error("This user did not request a password reset.");
   }
-  if (this.resetKey !== key) {
+  if (this.resetKey() !== key) {
     throw new Error("The password reset link was not given for that user.");
   }
   const resetIssued = new Date(this.security.reset.issued);
@@ -216,18 +219,18 @@ userSchema.method('validateResetKey', function(this: UserDocument, key: string) 
 });
 
 userSchema.method('generateConfirmKey', function(this: UserDocument) {
-  this.confirmKey = crypto.randomBytes(16).toString('base64');
+  this.security.confirmKey = crypto.randomBytes(16).toString('base64');
 
   return this.update({"security.confirmKey": this.security.confirmKey}).exec();
 });
 
-userSchema.virtual('confirmKey', function(this: UserDocument) {
+userSchema.method('confirmKey', function(this: UserDocument) {
   return this.security.confirmKey;
 });
 
 userSchema.method('confirm', function(this: UserDocument, key: string) {
-  assert(!this.confirmed, "User is already confirmed.");
-  assert(key && this.confirmKey === key, `Invalid confirmation key.`); // (${key},${this.confirmKey()})
+  assert(!this.confirmed(), "User is already confirmed.");
+  assert(key && this.confirmKey() === key, `Invalid confirmation key.`); // (${key},${this.confirmKey()})
   this.security.confirmed = true;
   this.security.confirmKey = null;
 
@@ -241,12 +244,12 @@ userSchema.virtual('confirmed', function(this: UserDocument) {
   return this.security.confirmed;
 });
 
-userSchema.virtual('sendConfirmationEmail', function(this: UserDocument) {
+userSchema.method('sendConfirmationEmail', function(this: UserDocument) {
   return sendmail({
     from: config.noreply,
-    to: this.email,
+    to: this.email(),
     subject: 'Confirm your account',
-    html: `<p>To finish your registration and confirm your account ${this.displayName()}, click <a href='http://www.${config.domain}/confirm?key=${this.confirmKey}&user=${this.email}'>this link</a>.</p>
+    html: `<p>To finish your registration and confirm your account ${this.displayName()}, click <a href='http://${config.domain}/confirm?key=${this.confirmKey()}&user=${this.email()}'>this link</a>.</p>
 
     <p>If you didn't create an account with us, then just ignore this email.</p>`,
   });
@@ -255,9 +258,9 @@ userSchema.virtual('sendConfirmationEmail', function(this: UserDocument) {
 userSchema.method('sendResetEmail', function(this: UserDocument) {
   return sendmail({
     from: config.noreply,
-    to: this.email,
+    to: this.email(),
     subject: 'Forgotten password',
-    html: `<p>A password reset was requested for your account ${this.displayName()}, click <a href='http://www.${config.domain}/reset?key=${this.resetKey}'>this link</a> to proceed with it.</p>
+    html: `<p>A password reset was requested for your account ${this.displayName()}, click <a href='http://${config.domain}/reset?key=${this.resetKey()}'>this link</a> to proceed with it.</p>
 
     <p>If you didn't request a password reset, then just ignore this email.</p>`,
   });

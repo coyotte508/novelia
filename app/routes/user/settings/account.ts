@@ -3,12 +3,13 @@ import limiter from 'mongo-limiter';
 import val from '../../../config/validator';
 import * as utils from '../../utils';
 import Router from 'express-promise-router';
-
+import { UserDocument } from '../../../models/user';
+import { Request } from '../../../types';
 const router = Router();
 
-router.post('/settings/account', utils.isLoggedInAndNotSocial, async (req, res) => {
+router.post('/settings/account', utils.isLoggedInAndNotSocial, async (req: Request, res) => {
   try {
-    const user = req.user;
+    const user: UserDocument = req.user;
     const newPw = req.body.newPassword ? val.validatePassword(req.body.newPassword) : "";
     const email = val.validateEmail(req.body.email);
 
@@ -20,7 +21,7 @@ router.post('/settings/account', utils.isLoggedInAndNotSocial, async (req, res) 
       await user.resetPassword(newPw);
     }
 
-    if (email !== user.email) {
+    if (email !== user.email()) {
       await user.changeEmail(email);
       user.sendConfirmationEmail();
 

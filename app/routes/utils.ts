@@ -67,7 +67,7 @@ function canTouchComment(req, res, next) {
 function isAdmin(req, res, next) {
   isLoggedIn(req, res, () => {
     try {
-      assert403(req.user.isAdmin, "You are not authorized to access this page.");
+      assert403(req.user.isAdmin(), "You are not authorized to access this page.");
       next();
     } catch (err) {
       next(err);

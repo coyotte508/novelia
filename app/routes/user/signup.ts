@@ -29,7 +29,7 @@ router.all('/confirm', utils.isLoggedIn, async (req: Request, res) => {
 
     user.sendConfirmationEmail();
 
-    req.flash("profileMessage", `Confirmation email sent to ${user.email}.`);
+    req.flash("profileMessage", `Confirmation email sent to ${user.email()}.`);
     res.redirect(user.link());
   } catch (err) {
     req.flash("profileMessage", err.message);

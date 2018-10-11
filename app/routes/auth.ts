@@ -1,6 +1,7 @@
 import Router from 'express-promise-router';
 import * as passport from 'passport';
 import configAuth from '../config/auth';
+import { UserDocument } from '../models/user';
 
 const router = Router();
 
@@ -24,7 +25,7 @@ router.get('/auth/google/callback',
   passport.authenticate('google', {
     failureRedirect : '/'
   }), async (req, res, next) => {
-    const user = req.user;
+    const user: UserDocument = req.user;
 
     try {
       if (user.new) {

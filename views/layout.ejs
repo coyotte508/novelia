@@ -30,7 +30,7 @@
 
         <ul class="navbar-nav navbar-md-right ">
           <% if (user) { %>
-            <% if (user.isAdmin) {%>
+            <% if (user.isAdmin()) {%>
               <li class="nav-item">
                 <a href="/admin" class="nav-link navbar-text">Admin</a>
               </li>

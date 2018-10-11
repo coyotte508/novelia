@@ -61,7 +61,7 @@ export default (passport) => {
         free = await locks.lock("account", req.ip);
 
         const user = await User.findOne().or([
-          { $text : { $search : username } },
+          {'local.username': username},
           {'local.email': email},
           {'google.email': email}
         ]);
