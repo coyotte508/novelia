@@ -48,7 +48,7 @@ $(function() {
     if (target === "#preview") {
       const $p = $(target).find("p");
       const $textarea = $(source).find("textarea");
-      $p.html(marked("### " + $("#chapterTitle").val() + "\n\n" + $textarea.val()));
+      $p.html(marked("# " + $("#chapterTitle").val() + "\n\n" + $textarea.val()));
 
       // Make the preview at least as tall as the text area
       $p.css('min-height', $textarea.height());
