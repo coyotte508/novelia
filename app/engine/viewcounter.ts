@@ -7,6 +7,10 @@ async function addView(req: Request) {
       return;
     }
 
+    if (req.user && req.novel.author.ref.equals(req.user._id)) {
+      return;
+    }
+
     try {
       await DailyThrottle.add(req.ip, "view-chapter", req.novel.id, req.chapter.number);
     } catch (err) {
