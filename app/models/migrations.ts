@@ -54,6 +54,12 @@ const migrations = {
         chapter.updateWordCount();
         await chapter.save();
       }
+
+      const novels = await Novel.find({wordCount: {$exists: false}});
+      for (const novel of novels) {
+        await novel.updateWordCount();
+        await novel.save();
+      }
     }
   }
 };

@@ -22,6 +22,8 @@ router.post('/edit', utils.canTouchNovel, async (req: Request, res) => {
     const authorNote = val.validateDescription(req.body.authorNote);
 
     await req.chapter.update({title, content, authorNote, wordCount: wordcount(stripTags(content))});
+    await novel.updateWordCount();
+    await novel.save();
 
     res.redirect(novel.link() + "/" + req.chapter.number);
   } catch (err) {

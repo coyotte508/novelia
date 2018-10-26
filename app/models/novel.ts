@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 import * as assert from 'assert';
 import Chapter, { ChapterDocument } from './chapter';
 import DailyCount from './dailyCount';
+import * as _ from "lodash";
 
 export interface NovelDocument extends mongoose.Document {
   title: string;
@@ -28,6 +29,7 @@ export interface NovelDocument extends mongoose.Document {
   numChapters: number;
   follows: number;
   firstPublicationDate: Date;
+  wordCount: number;
 
   dailyLikes: number;
   dailyViews: number;
@@ -42,6 +44,7 @@ export interface NovelDocument extends mongoose.Document {
   uploadRate(): number;
   publicationDate(): Date;
   loadChapters(): Promise<void>;
+  updateWordCount(): Promise<void>;
   addChapter(chapter: ChapterDocument): Promise<void>;
   deleteChapter(chapter: ChapterDocument): Promise<void>;
   adjustDailyLikes(): Promise<void>;
@@ -98,6 +101,10 @@ const novelSchema = new Schema({
     type: Number,
     default: 0
   },
+  wordCount: {
+    type: Number,
+    default: 0
+  },
   public: {
     type: Boolean,
     default: true
@@ -147,6 +154,11 @@ novelSchema.method("loadChapters",  async function(this: NovelDocument) {
   this.chapters = await Chapter.find({"novel.ref": this._id}, "title number views wordCount").sort({number: 1});
 });
 
+novelSchema.method("updateWordCount", async function(this: NovelDocument) {
+  await this.loadChapters();
+  this.wordCount = _.sum(this.chapters.map(ch => ch.wordCount));
+});
+
 novelSchema.method("adjustDailyLikes", async function(this: NovelDocument) {
   const [likes, unlikes] = await Promise.all([DailyCount.dailyCount("like-novel", this.id), DailyCount.dailyCount("unlike-novel", this.id)]);
 
@@ -188,12 +200,14 @@ novelSchema.method('addChapter', async function(this: NovelDocument, chapter: Ch
   if (chapter.number === 0) {
     await this.update({
       prologue: true,
-      latestChapter: chapter.id
+      latestChapter: chapter.id,
+      wordCount: this.wordCount + chapter.wordCount
     });
   } else {
     await this.update({
       $inc: {numChapters: 1},
-      latestChapter: chapter.id
+      latestChapter: chapter.id,
+      wordCount: this.wordCount + chapter.wordCount
     });
   }
 
