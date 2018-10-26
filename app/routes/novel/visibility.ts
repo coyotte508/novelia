@@ -15,7 +15,7 @@ router.all('/show', utils.canTouchNovel, async (req: Request, res) => {
   Chapter.update({"novel.ref": novel.id}, {public: true}, {multi: true}).then();
   await novel.update({public: true});
 
-  if (!novel.firstPublicationDate && novel.numChapters > 0)  {
+  if (!novel.firstPublicationDate && novel.wordCount > 0)  {
     await novel.update({firstPublicationDate: new Date()});
   }
 

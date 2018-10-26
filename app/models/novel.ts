@@ -103,7 +103,8 @@ const novelSchema = new Schema({
   },
   wordCount: {
     type: Number,
-    default: 0
+    default: 0,
+    index: true
   },
   public: {
     type: Boolean,
@@ -138,10 +139,6 @@ const novelSchema = new Schema({
 novelSchema.pre<NovelDocument>("save", function(next) {
   if (this.title) {
     this.slug = slug(this.title, {lower: true});
-  }
-
-  if (!this.firstPublicationDate && this.publicChaptersCount > 0) {
-    this.firstPublicationDate = new Date();
   }
 
   next();
@@ -248,7 +245,7 @@ novelSchema.method('getImageLink', function(this: NovelDocument, format?: string
 });
 
 novelSchema.static('latestUpdates', async function(this: Novel, conditions?: object) {
-  conditions = Object.assign({public: true}, conditions);
+  conditions = Object.assign({public: true, wordCount: {$gt: 0}}, conditions);
 
   const results = await this.find(conditions, "title latestChapter").sort({latestChapter: -1}).limit(10);
 
@@ -256,7 +253,7 @@ novelSchema.static('latestUpdates', async function(this: Novel, conditions?: obj
 });
 
 novelSchema.static('dailyTop', async function(this: Novel, conditions?: object) {
-  conditions = Object.assign({public: true}, conditions);
+  conditions = Object.assign({public: true, wordCount: {$gt: 0}}, conditions);
 
   const results = await this.find(conditions, "title dailyViews").sort({dailyViews: -1}).limit(10);
 
