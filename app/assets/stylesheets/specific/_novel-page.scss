@@ -12,6 +12,28 @@
   }
 
   @include media-breakpoint-down(sm) {
-    height:240px; width: 160px; margin-right: 10px;
+    height:240px; width: 160px;
+  }
+  @include media-breakpoint-down(xs) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.novel-header .novel-info {
+  position: relative;
+
+  &::before {
+    background-image: url("/images/aqua-swirl.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    content: " ";
+    opacity: 0.2;
   }
 }
