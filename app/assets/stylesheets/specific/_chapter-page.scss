@@ -1,6 +1,10 @@
 .synopsis, .chapter-content, .author-note {
   @extend .text-justify;
 
+  font-size: 1.06em;
+  line-height: 1.55;
+  color: #383838;
+
   img {
     max-height: 300px;
     max-width: 600px;
