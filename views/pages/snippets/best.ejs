@@ -1,5 +1,5 @@
 <% if (chapters.length > 0) {%>
-  <ul class="list-group text-md-left latest-updates mb-2">
+  <ul class="list-group text-md-left latest-updates chapter-list mb-2">
     <% chapters.forEach((item) => {%>
     <a class="list-group-item list-group-item-action" href="<%- item.getNovelLink() %>">
       <%= item.novel.title %>  
@@ -7,7 +7,7 @@
         <span class="sr-only">Chapter</span> <%= item.number %>
         <span class="fa fa-bookmark"></span>
       </span>
-      <span class="text-muted" title="Chapter views">
+      <span class="text-muted views" title="Chapter views">
         <%= item.views %>
         <span class="fa fa-eye">
           <span class="sr-only">Views</span>
