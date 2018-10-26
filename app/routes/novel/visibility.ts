@@ -2,9 +2,10 @@ import limiter from "mongo-limiter";
 import * as utils from "../utils";
 import Router from "express-promise-router";
 import {Chapter} from "../../models";
+import { Request } from "../../types";
 const router = Router();
 
-router.all('/show', utils.canTouchNovel, async (req, res) => {
+router.all('/show', utils.canTouchNovel, async (req: Request, res) => {
   const novel = req.novel;
 
   if (!(await limiter.attempt(req.user.id, 'shownovel', novel.title))) {
@@ -13,6 +14,10 @@ router.all('/show', utils.canTouchNovel, async (req, res) => {
 
   Chapter.update({"novel.ref": novel.id}, {public: true}, {multi: true}).then();
   await novel.update({public: true});
+
+  if (!novel.firstPublicationDate && novel.numChapters > 0)  {
+    await novel.update({firstPublicationDate: new Date()});
+  }
 
   res.redirect(novel.link());
 });

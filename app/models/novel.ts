@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 import * as assert from 'assert';
 import Chapter, { ChapterDocument } from './chapter';
 import DailyCount from './dailyCount';
+import { ObjectID } from '../../node_modules/@types/bson';
 
 export interface NovelDocument extends mongoose.Document {
   title: string;
@@ -27,6 +28,7 @@ export interface NovelDocument extends mongoose.Document {
   slug: string;
   numChapters: number;
   follows: number;
+  firstPublicationDate: Date;
 
   dailyLikes: number;
   dailyViews: number;
@@ -38,6 +40,7 @@ export interface NovelDocument extends mongoose.Document {
   /* Methods */
   link(): string;
   classySlug(): string;
+  publicationDate(): Date;
   loadChapters(): Promise<void>;
   addChapter(chapter: ChapterDocument): Promise<void>;
   deleteChapter(chapter: ChapterDocument): Promise<void>;
@@ -78,6 +81,9 @@ const novelSchema = new Schema({
   categories: {
     type: [String],
     index: true
+  },
+  firstPublicationDate: {
+    type: Date
   },
   latestChapter: {
     type: Schema.Types.ObjectId,
@@ -127,6 +133,10 @@ novelSchema.pre<NovelDocument>("save", function(next) {
     this.slug = slug(this.title, {lower: true});
   }
 
+  if (!this.firstPublicationDate && this.publicChaptersCount > 0) {
+    this.firstPublicationDate = new Date();
+  }
+
   next();
 });
 
@@ -151,6 +161,10 @@ novelSchema.virtual("publicChaptersCount", function(this: NovelDocument) {
   return this.numChapters + (this.prologue ? 0 : 1);
 });
 
+novelSchema.virtual("publicationDate", function(this: NovelDocument) {
+  return this.firstPublicationDate;
+});
+
 novelSchema.method('classySlug', function(this: NovelDocument) {
   return slug(this.title, {lower: false});
 });
@@ -170,6 +184,10 @@ novelSchema.method('addChapter', async function(this: NovelDocument, chapter: Ch
       $inc: {numChapters: 1},
       latestChapter: chapter.id
     });
+  }
+
+  if (!this.firstPublicationDate && this.public) {
+    await this.update({firstPublicationDate: new Date()});
   }
 });
 

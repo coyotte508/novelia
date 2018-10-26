@@ -3,7 +3,11 @@
   <hr>
 
   <!-- LOGIN FORM -->
-  <form method="post" accept-charset="UTF-8" role="form">
+  <form method="post" enctype="multipart/form-data" accept-charset="UTF-8" role="form">
+    <div class="form-group">
+      <label for="username">Avatar</label><br/>
+      <span class="text-muted">We are using gravatar for avatars.</span>
+    </div>
     <div class="form-group">
       <label for="username">Username</label>
       <input type="text" class="form-control" id="username" value="<%= user.displayName() %>" disabled>
