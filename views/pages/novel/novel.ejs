@@ -135,19 +135,21 @@ description = sys.makeDescription(novel.description);
             <%= index %> - <%= item.title %>
           </span>
         </a>
-        <span class="words">
-          <%= item.wordCount %>
-          <span class="fa">
-            W<span class="sr-only">words</span>
-          </span>&nbsp;
+        <span class="text-muted hide-sm">
+          <span class="words">
+            <%= item.wordCount %>
+            <span class="fa">
+              W<span class="sr-only">words</span>
+            </span>&nbsp;
+          </span>
+          <span class="views">
+          <%= item.views %>
+            <span class="fa fa-eye">
+              <span class="sr-only">Views</span>
+            </span>&nbsp;&nbsp;&nbsp;
+          </span>
+          <time class="text-muted" format="ago" unixtime="<%= sys.unixTime(item.id) %>"><%= sys.timeSince(item.id) %> ago</time>&nbsp;&nbsp;
         </span>
-        <span class="views">
-         <%= item.views %>
-          <span class="fa fa-eye">
-            <span class="sr-only">Views</span>
-          </span>&nbsp;&nbsp;&nbsp;
-        </span>
-        <time class="text-muted" format="ago" unixtime="<%= sys.unixTime(item.id) %>"><%= sys.timeSince(item.id) %> ago</time>&nbsp;&nbsp;&nbsp;
 
         <a href="<%= nLink + "/" + index  + "/edit" %>">
           <span class="sr-only">Edit chapter</span><span class="fa fa-pencil-square-o" aria-hidden="true"></span>
