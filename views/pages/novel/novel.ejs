@@ -99,7 +99,7 @@ description = sys.makeDescription(novel.description);
   </div>
   <div>
     <h4>Chapters</h4>
-    <p><ul class="list-group">
+    <p><ul class="list-group chapter-list">
     <% if (!isGod) {
        novel.chapters.forEach( (item, index) => { 
          index = novel.prologue ? index : (+index + 1);
@@ -148,7 +148,7 @@ description = sys.makeDescription(novel.description);
               <span class="sr-only">Views</span>
             </span>&nbsp;&nbsp;&nbsp;
           </span>
-          <time class="text-muted" format="ago" unixtime="<%= sys.unixTime(item.id) %>"><%= sys.timeSince(item.id) %> ago</time>&nbsp;&nbsp;
+          <time class="text-muted chapter-ago" format="ago" unixtime="<%= sys.unixTime(item.id) %>"><%= sys.timeSince(item.id) %> ago</time>&nbsp;&nbsp;
         </span>
 
         <a href="<%= nLink + "/" + index  + "/edit" %>">

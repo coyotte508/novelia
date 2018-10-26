@@ -38,8 +38,15 @@
   }
 }
 
-.views, .words {
-  display: inline-block;
-  min-width: 70px;
-  text-align: right;
+.chapter-list {
+  .views, .words {
+    display: inline-block;
+    min-width: 70px;
+    text-align: right;
+  }
+  .chapter-ago {
+    display: inline-block;
+    min-width: 110px;
+    text-align: right;
+  }
 }
