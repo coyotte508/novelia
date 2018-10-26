@@ -119,7 +119,7 @@ description = sys.makeDescription(novel.description);
            <%= item.views %>
             <span class="fa fa-eye">
               <span class="sr-only">Views</span>
-            </span>&nbsp;&nbsp;&nbsp;
+            </span>&nbsp;
           </span>
           <time format="ago" unixtime="<%= sys.unixTime(item.id) %>" class="when"><%= sys.timeSince(item.id) %> ago</time>
         </span>
@@ -146,7 +146,7 @@ description = sys.makeDescription(novel.description);
           <%= item.views %>
             <span class="fa fa-eye">
               <span class="sr-only">Views</span>
-            </span>&nbsp;&nbsp;&nbsp;
+            </span>&nbsp;
           </span>
           <time class="text-muted chapter-ago" format="ago" unixtime="<%= sys.unixTime(item.id) %>"><%= sys.timeSince(item.id) %> ago</time>&nbsp;&nbsp;
         </span>
