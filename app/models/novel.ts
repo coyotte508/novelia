@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;
 import * as assert from 'assert';
 import Chapter, { ChapterDocument } from './chapter';
 import DailyCount from './dailyCount';
-import { ObjectID } from '../../node_modules/@types/bson';
 
 export interface NovelDocument extends mongoose.Document {
   title: string;
@@ -40,6 +39,7 @@ export interface NovelDocument extends mongoose.Document {
   /* Methods */
   link(): string;
   classySlug(): string;
+  uploadRate(): number;
   publicationDate(): Date;
   loadChapters(): Promise<void>;
   addChapter(chapter: ChapterDocument): Promise<void>;
@@ -161,8 +161,19 @@ novelSchema.virtual("publicChaptersCount", function(this: NovelDocument) {
   return this.numChapters + (this.prologue ? 0 : 1);
 });
 
-novelSchema.virtual("publicationDate", function(this: NovelDocument) {
+novelSchema.method("publicationDate", function(this: NovelDocument) {
   return this.firstPublicationDate;
+});
+
+novelSchema.method("uploadRate", function(this: NovelDocument) {
+  const nChapters = this.numChapters + (this.prologue ? 0 : 1);
+  if (!nChapters) {
+    return 0;
+  }
+
+  const timeSpan = Math.max((Date.now() - (this.publicationDate() || new Date()).getTime()), 24 * 3600 * 1000) / (24 * 3600 * 1000);
+
+  return timeSpan / nChapters;
 });
 
 novelSchema.method('classySlug', function(this: NovelDocument) {

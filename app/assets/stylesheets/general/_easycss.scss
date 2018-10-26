@@ -45,3 +45,22 @@
 .f5 {
     font-size: 13px !important;
 }
+
+.hide-xs {
+  @extend .d-none;
+  @extend .d-sm-inline;
+}
+
+.hide-sm {
+  @extend .d-none;
+  @extend .d-md-inline;
+}
+
+.d-column {
+  display: flex !important;
+  flex-direction: column;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}

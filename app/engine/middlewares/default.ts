@@ -17,8 +17,8 @@ function sysStuff(req, res: Response, next) {
       return parseInt(date.substring(0, 8), 16);
     },
 
-    dayOfYear(id: string) {
-      const date = new Date(parseInt(id.substring(0, 8), 16) * 1000);
+    dayOfYear(id: string | Date) {
+      const date = typeof id === "string" ? new Date(parseInt(id.substring(0, 8), 16) * 1000) : id;
       const options = {year: "numeric", month: "long", day: "numeric"};
       return new Intl.DateTimeFormat("en-US", options).format(date);
     },

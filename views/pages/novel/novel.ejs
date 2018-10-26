@@ -30,8 +30,8 @@ description = sys.makeDescription(novel.description);
         </div>
       </div>
 
-      <div class="col-auto">
-        By <strong><a href="<%= author.link() %>"><%= authorName %></a></strong><br/>
+      <div class="col-auto d-column">
+        <p>By <strong><a href="<%= author.link() %>"><%= authorName %></a></strong><br/></p>
         <p>
         <% if (novel.categories[0]) { %>
           <a href="/category/<%= novel.categories[0] %>"><span class="badge badge-primary"><%= req.categoryName(novel.categories[0]) %></span></a>
@@ -42,9 +42,29 @@ description = sys.makeDescription(novel.description);
         <% }%>
         </p>
         <p>
-          <a href="<%= novel.link() + (followed ? "/unfollow" : "/follow") %>" class="btn btn-sm btn-secondary<%- followed ? " active" : "" %>" aria-pressed="<%- followed ? "true" : "false" %>"><span class="fa fa-plus"></span> Follow <span class="badge badge-default"><%- novel.follows %></span></a>
-          <span class="btn btn-sm btn-secondary" title="Views"><span class="fa fa-eye"><span class="sr-only">Views </span></span> <span class="badge badge-secondary"><%= novel.totalViews %></span></span>
+          Publication date: <span class="text-muted"><%= novel.publicationDate() ? sys.dayOfYear(novel.publicationDate()) : 'unpublished' %></span><br/>
+          Last upload: <span class="text-muted"><%= novel.latestChapter ? sys.timeSince(novel.latestChapter.toString()) + ' ago' : 'no chapters' %></span> <br />
+          Release frequency: <span class="text-muted">Every <%= novel.uploadRate().toFixed(1) %> day<%= novel.uploadRate() >= 2 ? 's' : '' %></span>
+        </p>
+        <div class="flex-grow"></div>
+        <p class="mb-0">
+          <span class="btn btn-sm btn-secondary" title="Chapters">
+            <span class="fa fa-bookmark"></span> 
+            <span class="badge badge-secondary"><%= novel.numChapters + (novel.prologue ? 1 : 0) %></span>
+            <span class="sr-only"> Chapters</span>
+          </span>
+          <span class="btn btn-sm btn-secondary" title="Words">
+            <span class="fa fa-font"></span> 
+            <span class="badge badge-secondary"><%= 1500 %></span>
+            <span class="sr-only"> Words</span>
+          </span>
+          <span class="btn btn-sm btn-secondary" title="Views">
+            <span class="fa fa-eye"></span>
+            <span class="badge badge-secondary"><%= novel.totalViews %></span>
+            <span class="sr-only"> Views</span>
+          </span>
           <span class="btn btn-sm btn-secondary" title="Likes"><span class="fa fa-thumbs-up"><span class="sr-only">Likes </span></span> <span class="badge badge-secondary"><%= novel.totalLikes %></span></span>
+          <a href="<%= novel.link() + (followed ? "/unfollow" : "/follow") %>" class="btn btn-sm btn-secondary<%- followed ? " active" : "" %>" aria-pressed="<%- followed ? "true" : "false" %>"><span class="fa fa-plus"></span> Follow <span class="badge badge-default"><%- novel.follows %></span></a>
         </p>
       </div>
     </div>
