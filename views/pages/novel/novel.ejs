@@ -135,12 +135,17 @@ description = sys.makeDescription(novel.description);
             <%= index %> - <%= item.title %>
           </span>
         </a>
-      </span>
-        <span class="text-muted" >
+        <span class="words">
+          <%= item.wordCount %>
+          <span class="fa">
+            W<span class="sr-only">words</span>
+          </span>&nbsp;
+        </span>
+        <span class="views">
          <%= item.views %>
           <span class="fa fa-eye">
             <span class="sr-only">Views</span>
-          </span>&nbsp;&nbsp;&nbsp;&nbsp;
+          </span>&nbsp;&nbsp;&nbsp;
         </span>
         <time class="text-muted" format="ago" unixtime="<%= sys.unixTime(item.id) %>"><%= sys.timeSince(item.id) %> ago</time>&nbsp;&nbsp;&nbsp;
 
