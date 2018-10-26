@@ -1,6 +1,6 @@
 'use strict';
 
-import { ObjectId } from 'bson';
+import { ObjectId, ObjectID } from 'bson';
 import { Chapter, Comment, Novel } from '.';
 
 function latest(doc: any) {
@@ -60,6 +60,12 @@ const migrations = {
         await novel.updateWordCount();
         await novel.save();
       }
+
+      // const otherNovels = await Novel.find({wordCount: {$gt: 0}, public: true, firstPublicationDate: {$exists: false}});
+      // for (const novel of otherNovels) {
+      //   novel.firstPublicationDate = (novel._id as ObjectID).getTimestamp();
+      //   await novel.save();
+      // }
     }
   }
 };
