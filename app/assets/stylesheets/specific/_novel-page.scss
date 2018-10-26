@@ -37,3 +37,9 @@
     opacity: 0.2;
   }
 }
+
+.views, .words {
+  display: inline-block;
+  min-width: 70px;
+  text-align: right;
+}

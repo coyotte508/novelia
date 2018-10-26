@@ -6,6 +6,8 @@ import {Novel, Chapter} from '../../models';
 import Router from 'express-promise-router';
 import { NovelDocument } from '../../models/novel';
 import { Request } from '../../types';
+import * as wordcount from 'wordcount';
+import * as stripTags from 'striptags';
 
 const router = Router();
 
@@ -42,6 +44,7 @@ router.post('/addchapter', utils.canTouchNovel, async (req: Request, res) => {
     chapter.novel = {ref: novel._id, title: novel.title};
     chapter.number = prologue ? 0 : (novel.numChapters + 1);
     chapter.public = novel.public;
+    chapter.wordCount = wordcount(stripTags(content));
 
     await chapter.save();
 

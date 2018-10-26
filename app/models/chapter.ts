@@ -4,6 +4,9 @@ import {Types} from 'mongoose';
 import Novel from "./novel";
 import { NovelDocument } from './novel';
 import { ObjectId } from 'bson';
+import * as wordcount from 'wordcount';
+import * as stripTags from 'striptags';
+
 const Schema = mongoose.Schema;
 
 export interface ChapterDocument extends mongoose.Document {
@@ -18,9 +21,11 @@ export interface ChapterDocument extends mongoose.Document {
   authorNote: string;
   public: boolean;
   number: number;
+  wordCount: number;
 
   getNovelLink(): string;
   getLink(): string;
+  updateWordCount(): void;
 }
 
 interface Chapter extends mongoose.Model<ChapterDocument> {
@@ -39,6 +44,10 @@ const chapterSchema = new Schema({
     required: true
   },
   views: {
+    type: Number,
+    default: 0
+  },
+  wordCount: {
     type: Number,
     default: 0
   },
@@ -65,11 +74,15 @@ const chapterSchema = new Schema({
 chapterSchema.index({"novel.ref" : 1, "number": -1}, {unique: true});
 
 chapterSchema.method("getNovelLink", function(this: ChapterDocument) {
-    return /*"/nv/" +*/ "/" + slug(this.novel.title, {lower: false});
+  return /*"/nv/" +*/ "/" + slug(this.novel.title, {lower: false});
 });
 
 chapterSchema.method("getLink", function(this: ChapterDocument) {
-    return this.getNovelLink() + "/" + this.number;
+  return this.getNovelLink() + "/" + this.number;
+});
+
+chapterSchema.method('updateWordCount', function(this: ChapterDocument) {
+  this.wordCount = wordcount(stripTags(this.content));
 });
 
 chapterSchema.static("latestUpdates", async function(this: Chapter, filter: object) {

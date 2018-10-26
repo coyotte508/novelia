@@ -45,6 +45,16 @@ const migrations = {
 
       console.log("end");
     }
+  },
+  "0.2.0": {
+    name: "add word count",
+    async up() {
+      const chapters = await Chapter.find({wordCount: {$exists: false}});
+      for (const chapter of chapters) {
+        chapter.updateWordCount();
+        await chapter.save();
+      }
+    }
   }
 };
 

@@ -41,7 +41,7 @@ mongoose.connection.on("open", async () => {
     }
 
     const migrations = require("./models/migrations");
-    // migrations["0.1.6"].up();
+    migrations["0.2.0"].up();
   } catch (err) {
     console.error(err);
   }

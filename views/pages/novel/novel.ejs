@@ -57,7 +57,7 @@ description = sys.makeDescription(novel.description);
           </div>
           <div class="col-auto pr-2 pt-2">
             <span class="btn btn-sm btn-secondary" title="Words">
-              <span class="fa fa-font" /> 
+              <span class="fa">W</span> 
               <span class="badge badge-secondary"><%= 1500 %></span>
               <span class="sr-only"> Words</span>
             </span>
@@ -109,11 +109,17 @@ description = sys.makeDescription(novel.description);
           <%= index %> - <%= item.title %>
         </span>
         <span class="text-muted hide-sm">
+          <span class="words">
+            <%= item.wordCount %>
+            <span class="fa">
+              W<span class="sr-only">words</span>
+            </span>&nbsp;
+          </span>
           <span class="views">
            <%= item.views %>
             <span class="fa fa-eye">
               <span class="sr-only">Views</span>
-            </span>&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>&nbsp;&nbsp;&nbsp;
           </span>
           <time format="ago" unixtime="<%= sys.unixTime(item.id) %>" class="when"><%= sys.timeSince(item.id) %> ago</time>
         </span>
